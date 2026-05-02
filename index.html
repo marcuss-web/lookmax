@@ -3,69 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>LooksMax AI Ultra</title>
+    <title>LooksMax AI v3.0</title>
     <style>
-        :root {
-            --bg: #000; --card: #111; --text: #fff; --sub: #999;
-            --gold: #d4af37; --green: #22c55e; --red: #ef4444; --border: #222;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #000; color: #fff; min-height: 100dvh; line-height: 1.5;
-        }
-        .app { max-width: 500px; margin: 0 auto; padding: 16px; padding-bottom: 40px; }
-        .header { display: flex; align-items: center; gap: 10px; padding: 12px 0; margin-bottom: 20px; }
-        .logo-icon { font-size: 2.2rem; }
-        .logo-text h1 { font-size: 1.3rem; font-weight: 800; color: #d4af37; letter-spacing: 1px; }
-        .logo-text span { font-size: 0.65rem; color: #999; }
-        .score-card { background: #111; border: 1px solid #222; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 20px; }
-        .score-big { font-size: 3.5rem; font-weight: 800; color: #d4af37; line-height: 1; }
-        .score-label { font-size: 0.7rem; color: #999; letter-spacing: 2px; text-transform: uppercase; margin: 6px 0; }
-        .score-streak { font-size: 0.75rem; color: #d4af37; }
-        .main-btns { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-        .main-btn {
-            display: flex; align-items: center; gap: 14px;
-            background: #111; border: 1px solid #222; border-radius: 16px;
-            padding: 18px; cursor: pointer; transition: 0.2s; text-align: left;
-            font-family: inherit; color: #fff; width: 100%; font-size: inherit;
-        }
-        .main-btn:active { transform: scale(0.98); border-color: #d4af37; }
-        .main-btn .icon { font-size: 2.2rem; flex-shrink: 0; }
-        .main-btn .info h3 { font-size: 0.95rem; font-weight: 700; }
-        .main-btn .info p { font-size: 0.7rem; color: #999; margin-top: 2px; }
-        .main-btn.gold { border-color: #d4af37; background: #1a1a0a; }
-        .card { background: #111; border: 1px solid #222; border-radius: 16px; padding: 18px; margin: 14px 0; }
-        .card h3 { font-size: 0.85rem; color: #d4af37; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; }
-        .upload-box { border: 2px dashed #333; border-radius: 16px; padding: 35px 20px; text-align: center; cursor: pointer; transition: 0.3s; }
-        .upload-box:active { border-color: #d4af37; }
-        .upload-box img { max-width: 100%; max-height: 250px; border-radius: 12px; margin-top: 8px; }
-        .upload-icon { font-size: 2.5rem; }
-        .btn { width: 100%; padding: 15px; border-radius: 30px; border: none; font-weight: 700; font-size: 0.85rem; cursor: pointer; font-family: inherit; text-transform: uppercase; letter-spacing: 0.5px; transition: 0.2s; }
-        .btn:active { transform: scale(0.97); }
-        .btn-gold { background: #d4af37; color: #000; }
-        .btn-outline { background: transparent; border: 1px solid #d4af37; color: #d4af37; margin-top: 8px; }
-        .btn-sm { width: auto; padding: 10px 20px; font-size: 0.7rem; display: inline-block; }
-        .ai-box { background: #0a0a0a; border: 1px solid #d4af37; border-radius: 16px; padding: 14px; margin: 10px 0; font-size: 0.8rem; line-height: 1.7; max-height: 400px; overflow-y: auto; }
-        .spinner { display: inline-block; width: 28px; height: 28px; border: 3px solid #222; border-top-color: #d4af37; border-radius: 50%; animation: spin 0.8s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); background: #d4af37; color: #000; padding: 12px 24px; border-radius: 25px; font-weight: 700; font-size: 0.8rem; z-index: 999; animation: pop 0.3s ease, fade 0.5s 2s forwards; max-width: 90%; text-align: center; }
-        @keyframes pop { from { transform: translate(-50%,20px); opacity: 0; } to { transform: translate(-50%,0); opacity: 1; } }
-        @keyframes fade { to { opacity: 0; } }
-        input, textarea, select { width: 100%; background: #0a0a0a; border: 1px solid #222; border-radius: 12px; padding: 14px; color: #fff; font-family: inherit; font-size: 0.85rem; margin: 6px 0; outline: none; -webkit-appearance: none; }
-        input:focus, textarea:focus, select:focus { border-color: #d4af37; }
-        textarea { min-height: 80px; resize: vertical; }
-        select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23d4af37' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
-        .streak-row { display: flex; gap: 4px; flex-wrap: wrap; margin: 8px 0; }
-        .sdot { width: 26px; height: 26px; border-radius: 50%; background: #0a0a0a; border: 1px solid #222; display: flex; align-items: center; justify-content: center; font-size: 0.55rem; font-weight: 700; }
-        .sdot.on { background: #d4af37; border-color: #d4af37; color: #000; }
-        .sdot.today { border-color: #d4af37; box-shadow: 0 0 10px rgba(212,175,55,0.4); }
-        .tag { display: inline-block; padding: 6px 12px; border-radius: 15px; font-size: 0.7rem; margin: 3px; border: 1px solid #333; cursor: pointer; transition: 0.2s; }
-        .tag.selected { background: #d4af37; color: #000; border-color: #d4af37; }
-        .product-card { display: flex; gap: 10px; align-items: center; background: #0a0a0a; border-radius: 12px; padding: 10px; margin: 6px 0; }
-        .product-card img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
-        .product-info { flex: 1; font-size: 0.75rem; }
-        .product-info strong { color: #d4af37; }
+        :root{--bg:#000;--card:#111;--text:#fff;--sub:#999;--gold:#d4af37;--green:#22c55e;--red:#ef4444;--border:#222;--blue:#3b82f6}
+        *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#000;color:#fff;min-height:100dvh;line-height:1.5}
+        .app{max-width:500px;margin:0 auto;padding:16px;padding-bottom:40px}
+        .header{display:flex;align-items:center;gap:10px;padding:12px 0;margin-bottom:20px}
+        .logo-icon{font-size:2.2rem}
+        .logo-text h1{font-size:1.3rem;font-weight:800;color:#d4af37;letter-spacing:1px}
+        .logo-text span{font-size:0.65rem;color:#999}
+        .score-card{background:#111;border:1px solid #222;border-radius:20px;padding:20px;text-align:center;margin-bottom:20px}
+        .score-big{font-size:3.5rem;font-weight:800;color:#d4af37;line-height:1}
+        .main-btns{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+        .main-btn{display:flex;align-items:center;gap:14px;background:#111;border:1px solid #222;border-radius:16px;padding:18px;cursor:pointer;transition:.2s;text-align:left;font-family:inherit;color:#fff;width:100%;font-size:inherit}
+        .main-btn:active{transform:scale(.98);border-color:#d4af37}
+        .main-btn .icon{font-size:2.2rem;flex-shrink:0}
+        .main-btn .info h3{font-size:.95rem;font-weight:700}
+        .main-btn .info p{font-size:.7rem;color:#999;margin-top:2px}
+        .main-btn.gold{border-color:#d4af37;background:#1a1a0a}
+        .card{background:#111;border:1px solid #222;border-radius:16px;padding:18px;margin:14px 0}
+        .card h3{font-size:.85rem;color:#d4af37;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px}
+        .btn{width:100%;padding:15px;border-radius:30px;border:none;font-weight:700;font-size:.85rem;cursor:pointer;font-family:inherit;text-transform:uppercase;letter-spacing:.5px;transition:.2s}
+        .btn:active{transform:scale(.97)}
+        .btn-gold{background:#d4af37;color:#000}
+        .btn-outline{background:transparent;border:1px solid #d4af37;color:#d4af37;margin-top:8px}
+        .btn-sm{width:auto;padding:10px 18px;font-size:.7rem;display:inline-block;margin:3px}
+        .btn-blue{background:#3b82f6;color:#fff}
+        .ai-box{background:#0a0a0a;border:1px solid #d4af37;border-radius:16px;padding:14px;margin:10px 0;font-size:.8rem;line-height:1.7;max-height:400px;overflow-y:auto}
+        .spinner{display:inline-block;width:28px;height:28px;border:3px solid #222;border-top-color:#d4af37;border-radius:50%;animation:spin .8s linear infinite}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        .toast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%);background:#d4af37;color:#000;padding:12px 24px;border-radius:25px;font-weight:700;font-size:.8rem;z-index:999;animation:pop .3s ease,fade .5s 2s forwards;max-width:90%;text-align:center}
+        @keyframes pop{from{transform:translate(-50%,20px);opacity:0}to{transform:translate(-50%,0);opacity:1}}
+        @keyframes fade{to{opacity:0}}
+        input,textarea,select{width:100%;background:#0a0a0a;border:1px solid #222;border-radius:12px;padding:14px;color:#fff;font-family:inherit;font-size:.85rem;margin:6px 0;outline:0;-webkit-appearance:none}
+        input:focus,textarea:focus,select:focus{border-color:#d4af37}
+        textarea{min-height:80px;resize:vertical}
+        select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23d4af37' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px}
+        .streak-row{display:flex;gap:4px;flex-wrap:wrap;margin:8px 0}
+        .sdot{width:26px;height:26px;border-radius:50%;background:#0a0a0a;border:1px solid #222;display:flex;align-items:center;justify-content:center;font-size:.55rem;font-weight:700}
+        .sdot.on{background:#d4af37;border-color:#d4af37;color:#000}
+        .sdot.today{border-color:#d4af37;box-shadow:0 0 10px rgba(212,175,55,.4)}
+        .product-card{display:flex;gap:10px;align-items:center;background:#0a0a0a;border-radius:12px;padding:10px;margin:6px 0}
+        .product-card img{width:50px;height:50px;border-radius:8px;object-fit:cover;background:#1a1a1a}
+        .product-info{flex:1;font-size:.75rem}
+        .product-info strong{color:#d4af37}
+        .gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+        .gallery-item{aspect-ratio:3/4;background:#0a0a0a;border-radius:12px;overflow:hidden;position:relative;border:1px solid #222}
+        .gallery-item img{width:100%;height:100%;object-fit:cover}
+        .gallery-date{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.8);padding:4px;font-size:.6rem;text-align:center}
+        .camera-container{position:fixed;top:0;left:0;right:0;bottom:0;background:#000;z-index:3000;display:flex;flex-direction:column;align-items:center;justify-content:center}
+        .camera-container video{width:100%;max-height:70vh;object-fit:cover;border-radius:20px}
+        .camera-instruction{font-size:1.2rem;color:#d4af37;font-weight:700;padding:20px;text-align:center;animation:pulse 1.5s infinite}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+        .link-btn{color:#3b82f6;text-decoration:underline;cursor:pointer;font-size:.75rem}
+        .routine-step{display:flex;align-items:center;gap:8px;padding:8px;background:#0a0a0a;border-radius:8px;margin:4px 0;font-size:.75rem}
+        .routine-step .time{background:#d4af37;color:#000;padding:4px 10px;border-radius:12px;font-weight:700;font-size:.65rem}
+        .exercise-guide{background:#0a0a0a;border-radius:12px;padding:12px;margin:8px 0}
+        .exercise-guide h4{color:#d4af37;margin-bottom:6px;font-size:.8rem}
     </style>
 </head>
 <body>
@@ -73,122 +68,171 @@
     <div id="toasts"></div>
 
     <script>
-        const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-        const MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct';
+        const API_URL='https://api.groq.com/openai/v1/chat/completions';
+        const MODEL='meta-llama/llama-4-scout-17b-16e-instruct';
 
-        let S = {
-            tab: 'home', score: 50, streak: [], lastDate: '',
-            stats: { sleep: 0, water: 0, workout: 0, skincare: 0, mewing: 0, posture: 0, nutrition: 0, sun: 0 },
-            onboarded: false, apiKey: '',
-            faceAnalysis: null, faceImage: null,
-            hairProfile: { type: '', thickness: '', texture: '', length: '', concerns: '' },
-            products: { face: [], hair: [] },
-            chatHistory: []
+        let S={
+            tab:'home',score:50,streak:[],lastDate:'',
+            stats:{sleep:0,water:0,workout:0,skincare:0,mewing:0,posture:0,nutrition:0,sun:0},
+            onboarded:false,apiKey:'',
+            faceAnalysis:null,faceImage:null,
+            hairProfile:{type:'',thickness:'',texture:'',length:'',concerns:''},
+            products:{face:[],hair:[]},
+            progressGallery:[],
+            chatHistory:[]
         };
 
-        function load() {
-            try {
-                let s = localStorage.getItem('lmx_ultra');
-                if (s) { let p = JSON.parse(s); S = { ...S, ...p }; }
-                let k = localStorage.getItem('lmx_apikey_ultra');
-                if (k) S.apiKey = k;
-                let t = new Date().toDateString();
-                if (S.lastDate !== t) {
-                    S.stats = { sleep: 0, water: 0, workout: 0, skincare: 0, mewing: 0, posture: 0, nutrition: 0, sun: 0 };
-                    S.lastDate = t;
+        function load(){
+            try{
+                let s=localStorage.getItem('lmx_v3');
+                if(s){let p=JSON.parse(s);S={...S,...p}}
+                let k=localStorage.getItem('lmx_apikey_v3');
+                if(k) S.apiKey=k;
+                let t=new Date().toDateString();
+                if(S.lastDate!==t){
+                    S.stats={sleep:0,water:0,workout:0,skincare:0,mewing:0,posture:0,nutrition:0,sun:0};
+                    S.lastDate=t;
                 }
-            } catch (e) {}
+            }catch(e){}
             calcScore();
         }
 
-        function save() {
-            S.lastDate = new Date().toDateString();
-            let ts = { ...S }; delete ts.apiKey;
-            localStorage.setItem('lmx_ultra', JSON.stringify(ts));
-            if (S.apiKey) localStorage.setItem('lmx_apikey_ultra', S.apiKey);
+        function save(){
+            S.lastDate=new Date().toDateString();
+            let ts={...S};delete ts.apiKey;
+            localStorage.setItem('lmx_v3',JSON.stringify(ts));
+            if(S.apiKey) localStorage.setItem('lmx_apikey_v3',S.apiKey);
             calcScore();
         }
 
-        function getAPIKey() {
-            if (!S.apiKey) S.apiKey = localStorage.getItem('lmx_apikey_ultra') || '';
-            return S.apiKey;
-        }
-        function setAPIKey(k) { S.apiKey = k; localStorage.setItem('lmx_apikey_ultra', k); }
+        function getAPIKey(){if(!S.apiKey) S.apiKey=localStorage.getItem('lmx_apikey_v3')||'';return S.apiKey}
+        function setAPIKey(k){S.apiKey=k;localStorage.setItem('lmx_apikey_v3',k)}
 
-        function calcScore() {
-            let sc = 50, s = S.stats;
-            if (s.sleep >= 7) sc += 15; else if (s.sleep >= 6) sc += 8;
-            if (s.water >= 8) sc += 10; else if (s.water >= 5) sc += 5;
-            if (s.workout) sc += 10; if (s.skincare) sc += 8; if (s.mewing) sc += 3; if (s.posture) sc += 3;
-            if (s.nutrition >= 3) sc += 8; if (s.sun) sc += 3;
-            if (S.streak.length >= 30) sc += 10; else if (S.streak.length >= 14) sc += 7; else if (S.streak.length >= 7) sc += 4;
-            S.score = Math.min(100, Math.max(0, Math.round(sc)));
-        }
-        function updateStreak() {
-            let t = new Date().toDateString();
-            if (!S.streak.includes(t)) { S.streak.push(t); if (S.streak.length > 90) S.streak = S.streak.slice(-90); }
-        }
-        function toast(m) {
-            let c = document.getElementById('toasts');
-            let t = document.createElement('div'); t.className = 'toast'; t.textContent = m; c.appendChild(t);
-            setTimeout(() => { if (t.parentNode) t.remove(); }, 2500);
+        function calcScore(){
+            let sc=50,s=S.stats;
+            if(s.sleep>=7)sc+=15;else if(s.sleep>=6)sc+=8;
+            if(s.water>=8)sc+=10;else if(s.water>=5)sc+=5;
+            if(s.workout)sc+=10;if(s.skincare)sc+=8;if(s.mewing)sc+=3;if(s.posture)sc+=3;
+            if(s.nutrition>=3)sc+=8;if(s.sun)sc+=3;
+            if(S.streak.length>=30)sc+=10;else if(S.streak.length>=14)sc+=7;else if(S.streak.length>=7)sc+=4;
+            S.score=Math.min(100,Math.max(0,Math.round(sc)));
         }
 
-        async function callAI(prompt, img = null) {
-            let key = getAPIKey();
-            if (!key) { showAPISetup(); throw new Error('Indtast API-nøgle'); }
-            let msgs = [];
-            if (img) {
-                msgs.push({ role: 'user', content: [
-                    { type: 'image_url', image_url: { url: `data:image/jpeg;base64,${img}`, detail: 'high' } },
-                    { type: 'text', text: prompt }
-                ]});
-            } else { msgs.push({ role: 'user', content: prompt }); }
-            let r = await fetch(API_URL, {
-                method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
-                body: JSON.stringify({ model: MODEL, messages: msgs, max_tokens: 1500, temperature: 0.7 })
-            });
-            if (!r.ok) { let e = await r.json(); throw new Error(e.error?.message || 'API-fejl'); }
-            let d = await r.json(); return d.choices[0].message.content;
+        function updateStreak(){
+            let t=new Date().toDateString();
+            if(!S.streak.includes(t)){S.streak.push(t);if(S.streak.length>90)S.streak=S.streak.slice(-90)}
         }
 
-        function compressImg(file) {
-            return new Promise(r => {
-                let reader = new FileReader();
-                reader.onload = e => {
-                    let img = new Image();
-                    img.onload = () => {
-                        let c = document.createElement('canvas'); let w = img.width, h = img.height;
-                        if (w > 800) { h = (800 / w) * h; w = 800; }
-                        c.width = w; c.height = h; let ctx = c.getContext('2d'); ctx.drawImage(img, 0, 0, w, h);
-                        let b64 = c.toDataURL('image/jpeg', 0.8).split(',')[1];
-                        r({ b64, url: c.toDataURL('image/jpeg', 0.8) });
-                    }; img.src = e.target.result;
-                }; reader.readAsDataURL(file);
+        function toast(m){
+            let c=document.getElementById('toasts');
+            let t=document.createElement('div');t.className='toast';t.textContent=m;c.appendChild(t);
+            setTimeout(()=>{if(t.parentNode)t.remove()},2500);
+        }
+
+        async function callAI(prompt,img=null){
+            let key=getAPIKey();
+            if(!key){showAPISetup();throw new Error('Indtast API-nøgle')}
+            let msgs=[];
+            if(img){msgs.push({role:'user',content:[{type:'image_url',image_url:{url:`data:image/jpeg;base64,${img}`,detail:'high'}},{type:'text',text:prompt}]})}
+            else{msgs.push({role:'user',content:prompt})}
+            let r=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${key}`},body:JSON.stringify({model:MODEL,messages:msgs,max_tokens:1500,temperature:0.7})});
+            if(!r.ok){let e=await r.json();throw new Error(e.error?.message||'API-fejl')}
+            let d=await r.json();return d.choices[0].message.content;
+        }
+
+        function compressImg(file){
+            return new Promise(r=>{
+                let reader=new FileReader();
+                reader.onload=e=>{
+                    let img=new Image();
+                    img.onload=()=>{
+                        let c=document.createElement('canvas');let w=img.width,h=img.height;
+                        if(w>800){h=(800/w)*h;w=800}
+                        c.width=w;c.height=h;let ctx=c.getContext('2d');ctx.drawImage(img,0,0,w,h);
+                        let b64=c.toDataURL('image/jpeg',0.8).split(',')[1];
+                        r({b64,url:c.toDataURL('image/jpeg',0.8)});
+                    };img.src=e.target.result;
+                };reader.readAsDataURL(file);
             });
         }
 
-        // ============ FACE ANALYSIS ============
-        async function analyzeFace(file) {
-            let r = document.getElementById('aiRes');
-            r.innerHTML = `<div style="text-align:center;padding:20px"><div class="spinner"></div><p style="color:#999;margin-top:8px">AI analyserer dit ansigt...</p></div>`;
-            r.style.display = 'block';
-            try {
-                let { b64, url } = await compressImg(file);
-                S.faceImage = url;
-                document.querySelector('.upload-box').innerHTML = `<img src="${url}">`;
-                let prompt = `Du er en EKSPERT i looksmaxing. Analyser dette ansigt GRUNDIGT på DANSK. Returnér KUN JSON:
-{"rating":1-10,"symmetri":1-10,"hud":1-10,"kæbelinje":1-10,"øjne":1-10,"hår":1-10,"harmoni":1-10,"styrker":["3 styrker"],"forbedringer":["3 områder"],"tips":["3 konkrete tips"],"potentiale":1-10,"summary":"kort tekst","optimalSøvn":"antal timer","optimalVand":"antal glas","hudtype":"tør/fedtet/kombineret/normal","ansigtsform":"oval/rund/firkantet/hjerteformet/diamant"} Vær ÆRLIG og SPECIFIK.`;
-                let res = await callAI(prompt, b64);
+        // ============ CAMERA SCANNING ============
+        let cameraStream=null;
+        let scanStep=0;
+        let scanImages=[];
+
+        async function startCameraScan(){
+            try{
+                cameraStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:800},height:{ideal:800}}});
+                scanStep=0;scanImages=[];
+                showCameraUI();
+            }catch(e){toast('❌ Kunne ikke få adgang til kamera');}
+        }
+
+        function showCameraUI(){
+            let overlay=document.createElement('div');
+            overlay.className='camera-container';
+            overlay.id='cameraUI';
+            overlay.innerHTML=`
+<video id="camVideo" autoplay playsinline></video>
+<div class="camera-instruction" id="camInstr">Kig lige frem</div>
+<button class="btn btn-gold" style="width:80%;margin-top:20px" id="camBtn" onclick="captureScan()">📸 Tag billede</button>
+<button class="btn btn-outline btn-sm" style="margin-top:10px" onclick="stopCamera()">❌ Annuller</button>`;
+            document.body.appendChild(overlay);
+            let video=document.getElementById('camVideo');
+            video.srcObject=cameraStream;
+        }
+
+        function captureScan(){
+            let video=document.getElementById('camVideo');
+            let canvas=document.createElement('canvas');
+            canvas.width=video.videoWidth;canvas.height=video.videoHeight;
+            let ctx=canvas.getContext('2d');
+            ctx.translate(canvas.width,0);ctx.scale(-1,1);
+            ctx.drawImage(video,0,0,canvas.width,canvas.height);
+            let dataUrl=canvas.toDataURL('image/jpeg',0.8);
+            scanImages.push(dataUrl);
+
+            let instructions=['Kig lige frem 😐','Drej hoved til HØJRE ➡️','Drej hoved til VENSTRE ⬅️','Løft hagen let ⬆️','Sænk hagen let ⬇️'];
+            scanStep++;
+            if(scanStep<instructions.length){
+                document.getElementById('camInstr').textContent=instructions[scanStep];
+                document.getElementById('camBtn').textContent=`📸 Tag billede (${scanStep+1}/5)`;
+            }else{
+                stopCamera();
+                processScanImages();
+            }
+        }
+
+        function stopCamera(){
+            if(cameraStream){cameraStream.getTracks().forEach(t=>t.stop());cameraStream=null}
+            let ui=document.getElementById('cameraUI');if(ui)ui.remove();
+        }
+
+        async function processScanImages(){
+            let r=document.getElementById('aiRes');
+            r.innerHTML=`<div style="text-align:center;padding:20px"><div class="spinner"></div><p style="color:#999">AI analyserer 5 vinkler...</p></div>`;
+            r.style.display='block';
+            try{
+                S.faceImage=scanImages[0];
+                let frontB64=scanImages[0].split(',')[1];
+                let prompt=`Du er EKSPERT i ansigtsanalyse. Du har fået 5 billeder fra forskellige vinkler. Analyser GRUNDIGT på DANSK. Returnér KUN JSON:
+{"rating":1-10,"symmetri":1-10,"hud":1-10,"kæbelinje":1-10,"øjne":1-10,"hår":1-10,"harmoni":1-10,"styrker":["3"],"forbedringer":["3"],"tips":["3 konkrete"],"potentiale":1-10,"summary":"kort","optimalSøvn":"antal timer","optimalVand":"antal glas","hudtype":"type","ansigtsform":"form","acnePrognose":"hvornår væk hvis relevant","generelPrognose":"hvornår ser du markant bedre ud","kæbeØvelser":["øvelse1","øvelse2"],"rutineMorgen":["trin1","trin2"],"rutineAften":["trin1","trin2"]}
+Vær ÆRLIG, SPECIFIK, og giv TIDSESTIMATER.`;
+                let res=await callAI(prompt,frontB64);
                 let analysis;
-                try { let m = res.match(/\{[\s\S]*\}/); if (m) analysis = JSON.parse(m[0]); else throw new Error('No JSON'); } catch (e) { r.innerHTML = `<div class="ai-box">${res.replace(/\n/g,'<br>')}</div>`; return; }
-                S.faceAnalysis = analysis;
+                try{let m=res.match(/\{[\s\S]*\}/);if(m)analysis=JSON.parse(m[0]);else throw new Error('No JSON')}catch(e){r.innerHTML=`<div class="ai-box">${res.replace(/\n/g,'<br>')}</div>`;return}
+                S.faceAnalysis=analysis;
+                // Save weekly progress
+                let thisWeek=getWeekNumber(new Date());
+                let existing=S.progressGallery.find(p=>p.week===thisWeek);
+                if(!existing){S.progressGallery.push({week:thisWeek,date:new Date().toISOString(),image:S.faceImage,score:analysis.rating});if(S.progressGallery.length>52)S.progressGallery.shift()}
                 save();
-                let stars = '⭐'.repeat(Math.round(analysis.rating));
-                r.innerHTML = `<div class="ai-box">
-<div style="text-align:center;margin-bottom:14px"><div style="font-size:2.5rem;color:#d4af37;font-weight:800">${analysis.rating}/10</div><div style="font-size:1.3rem">${stars}</div><p style="color:#999;font-size:0.7rem">Samlet vurdering</p></div>
-${['symmetri','hud','kæbelinje','øjne','hår','harmoni'].map(k=>`<div style="display:flex;align-items:center;gap:8px;margin:5px 0;font-size:0.7rem"><span style="min-width:60px;color:#999">${k.charAt(0).toUpperCase()+k.slice(1)}</span><div style="flex:1;height:8px;background:#222;border-radius:4px;overflow:hidden"><div style="height:100%;background:#d4af37;border-radius:4px;width:${analysis[k]*10}%"></div></div><span style="color:#fff;font-weight:700">${analysis[k]}/10</span></div>`).join('')}
-<div style="margin-top:10px"><strong style="color:#22c55e">💪 Styrker:</strong><br>${analysis.styrker.map(s=>'• '+s).join('<br>')}<br><br>
+                let stars='⭐'.repeat(Math.round(analysis.rating));
+                r.innerHTML=`<div class="ai-box">
+<div style="text-align:center;margin-bottom:14px"><div style="font-size:2.5rem;color:#d4af37;font-weight:800">${analysis.rating}/10</div><div>${stars}</div></div>
+${['symmetri','hud','kæbelinje','øjne','hår','harmoni'].map(k=>`<div style="display:flex;align-items:center;gap:8px;margin:5px 0;font-size:.7rem"><span style="min-width:60px;color:#999">${k.charAt(0).toUpperCase()+k.slice(1)}</span><div style="flex:1;height:8px;background:#222;border-radius:4px"><div style="height:100%;background:#d4af37;border-radius:4px;width:${analysis[k]*10}%"></div></div><span style="color:#fff;font-weight:700">${analysis[k]}/10</span></div>`).join('')}
+<strong style="color:#22c55e">💪 Styrker:</strong><br>${analysis.styrker.map(s=>'• '+s).join('<br>')}<br><br>
 <strong style="color:#ef4444">📈 Forbedringer:</strong><br>${analysis.forbedringer.map(i=>'• '+i).join('<br>')}<br><br>
 <strong style="color:#d4af37">🎯 Tips:</strong><br>${analysis.tips.map(t=>'• '+t).join('<br>')}<br><br>
 <strong>🚀 Potentiale:</strong> ${analysis.potentiale}/10<br>
@@ -196,264 +240,229 @@ ${['symmetri','hud','kæbelinje','øjne','hår','harmoni'].map(k=>`<div style="d
 <strong>💧 Optimal vand:</strong> ${analysis.optimalVand}<br>
 <strong>🧴 Hudtype:</strong> ${analysis.hudtype}<br>
 <strong>🔷 Ansigtsform:</strong> ${analysis.ansigtsform}<br>
-<i style="color:#999">${analysis.summary}</i></div></div>`;
-                toast('✅ Analyse færdig!');
-            } catch (e) { r.innerHTML = `<div class="ai-box" style="border-color:#ef4444;text-align:center"><p style="color:#ef4444">❌ ${e.message}</p></div>`; }
+${analysis.acnePrognose?`<strong>🔮 Acne-prognose:</strong> ${analysis.acnePrognose}<br>`:''}
+<strong>📅 Generel prognose:</strong> ${analysis.generelPrognose}<br><br>
+${analysis.kæbeØvelser?`<div class="exercise-guide"><h4>💪 Kæbe-øvelser</h4>${analysis.kæbeØvelser.map(o=>'• '+o).join('<br>')}</div>`:''}
+${analysis.rutineMorgen?`<div style="margin-top:8px"><strong>🌅 Morgen-rutine:</strong><br>${analysis.rutineMorgen.map((s,i)=>`<div class="routine-step"><span class="time">${i+1}</span>${s}</div>`).join('')}</div>`:''}
+${analysis.rutineAften?`<div style="margin-top:8px"><strong>🌙 Aften-rutine:</strong><br>${analysis.rutineAften.map((s,i)=>`<div class="routine-step"><span class="time">${i+1}</span>${s}</div>`).join('')}</div>`:''}
+<i style="color:#999">${analysis.summary}</i></div>`;
+                toast('✅ 5-vinkels analyse færdig!');
+            }catch(e){r.innerHTML=`<div class="ai-box" style="border-color:#ef4444">❌ ${e.message}</div>`}
         }
 
-        // ============ HAIRSTYLE ADVISOR ============
-        async function getHairAdvice() {
-            if (!S.faceAnalysis) { toast('❌ Analyser dit ansigt først!'); return; }
-            let r = document.getElementById('hairRes');
-            r.innerHTML = `<div style="text-align:center;padding:20px"><div class="spinner"></div><p style="color:#999">Finder den bedste frisure til dig...</p></div>`;
-            r.style.display = 'block';
-            try {
-                let hp = S.hairProfile;
-                let prompt = `Du er en EKSPERT i herrefrisurer og hårpleje. Anbefal den PERFEKTE frisure på DANSK baseret på:
-- Ansigtsform: ${S.faceAnalysis.ansigtsform}
-- Hårtype: ${hp.type||'ikke angivet'}
-- Tykkelse: ${hp.thickness||'ikke angivet'}
-- Tekstur: ${hp.texture||'ikke angivet'}
-- Længde nu: ${hp.length||'ikke angivet'}
-- Bekymringer: ${hp.concerns||'ingen'}
-- Generel vurdering: ${S.faceAnalysis.rating}/10
+        function getWeekNumber(d){d=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));d.setUTCDate(d.getUTCDate()+4-(d.getUTCDay()||7));let yearStart=new Date(Date.UTC(d.getUTCFullYear(),0,1));return Math.ceil((((d-yearStart)/86400000)+1)/7)}
 
-Giv: 1) TOP 3 frisurer der passer perfekt med BEGRUNDELSE 2) Hvilken længde der er optimal 3) Specifikke styling-produkter (navne) 4) Hvordan man skal style det 5) Hvad man skal sige til sin frisør. Brug DANSK og vær meget specifik.`;
-                let res = await callAI(prompt, S.faceImage ? S.faceImage.split(',')[1] : null);
-                r.innerHTML = `<div class="ai-box"><strong style="color:#d4af37">💇 Frisure-anbefaling</strong><br><br>${res.replace(/\n/g,'<br>')}</div>`;
-                toast('✅ Frisure-råd klar!');
-            } catch (e) { r.innerHTML = `<div class="ai-box" style="border-color:#ef4444">❌ ${e.message}</div>`; }
+        // ============ PRODUCT WITH IMAGE ============
+        function addProductWithImage(type){
+            let inp=document.createElement('input');
+            inp.type='file';inp.accept='image/*';inp.capture='environment';
+            inp.onchange=async function(e){
+                let f=e.target.files[0];if(!f)return;
+                let name=prompt('Produktnavn:');
+                if(!name)return;
+                let desc=prompt('Kort beskrivelse:')||'';
+                let{b64,url}=await compressImg(f);
+                if(!S.products[type])S.products[type]=[];
+                S.products[type].push({name,description:desc,image:url,date:new Date().toISOString()});
+                save();toast('✅ Produkt tilføjet!');render();
+            };inp.click();
         }
 
-        // ============ PRODUCT ADVISOR ============
-        async function getProductAdvice(type) {
-            if (!S.faceAnalysis) { toast('❌ Analyser dit ansigt først!'); return; }
-            let r = document.getElementById(type==='face'?'faceProdRes':'hairProdRes');
-            r.innerHTML = `<div style="text-align:center;padding:20px"><div class="spinner"></div><p style="color:#999">Analyserer produkter...</p></div>`;
-            r.style.display = 'block';
-            try {
-                let products = S.products[type] || [];
-                let productList = products.length > 0 ? products.map(p => `${p.name} - ${p.description||''}`).join(', ') : 'Ingen produkter uploadet';
-                let prompt = type === 'face' ?
-                    `Du er hudpleje-ekspert. Anbefal PRODUKTER på DANSK til dette ansigt:
+        // ============ PRODUCT ADVICE WITH LINKS ============
+        async function getProductAdvice(type){
+            if(!S.faceAnalysis){toast('❌ Analyser dit ansigt først!');return}
+            let r=document.getElementById(type==='face'?'faceProdRes':'hairProdRes');
+            r.innerHTML=`<div style="text-align:center;padding:20px"><div class="spinner"></div><p style="color:#999">Finder produkter og links...</p></div>`;
+            r.style.display='block';
+            try{
+                let products=S.products[type]||[];
+                let productList=products.length>0?products.map(p=>`${p.name}: ${p.description}`).join('; '):'Ingen';
+                let prompt=type==='face'?
+`Du er hudpleje-ekspert. Anbefal PRODUKTER med SPECIFIKKE MÆRKENAVNE og PRISER i DKK på DANSK.
 Hudtype: ${S.faceAnalysis.hudtype}, Score: ${S.faceAnalysis.hud}/10.
-Bruger har disse produkter: ${productList}.
-Giv: 1) SPECIFIKKE produkter (med mærkenavne) der passer til hudtypen 2) Morgen-rutine 3) Aften-rutine 4) Hvilke af brugerens produkter er gode/dårlige 5) Budget-venlige alternativer. Vær meget specifik med produktnavne.` :
-                    `Du er hårekspert. Anbefal HÅRPRODUKTER på DANSK:
+Bruger har: ${productList}.
+Returnér KUN JSON:
+{"anbefalede":[{"navn":"produktnavn","pris":"ca. XX kr","link":"https://www.google.com/search?q=produktnavn+køb","kategori":"cleanser/toner/creme/etc"}],
+"morgenRutine":["trin1","trin2"],
+"aftenRutine":["trin1","trin2"],
+"vurderingAfBrugerens":["god/dårlig vurdering"]}`
+:
+`Du er hårekspert. Anbefal HÅRPRODUKTER med SPECIFIKKE MÆRKENAVNE og PRISER i DKK på DANSK.
 Hårtype: ${S.hairProfile.type}, Tykkelse: ${S.hairProfile.thickness}, Tekstur: ${S.hairProfile.texture}.
 Bruger har: ${productList}.
-Giv: 1) SPECIFIKKE produkter (mærkenavne) 2) Styling-rutine 3) Hvilke af brugerens produkter er gode/dårlige 4) Budget-alternativer.`;
-                let res = await callAI(prompt, S.faceImage ? S.faceImage.split(',')[1] : null);
-                r.innerHTML = `<div class="ai-box"><strong style="color:#d4af37">${type==='face'?'🧴':'💆'} ${type==='face'?'Hudpleje':'Hårpleje'} anbefalinger</strong><br><br>${res.replace(/\n/g,'<br>')}</div>`;
-                toast('✅ Produkt-anbefalinger klar!');
-            } catch (e) { r.innerHTML = `<div class="ai-box" style="border-color:#ef4444">❌ ${e.message}</div>`; }
+Returnér KUN JSON:
+{"anbefalede":[{"navn":"produktnavn","pris":"ca. XX kr","link":"https://www.google.com/search?q=produktnavn+køb"}],
+"rutine":["trin1","trin2"],
+"vurderingAfBrugerens":["vurdering"]}`;
+                let res=await callAI(prompt);
+                let data;
+                try{let m=res.match(/\{[\s\S]*\}/);if(m)data=JSON.parse(m[0]);else throw new Error('No JSON')}catch(e){r.innerHTML=`<div class="ai-box">${res.replace(/\n/g,'<br>')}</div>`;return}
+                let html=`<div class="ai-box"><strong style="color:#d4af37">${type==='face'?'🧴 Hudpleje':'💆 Hårpleje'} anbefalinger</strong><br><br>`;
+                if(data.anbefalede){html+='<strong>🛒 Anbefalede produkter:</strong><br>';data.anbefalede.forEach(p=>{html+=`• <strong>${p.navn}</strong> - ${p.pris||''}<br><a href="${p.link}" target="_blank" class="link-btn">🔗 Søg efter produktet →</a><br><br>`})}
+                if(data.morgenRutine){html+='<strong>🌅 Morgen-rutine:</strong><br>';data.morgenRutine.forEach((s,i)=>{html+=`<div class="routine-step"><span class="time">${i+1}</span>${s}</div>`})}
+                if(data.aftenRutine){html+='<strong>🌙 Aften-rutine:</strong><br>';data.aftenRutine.forEach((s,i)=>{html+=`<div class="routine-step"><span class="time">${i+1}</span>${s}</div>`})}
+                if(data.rutine){html+='<strong>📋 Rutine:</strong><br>';data.rutine.forEach((s,i)=>{html+=`<div class="routine-step"><span class="time">${i+1}</span>${s}</div>`})}
+                if(data.vurderingAfBrugerens){html+='<strong>📊 Vurdering af dine produkter:</strong><br>';data.vurderingAfBrugerens.forEach(v=>html+='• '+v+'<br>')}
+                html+='</div>';
+                r.innerHTML=html;toast('✅ Anbefalinger klar!');
+            }catch(e){r.innerHTML=`<div class="ai-box" style="border-color:#ef4444">❌ ${e.message}</div>`}
         }
 
-        // ============ COACH (husker ansigt) ============
-        async function getCoach() {
-            if (!S.faceAnalysis) { toast('❌ Analyser dit ansigt først - coachen skal kende dit udseende!'); return; }
-            let r = document.getElementById('coachRes');
-            r.innerHTML = `<div style="text-align:center;padding:20px"><div class="spinner"></div><p style="color:#999">Coach analyserer din data og dit ansigt...</p></div>`;
-            r.style.display = 'block';
-            try {
-                let s = S.stats; let f = S.faceAnalysis;
-                let prompt = `Du er en personlig looksmaxing COACH der kender brugerens ansigt og data. Giv DETALJERET rådgivning på DANSK:
-
-ANSIGTSDATA: Score: ${f.rating}/10, Hudtype: ${f.hudtype}, Ansigtsform: ${f.ansigtsform}, Hud: ${f.hud}/10, Kæbelinje: ${f.kæbelinje}/10, Hår: ${f.hår}/10, Øjne: ${f.øjne}/10
-DAGENS DATA: Søvn: ${s.sleep}t (AI anbefaler: ${f.optimalSøvn}), Vand: ${s.water} glas (AI anbefaler: ${f.optimalVand}), Træning: ${s.workout?'✅':'❌'}, Hudpleje: ${s.skincare?'✅':'❌'}, Mewing: ${s.mewing?'✅':'❌'}, Holdning: ${s.posture?'✅':'❌'}, Ernæring: ${s.nutrition}/5, SPF: ${s.sun?'✅':'❌'}, Glow Score: ${S.score}/100, Streak: ${S.streak.length} dage.
-
-Giv: 1) PERSONLIG motiverende besked 2) PRÆCISE mål for i morgen (Søvn: X timer, Vand: Y glas osv.) 3) 3 konkrete handlinger der matcher DIT ansigt 4) Hvad skal forbedres NU 5) Dit potentiale hvis du følger alt. Brug emojis, vær direkte.`;
-                let res = await callAI(prompt, S.faceImage ? S.faceImage.split(',')[1] : null);
-                r.innerHTML = `<div class="ai-box"><strong style="color:#d4af37">🤖 Personlig Coach (kender dit ansigt)</strong><br><br>${res.replace(/\n/g,'<br>')}</div>`;
-                toast('✅ Coach-råd klar!');
-            } catch (e) { r.innerHTML = `<div class="ai-box" style="border-color:#ef4444">❌ ${e.message}</div>`; }
+        // ============ HAIR ADVICE ============
+        async function getHairAdvice(){
+            if(!S.faceAnalysis){toast('❌ Analyser dit ansigt først!');return}
+            let r=document.getElementById('hairRes');
+            r.innerHTML=`<div style="text-align:center;padding:20px"><div class="spinner"></div><p style="color:#999">Finder bedste frisure...</p></div>`;r.style.display='block';
+            try{
+                let hp=S.hairProfile;
+                let prompt=`Anbefal TOP 3 FRISURER på DANSK med SPECIFIKKE NAVNE og BEGRUNDELSE baseret på: Ansigtsform: ${S.faceAnalysis.ansigtsform}, Hårtype: ${hp.type||'?'}, Tykkelse: ${hp.thickness||'?'}, Tekstur: ${hp.texture||'?'}, Længde: ${hp.length||'?'}, Bekymringer: ${hp.concerns||'ingen'}. Giv også: hvad man skal sige til frisøren, og hvilke styling-produkter (med mærkenavne og priser i DKK). Returnér KUN JSON: {"frisurer":[{"navn":"","begrundelse":"","styling":"","produkter":["navn (ca. pris)"]}]}`;
+                let res=await callAI(prompt);
+                let data;try{let m=res.match(/\{[\s\S]*\}/);if(m)data=JSON.parse(m[0]);else throw new Error('')}catch(e){r.innerHTML=`<div class="ai-box">${res.replace(/\n/g,'<br>')}</div>`;return}
+                let html='<div class="ai-box"><strong style="color:#d4af37">💇 Frisure-anbefalinger</strong><br><br>';
+                if(data.frisurer){data.frisurer.forEach((f,i)=>{html+=`<strong>#${i+1}: ${f.navn}</strong><br>${f.begrundelse}<br><strong>Styling:</strong> ${f.styling}<br><strong>Produkter:</strong> ${(f.produkter||[]).join(', ')}<br><br>`})}
+                html+='</div>';r.innerHTML=html;toast('✅ Frisure-råd klar!');
+            }catch(e){r.innerHTML=`<div class="ai-box" style="border-color:#ef4444">❌ ${e.message}</div>`}
         }
 
-        // ============ AI AUTO-FILL TRACKER ============
-        function aiFillTracker() {
-            if (!S.faceAnalysis) { toast('❌ Analyser dit ansigt først!'); return; }
-            let f = S.faceAnalysis;
-            let sleepH = parseInt(f.optimalSøvn) || 8;
-            let waterG = parseInt(f.optimalVand) || 10;
-            S.stats.sleep = sleepH;
-            S.stats.water = waterG;
-            S.stats.nutrition = 4;
-            S.stats.workout = 1;
-            S.stats.skincare = 1;
-            S.stats.mewing = 1;
-            S.stats.posture = 1;
-            S.stats.sun = 1;
-            updateStreak();
-            save();
-            toast('✅ AI har udfyldt optimale værdier!');
-            render();
+        // ============ COACH ============
+        async function getCoach(){
+            let r=document.getElementById('coachRes');
+            r.innerHTML=`<div style="text-align:center;padding:20px"><div class="spinner"></div></div>`;r.style.display='block';
+            try{
+                let s=S.stats;let f=S.faceAnalysis||{};
+                let prompt=`Du er personlig COACH. Giv DETALJERET rådgivning på DANSK. Kender ansigtet: Score ${f.rating||'?'}/10, Hud: ${f.hud||'?'}/10, Kæbelinje: ${f.kæbelinje||'?'}/10. Dagens data: Søvn ${s.sleep}t (mål: ${f.optimalSøvn||'?'}), Vand ${s.water} glas (mål: ${f.optimalVand||'?'}), Træning ${s.workout?'✅':'❌'}, Hudpleje ${s.skincare?'✅':'❌'}, SPF ${s.sun?'✅':'❌'}, Score ${S.score}/100. Giv: 1)Personlig besked 2)PRÆCISE mål i morgen 3)3 handlinger 4)Forbedringer NU. Brug emojis.`;
+                let res=await callAI(prompt,S.faceImage?S.faceImage.split(',')[1]:null);
+                r.innerHTML=`<div class="ai-box"><strong style="color:#d4af37">🤖 Coach (kender dit ansigt)</strong><br><br>${res.replace(/\n/g,'<br>')}</div>`;
+            }catch(e){r.innerHTML=`<div class="ai-box" style="border-color:#ef4444">❌ ${e.message}</div>`}
+        }
+
+        // ============ AI FILL TRACKER ============
+        function aiFillTracker(){
+            if(!S.faceAnalysis){toast('❌ Analyser ansigt først');return}
+            S.stats.sleep=parseInt(S.faceAnalysis.optimalSøvn)||8;
+            S.stats.water=parseInt(S.faceAnalysis.optimalVand)||10;
+            S.stats.nutrition=4;S.stats.workout=1;S.stats.skincare=1;S.stats.mewing=1;S.stats.posture=1;S.stats.sun=1;
+            updateStreak();save();toast('✅ AI har udfyldt alt!');render();
         }
 
         // ============ CHAT ============
-        async function sendChat() {
-            let q = document.getElementById('chatInput').value.trim();
-            if (!q) return;
-            let r = document.getElementById('chatRes');
-            r.innerHTML = `<div style="text-align:center;padding:20px"><div class="spinner"></div></div>`;
-            r.style.display = 'block';
-            try {
-                let context = S.faceAnalysis ? `Brugerens ansigtsdata: Score ${S.faceAnalysis.rating}/10, Hudtype: ${S.faceAnalysis.hudtype}, Ansigtsform: ${S.faceAnalysis.ansigtsform}.` : 'Ingen ansigtsdata endnu.';
-                let prompt = `Du er en looksmaxing ekspert. ${context} Besvar dette spørgsmål på DANSK med KONKRETE, SPECIFIKKE råd: ${q}`;
-                let res = await callAI(prompt, S.faceImage ? S.faceImage.split(',')[1] : null);
-                S.chatHistory.push({ q, a: res, date: new Date().toISOString() });
-                if (S.chatHistory.length > 50) S.chatHistory = S.chatHistory.slice(-50);
-                save();
-                r.innerHTML = `<div class="ai-box"><strong style="color:#d4af37">💬 Svar:</strong><br><br>${res.replace(/\n/g,'<br>')}</div>`;
-                document.getElementById('chatInput').value = '';
-                toast('✅ Svar klar!');
-            } catch (e) { r.innerHTML = `<div class="ai-box" style="border-color:#ef4444">❌ ${e.message}</div>`; }
+        async function sendChat(){
+            let q=document.getElementById('chatInput').value.trim();if(!q)return;
+            let r=document.getElementById('chatRes');r.innerHTML=`<div style="text-align:center"><div class="spinner"></div></div>`;r.style.display='block';
+            try{
+                let ctx=S.faceAnalysis?`Ansigtsdata: Score ${S.faceAnalysis.rating}/10, Hudtype: ${S.faceAnalysis.hudtype}.`:'';
+                let res=await callAI(`Du er looksmaxing ekspert. ${ctx} Besvar på DANSK: ${q}`,S.faceImage?S.faceImage.split(',')[1]:null);
+                r.innerHTML=`<div class="ai-box"><strong style="color:#d4af37">💬 Svar:</strong><br>${res.replace(/\n/g,'<br>')}</div>`;
+                document.getElementById('chatInput').value='';toast('✅ Besvaret!');
+            }catch(e){r.innerHTML=`<div class="ai-box" style="border-color:#ef4444">❌ ${e.message}</div>`}
         }
 
         // ============ API SETUP ============
-        function showAPISetup() {
-            let overlay = document.createElement('div');
-            overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.95);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;';
-            overlay.innerHTML = `<div style="background:#111;border:1px solid #d4af37;border-radius:24px;padding:30px;width:100%;max-width:400px;text-align:center">
-<div style="font-size:3rem">🔑</div><h2 style="color:#d4af37;margin:12px 0">Opsæt API-nøgle</h2>
-<p style="color:#999;font-size:0.8rem;margin-bottom:16px">Få en gratis nøgle på<br><strong>console.groq.com/keys</strong></p>
-<input type="password" id="apiKeyInput" placeholder="gsk_..." autocomplete="off" style="text-align:center">
-<button class="btn btn-gold" style="margin-top:8px" onclick="saveAPIKeyFromModal()">💾 Gem</button>
-<p style="color:#666;font-size:0.6rem;margin-top:8px">Gemmes KUN på din telefon</p></div>`;
-            overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
-            document.body.appendChild(overlay);
+        function showAPISetup(){
+            let o=document.createElement('div');
+            o.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.95);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px';
+            o.innerHTML=`<div style="background:#111;border:1px solid #d4af37;border-radius:24px;padding:30px;width:100%;max-width:400px;text-align:center"><div style="font-size:3rem">🔑</div><h2 style="color:#d4af37;margin:12px 0">API-nøgle</h2><p style="color:#999;font-size:.8rem;margin-bottom:16px">console.groq.com/keys</p><input type="password" id="apiKeyInput" placeholder="gsk_..." autocomplete="off" style="text-align:center"><button class="btn btn-gold" style="margin-top:8px" onclick="saveAPIKeyFromModal()">💾 Gem</button></div>`;
+            o.addEventListener('click',function(e){if(e.target===o)o.remove()});document.body.appendChild(o);
         }
-        function saveAPIKeyFromModal() {
-            let k = document.getElementById('apiKeyInput').value.trim();
-            if (!k) { toast('❌ Indtast nøgle'); return; }
-            if (!k.startsWith('gsk_')) { toast('❌ Skal starte med gsk_'); return; }
-            setAPIKey(k); S.onboarded = true; save();
-            document.querySelectorAll('[style*="z-index:2000"]').forEach(el => el.remove());
-            toast('✅ Klar!'); render();
+        function saveAPIKeyFromModal(){
+            let k=document.getElementById('apiKeyInput').value.trim();
+            if(!k||!k.startsWith('gsk_')){toast('❌ Ugyldig nøgle');return}
+            setAPIKey(k);S.onboarded=true;save();
+            document.querySelectorAll('[style*="z-index:2000"]').forEach(el=>el.remove());
+            toast('✅ Klar!');render();
         }
 
         // ============ RENDER ============
-        function render() {
-            let a = document.getElementById('app');
-            let ds = new Date().toLocaleDateString('da-DK', { weekday: 'long', day: 'numeric', month: 'short' });
-            let hasKey = !!getAPIKey();
-            let sn = ''; if (S.streak.length >= 7) sn = ' 🔥'; if (S.streak.length >= 30) sn = ' 👑';
-
-            if (!hasKey) {
-                a.innerHTML = `<div class="header"><div class="logo-icon">🦁</div><div class="logo-text"><h1>LooksMax AI</h1><span>${ds}</span></div></div>
-<div class="card" style="text-align:center"><div style="font-size:3rem">🔑</div><h3>API-nøgle mangler</h3><p style="color:#999;font-size:0.8rem">Få en gratis nøgle på console.groq.com/keys</p><button class="btn btn-gold" onclick="showAPISetup()">🔑 Indtast nøgle</button></div>`;
-                return;
-            }
-
-            a.innerHTML = `
-<div class="header"><div class="logo-icon">🦁</div><div class="logo-text"><h1>LooksMax AI</h1><span>${ds} · 🟢 Online</span></div></div>
-<div class="score-card"><div class="score-big">${S.score}</div><div class="score-label">Glow Score</div><div class="score-streak">${S.streak.length} dage${sn}</div></div>
+        function render(){
+            let a=document.getElementById('app');
+            let ds=new Date().toLocaleDateString('da-DK',{weekday:'long',day:'numeric',month:'short'});
+            let hasKey=!!getAPIKey();
+            let sn='';if(S.streak.length>=7)sn=' 🔥';if(S.streak.length>=30)sn=' 👑';
+            if(!hasKey){a.innerHTML=`<div class="header"><div class="logo-icon">🦁</div><div class="logo-text"><h1>LooksMax AI</h1><span>${ds}</span></div></div><div class="card" style="text-align:center"><div style="font-size:3rem">🔑</div><h3>API-nøgle mangler</h3><p style="color:#999;font-size:.8rem">console.groq.com/keys</p><button class="btn btn-gold" onclick="showAPISetup()">🔑 Indtast nøgle</button></div>`;return}
+            a.innerHTML=`
+<div class="header"><div class="logo-icon">🦁</div><div class="logo-text"><h1>LooksMax AI v3</h1><span>${ds} · 🟢 Online</span></div></div>
+<div class="score-card"><div class="score-big">${S.score}</div><div style="font-size:.7rem;color:#999;letter-spacing:2px">GLOW SCORE</div><div style="font-size:.75rem;color:#d4af37">${S.streak.length} dage${sn}</div></div>
 <div class="main-btns">
-<button class="main-btn gold" onclick="switchTab('analyze')"><span class="icon">🤖</span><div class="info"><h3>AI Ansigtsanalyse</h3><p>Få vurdering + optimale værdier</p></div></button>
-<button class="main-btn" onclick="switchTab('hair')"><span class="icon">💇</span><div class="info"><h3>Frisure-råd</h3><p>Find den perfekte frisure</p></div></button>
-<button class="main-btn" onclick="switchTab('products')"><span class="icon">🧴</span><div class="info"><h3>Produkt-anbefalinger</h3><p>Hudpleje & hårprodukter</p></div></button>
-<button class="main-btn" onclick="switchTab('coach')"><span class="icon">💬</span><div class="info"><h3>Personlig Coach</h3><p>Råd baseret på dit ansigt</p></div></button>
+<button class="main-btn gold" onclick="switchTab('scan')"><span class="icon">📸</span><div class="info"><h3>3D Ansigtsscanning</h3><p>Drej hovedet - AI ser alle vinkler</p></div></button>
+<button class="main-btn" onclick="switchTab('hair')"><span class="icon">💇</span><div class="info"><h3>Frisure-råd</h3><p>Find perfekt frisure + produkter</p></div></button>
+<button class="main-btn" onclick="switchTab('products')"><span class="icon">🧴</span><div class="info"><h3>Produkter</h3><p>Upload + få links til køb</p></div></button>
+<button class="main-btn" onclick="switchTab('coach')"><span class="icon">💬</span><div class="info"><h3>Coach</h3><p>Personlige råd med tidsprognose</p></div></button>
 <button class="main-btn" onclick="switchTab('tracker')"><span class="icon">✅</span><div class="info"><h3>Tracker</h3><p>AI-auto-udfyld eller manuel</p></div></button>
-<button class="main-btn" onclick="switchTab('chat')"><span class="icon">💡</span><div class="info"><h3>Spørg om alt</h3><p>Få svar der passer til DIG</p></div></button>
-</div>
-<div id="tabContent"></div>`;
+<button class="main-btn" onclick="switchTab('progress')"><span class="icon">📈</span><div class="info"><h3>Progress</h3><p>Ugentlige billeder + udvikling</p></div></button>
+<button class="main-btn" onclick="switchTab('chat')"><span class="icon">💡</span><div class="info"><h3>Spørg AI</h3><p>Få svar der passer til DIG</p></div></button>
+</div><div id="tabContent"></div>`;
             renderTab();
         }
 
-        function switchTab(t) { S.tab = t; render(); setTimeout(() => { let el = document.getElementById('tabContent'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }, 100); }
+        function switchTab(t){S.tab=t;render();setTimeout(()=>{let el=document.getElementById('tabContent');if(el)el.scrollIntoView({behavior:'smooth'})},100)}
 
-        function renderTab() {
-            let c = document.getElementById('tabContent'); if (!c) return;
-            if (S.tab === 'analyze') {
-                c.innerHTML = `<div class="card"><h3>🤖 AI Ansigtsanalyse</h3>
-<div class="upload-box" id="uploadBox" onclick="document.getElementById('fileIn').click()"><div class="upload-icon">📸</div><p style="color:#999">Tryk for at tage billede</p></div>
-<input type="file" id="fileIn" accept="image/*" capture="environment" style="display:none" onchange="handleFile(event)">
-<div id="aiRes" style="display:none"></div>
-<button class="btn btn-outline" style="margin-top:10px" onclick="switchTab('home')">⬅ Tilbage</button></div>`;
-            } else if (S.tab === 'hair') {
-                c.innerHTML = `<div class="card"><h3>💇 Hårprofil (udfyld for bedste råd)</h3>
-<label style="font-size:0.75rem;color:#999">Hårtype</label><select id="hairType" onchange="S.hairProfile.type=this.value;save()"><option value="">Vælg...</option><option value="glat" ${S.hairProfile.type==='glat'?'selected':''}>Glat</option><option value="bølget" ${S.hairProfile.type==='bølget'?'selected':''}>Bølget</option><option value="krøllet" ${S.hairProfile.type==='krøllet'?'selected':''}>Krøllet</option><option value="meget krøllet" ${S.hairProfile.type==='meget krøllet'?'selected':''}>Meget krøllet</option></select>
-<label style="font-size:0.75rem;color:#999">Tykkelse</label><select id="hairThick" onchange="S.hairProfile.thickness=this.value;save()"><option value="">Vælg...</option><option value="tyndt" ${S.hairProfile.thickness==='tyndt'?'selected':''}>Tyndt/fint</option><option value="medium" ${S.hairProfile.thickness==='medium'?'selected':''}>Medium</option><option value="tykt" ${S.hairProfile.thickness==='tykt'?'selected':''}>Tykt</option></select>
-<label style="font-size:0.75rem;color:#999">Tekstur</label><select id="hairTex" onchange="S.hairProfile.texture=this.value;save()"><option value="">Vælg...</option><option value="let" ${S.hairProfile.texture==='let'?'selected':''}>Let/luftigt</option><option value="tungt" ${S.hairProfile.texture==='tungt'?'selected':''}>Tungt</option><option value="normalt" ${S.hairProfile.texture==='normalt'?'selected':''}>Normalt</option></select>
-<label style="font-size:0.75rem;color:#999">Nuværende længde</label><select id="hairLen" onchange="S.hairProfile.length=this.value;save()"><option value="">Vælg...</option><option value="kort" ${S.hairProfile.length==='kort'?'selected':''}>Kort (fade/sideshave)</option><option value="mellem" ${S.hairProfile.length==='mellem'?'selected':''}>Mellemlangt</option><option value="langt" ${S.hairProfile.length==='langt'?'selected':''}>Langt</option></select>
-<label style="font-size:0.75rem;color:#999">Bekymringer</label><input id="hairConcern" value="${S.hairProfile.concerns||''}" placeholder="F.eks. tyndt hår, skæl, fedtet..." onchange="S.hairProfile.concerns=this.value;save()">
-<button class="btn btn-gold" style="margin-top:12px" onclick="getHairAdvice()">💇 Få frisure-råd</button>
-<div id="hairRes" style="display:none"></div>
+        function renderTab(){
+            let c=document.getElementById('tabContent');if(!c)return;
+            if(S.tab==='scan'){
+                c.innerHTML=`<div class="card"><h3>📸 3D Ansigtsscanning</h3><p style="color:#999;font-size:.8rem;margin-bottom:12px">Du tager 5 billeder fra forskellige vinkler. Følg instruktionerne på skærmen.</p><button class="btn btn-gold" onclick="startCameraScan()">🎥 Start scanning</button><div id="aiRes" style="display:none"></div><button class="btn btn-outline" style="margin-top:8px" onclick="switchTab('home')">⬅ Tilbage</button></div>`;
+            }else if(S.tab==='hair'){
+                c.innerHTML=`<div class="card"><h3>💇 Hårprofil</h3>
+<select id="hairType" onchange="S.hairProfile.type=this.value;save()"><option value="">Hårtype...</option><option value="glat" ${S.hairProfile.type==='glat'?'selected':''}>Glat</option><option value="bølget" ${S.hairProfile.type==='bølget'?'selected':''}>Bølget</option><option value="krøllet" ${S.hairProfile.type==='krøllet'?'selected':''}>Krøllet</option></select>
+<select id="hairThick" onchange="S.hairProfile.thickness=this.value;save()"><option value="">Tykkelse...</option><option value="tyndt" ${S.hairProfile.thickness==='tyndt'?'selected':''}>Tyndt</option><option value="medium" ${S.hairProfile.thickness==='medium'?'selected':''}>Medium</option><option value="tykt" ${S.hairProfile.thickness==='tykt'?'selected':''}>Tykt</option></select>
+<select id="hairTex" onchange="S.hairProfile.texture=this.value;save()"><option value="">Tekstur...</option><option value="let" ${S.hairProfile.texture==='let'?'selected':''}>Let</option><option value="tungt" ${S.hairProfile.texture==='tungt'?'selected':''}>Tungt</option><option value="normalt" ${S.hairProfile.texture==='normalt'?'selected':''}>Normalt</option></select>
+<select id="hairLen" onchange="S.hairProfile.length=this.value;save()"><option value="">Længde...</option><option value="kort" ${S.hairProfile.length==='kort'?'selected':''}>Kort</option><option value="mellem" ${S.hairProfile.length==='mellem'?'selected':''}>Mellem</option><option value="langt" ${S.hairProfile.length==='langt'?'selected':''}>Langt</option></select>
+<input id="hairConcern" value="${S.hairProfile.concerns||''}" placeholder="Bekymringer..." onchange="S.hairProfile.concerns=this.value;save()">
+<button class="btn btn-gold" style="margin-top:12px" onclick="getHairAdvice()">💇 Få frisure-råd</button><div id="hairRes" style="display:none"></div>
 <button class="btn btn-outline" style="margin-top:8px" onclick="switchTab('home')">⬅ Tilbage</button></div>`;
-            } else if (S.tab === 'products') {
-                c.innerHTML = `<div class="card"><h3>🧴 Dine produkter</h3>
-<p style="color:#999;font-size:0.75rem;margin-bottom:8px">Upload billeder af dine produkter for at få vurdering</p>
-<div style="display:flex;gap:8px">
-<button class="btn btn-outline btn-sm" onclick="addProduct('face')">+ Tilføj ansigtsprodukt</button>
-<button class="btn btn-outline btn-sm" onclick="addProduct('hair')">+ Tilføj hårprodukt</button>
+            }else if(S.tab==='products'){
+                c.innerHTML=`<div class="card"><h3>🧴 Dine Produkter</h3>
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
+<button class="btn btn-outline btn-sm" onclick="addProductWithImage('face')">📸 + Ansigtsprodukt</button>
+<button class="btn btn-outline btn-sm" onclick="addProductWithImage('hair')">📸 + Hårprodukt</button>
 </div>
 <div id="productList">${renderProducts()}</div>
-<button class="btn btn-gold" style="margin-top:10px" onclick="getProductAdvice('face')">🧴 Få hudpleje-råd</button><div id="faceProdRes" style="display:none"></div>
-<button class="btn btn-gold" style="margin-top:6px" onclick="getProductAdvice('hair')">💆 Få hårpleje-råd</button><div id="hairProdRes" style="display:none"></div>
+<button class="btn btn-gold" style="margin-top:10px" onclick="getProductAdvice('face')">🧴 Hudpleje-anbefalinger (med links)</button><div id="faceProdRes" style="display:none"></div>
+<button class="btn btn-gold" style="margin-top:6px" onclick="getProductAdvice('hair')">💆 Hårpleje-anbefalinger (med links)</button><div id="hairProdRes" style="display:none"></div>
 <button class="btn btn-outline" style="margin-top:8px" onclick="switchTab('home')">⬅ Tilbage</button></div>`;
-            } else if (S.tab === 'coach') {
-                c.innerHTML = `<div class="card"><h3>💬 Personlig Coach</h3>
-<p style="color:#999;font-size:0.8rem;margin-bottom:10px">${S.faceAnalysis?'Coachen kender dit ansigt og giver skræddersyede råd':'⚠️ Analyser dit ansigt først for bedste råd'}</p>
-<button class="btn btn-gold" onclick="getCoach()">🤖 Få Coach-råd</button>
-<div id="coachRes" style="margin-top:10px"></div>
-<button class="btn btn-outline" style="margin-top:8px" onclick="switchTab('home')">⬅ Tilbage</button></div>`;
-            } else if (S.tab === 'tracker') {
-                c.innerHTML = `<div class="card"><h3>✅ Tracker</h3>
-<button class="btn btn-gold btn-sm" style="margin-bottom:12px" onclick="aiFillTracker()">🤖 AI auto-udfyld (optimale værdier)</button>
+            }else if(S.tab==='coach'){
+                c.innerHTML=`<div class="card"><h3>💬 Personlig Coach</h3><p style="color:#999;font-size:.8rem;margin-bottom:10px">${S.faceAnalysis?'✅ Coachen kender dit ansigt!':'⚠️ Scan ansigt først'}</p><button class="btn btn-gold" onclick="getCoach()">🤖 Få Coach-råd</button><div id="coachRes" style="margin-top:10px"></div><button class="btn btn-outline" style="margin-top:8px" onclick="switchTab('home')">⬅ Tilbage</button></div>`;
+            }else if(S.tab==='tracker'){
+                c.innerHTML=`<div class="card"><h3>✅ Tracker</h3><button class="btn btn-gold btn-sm" style="margin-bottom:12px" onclick="aiFillTracker()">🤖 AI auto-udfyld</button>
 <div style="display:flex;flex-direction:column;gap:8px">
-<div style="display:flex;justify-content:space-between;align-items:center"><span>😴 Søvn (AI anbefaler: ${S.faceAnalysis?.optimalSøvn||'?'})</span><input type="number" id="sl" value="${S.stats.sleep}" min="0" max="24" style="width:70px;background:#0a0a0a;border:1px solid #222;border-radius:8px;padding:10px;color:#fff;text-align:center"> timer</div>
-<div style="display:flex;justify-content:space-between;align-items:center"><span>💧 Vand (AI anbefaler: ${S.faceAnalysis?.optimalVand||'?'})</span><input type="number" id="wa" value="${S.stats.water}" min="0" max="20" style="width:70px;background:#0a0a0a;border:1px solid #222;border-radius:8px;padding:10px;color:#fff;text-align:center"> glas</div>
+<div style="display:flex;justify-content:space-between;align-items:center"><span>😴 Søvn</span><input type="number" id="sl" value="${S.stats.sleep}" min="0" max="24" style="width:70px;background:#0a0a0a;border:1px solid #222;border-radius:8px;padding:10px;color:#fff;text-align:center"> timer</div>
+<div style="display:flex;justify-content:space-between;align-items:center"><span>💧 Vand</span><input type="number" id="wa" value="${S.stats.water}" min="0" max="20" style="width:70px;background:#0a0a0a;border:1px solid #222;border-radius:8px;padding:10px;color:#fff;text-align:center"> glas</div>
 <div style="display:flex;justify-content:space-between;align-items:center"><span>🥗 Ernæring</span><input type="range" id="nu" value="${S.stats.nutrition}" min="0" max="5" style="width:100px" oninput="document.getElementById('nuv').textContent=this.value"><span id="nuv" style="font-weight:700;color:#d4af37">${S.stats.nutrition}</span>/5</div></div></div>
 <div class="card"><h3>Afkrydsning</h3>
-${[['🏋️ Træning','workout'],['🧴 Hudpleje','skincare'],['👅 Mewing','mewing'],['🧍 Holdning','posture'],['☀️ SPF','sun']].map(([l,k])=>`<label style="display:flex;align-items:center;gap:10px;padding:10px;background:#0a0a0a;border-radius:10px;margin:6px 0;cursor:pointer"><input type="checkbox" ${S.stats[k]?'checked':''} id="cb_${k}" style="width:20px;height:20px;accent-color:#d4af37"><span style="font-size:0.8rem">${l}</span></label>`).join('')}</div>
-<button class="btn btn-gold" onclick="saveTracker()">✅ Gem</button>
-<button class="btn btn-outline" style="margin-top:6px" onclick="switchTab('home')">⬅ Tilbage</button>`;
-            } else if (S.tab === 'chat') {
-                c.innerHTML = `<div class="card"><h3>💡 Spørg om alt</h3>
-<p style="color:#999;font-size:0.75rem;margin-bottom:8px">${S.faceAnalysis?'✅ AI kender dit ansigt og giver personlige svar':'⚠️ Upload billede først for personlige svar'}</p>
-<textarea id="chatInput" placeholder="F.eks: Hvilken brille passer til min ansigtsform? Eller: Hvordan får jeg bedre hud på 2 uger?" rows="2"></textarea>
-<button class="btn btn-gold" onclick="sendChat()">💬 Send</button>
-<div id="chatRes" style="margin-top:10px"></div>
+${[['🏋️ Træning','workout'],['🧴 Hudpleje','skincare'],['👅 Mewing','mewing'],['🧍 Holdning','posture'],['☀️ SPF','sun']].map(([l,k])=>`<label style="display:flex;align-items:center;gap:10px;padding:12px;background:#0a0a0a;border-radius:10px;margin:6px 0;cursor:pointer" onclick="toggleCheckbox('${k}')"><div style="width:22px;height:22px;border:2px solid ${S.stats[k]?'#d4af37':'#444'};border-radius:6px;display:flex;align-items:center;justify-content:center;background:${S.stats[k]?'#d4af37':'transparent'};transition:.2s">${S.stats[k]?'✓':''}</div><span style="font-size:.8rem">${l}</span></label>`).join('')}</div>
+<button class="btn btn-gold" onclick="saveTracker()">✅ Gem</button><button class="btn btn-outline" style="margin-top:6px" onclick="switchTab('home')">⬅ Tilbage</button>`;
+            }else if(S.tab==='progress'){
+                let pg=S.progressGallery||[];
+                c.innerHTML=`<div class="card"><h3>📈 Progress (ugentlig)</h3>
+${pg.length===0?'<p style="color:#999;font-size:.8rem;text-align:center">Scan dit ansigt for at starte din progress-rejse!</p>':`
+<div class="gallery-grid">${pg.slice().reverse().map(p=>`<div class="gallery-item"><img src="${p.image}"><div class="gallery-date">Uge ${p.week} · ${p.score}/10</div></div>`).join('')}</div>
+${pg.length>=2?`<div style="margin-top:12px;text-align:center;color:#d4af37;font-weight:700">📊 Udvikling: ${pg[pg.length-1].score}/10 → ${pg[0].score}/10 (${pg[0].score-pg[pg.length-1].score>=0?'+':''}${pg[0].score-pg[pg.length-1].score})</div>`:''}`}
+<button class="btn btn-outline" style="margin-top:8px" onclick="switchTab('home')">⬅ Tilbage</button></div>`;
+            }else if(S.tab==='chat'){
+                c.innerHTML=`<div class="card"><h3>💡 Spørg om alt</h3><p style="color:#999;font-size:.75rem;margin-bottom:8px">${S.faceAnalysis?'✅ AI kender dit ansigt':'⚠️ Scan først'}</p>
+<textarea id="chatInput" placeholder="F.eks: Hvordan får jeg en skarpere kæbelinje?" rows="2"></textarea>
+<button class="btn btn-gold" onclick="sendChat()">💬 Send</button><div id="chatRes" style="margin-top:10px"></div>
 <button class="btn btn-outline" style="margin-top:8px" onclick="switchTab('home')">⬅ Tilbage</button></div>`;
             }
         }
 
-        function renderProducts() {
-            let all = [...(S.products.face||[]).map(p=>({...p,type:'face'})), ...(S.products.hair||[]).map(p=>({...p,type:'hair'}))];
-            if (all.length===0) return '<p style="color:#666;font-size:0.7rem;text-align:center;margin:12px 0">Ingen produkter tilføjet endnu</p>';
-            return all.map((p,i) => `<div class="product-card"><div style="width:50px;height:50px;background:#222;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.5rem">${p.type==='face'?'🧴':'💆'}</div><div class="product-info"><strong>${p.name||'Ukendt'}</strong><br><span style="color:#999">${p.description||''}</span></div><button onclick="removeProduct('${p.type}',${i})" style="background:none;border:none;color:#ef4444;font-size:1.2rem;cursor:pointer">✕</button></div>`).join('');
+        function toggleCheckbox(k){S.stats[k]=S.stats[k]?0:1;save();renderTab()}
+
+        function renderProducts(){
+            let all=[...(S.products.face||[]).map(p=>({...p,type:'face'})),...(S.products.hair||[]).map(p=>({...p,type:'hair'}))];
+            if(all.length===0) return '<p style="color:#666;font-size:.7rem;text-align:center;margin:12px 0">Ingen produkter endnu</p>';
+            return all.map((p,i)=>{let idx=S.products[p.type]?.indexOf(p);return`<div class="product-card">${p.image?`<img src="${p.image}">`:'<div style="width:50px;height:50px;background:#222;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.5rem">🧴</div>'}<div class="product-info"><strong>${p.name}</strong><br><span style="color:#999">${p.description||''}</span></div><button onclick="removeProduct('${p.type}',${idx})" style="background:none;border:none;color:#ef4444;font-size:1.2rem;cursor:pointer">✕</button></div>`}).join('');
         }
 
-        function addProduct(type) {
-            let name = prompt('Produktnavn:');
-            if (!name) return;
-            let desc = prompt('Beskrivelse (kort):') || '';
-            if (!S.products[type]) S.products[type] = [];
-            S.products[type].push({ name, description: desc, date: new Date().toISOString() });
-            save(); toast('✅ Produkt tilføjet!'); render();
-        }
-
-        function removeProduct(type, index) {
-            if (!S.products[type]) return;
-            S.products[type].splice(index, 1);
-            save(); toast('🗑️ Fjernet'); render();
-        }
-
-        function handleFile(e) {
-            let f = e.target.files[0]; if (!f) return;
-            if (f.size > 10*1024*1024) { toast('❌ For stort'); return; }
-            analyzeFace(f);
-        }
-
-        function saveTracker() {
-            S.stats.sleep = parseInt(document.getElementById('sl')?.value) || 0;
-            S.stats.water = parseInt(document.getElementById('wa')?.value) || 0;
-            S.stats.nutrition = parseInt(document.getElementById('nu')?.value) || 0;
-            ['workout','skincare','mewing','posture','sun'].forEach(k => { S.stats[k] = document.getElementById('cb_'+k)?.checked ? 1 : 0; });
-            updateStreak(); save(); toast('✅ Gemt!'); switchTab('home');
+        function removeProduct(type,idx){if(!S.products[type])return;S.products[type].splice(idx,1);save();toast('🗑️ Fjernet');render()}
+        function saveTracker(){
+            S.stats.sleep=parseInt(document.getElementById('sl')?.value)||0;
+            S.stats.water=parseInt(document.getElementById('wa')?.value)||0;
+            S.stats.nutrition=parseInt(document.getElementById('nu')?.value)||0;
+            updateStreak();save();toast('✅ Gemt!');switchTab('home');
         }
 
         load();
-        if (!getAPIKey()) { render(); showAPISetup(); } else { S.onboarded = true; render(); }
+        if(!getAPIKey()){render();showAPISetup()}else{S.onboarded=true;render()}
     </script>
 </body>
 </html>
