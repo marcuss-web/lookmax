@@ -2,422 +2,212 @@
 <html lang="da">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>LooksMax AI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>LooksMax AI Pro</title>
     <style>
         :root {
             --bg: #000000;
             --surface: #0d0d0d;
             --card: #141414;
             --text: #ffffff;
-            --text-secondary: #b0b0b0;
+            --text2: #b0b0b0;
             --accent: #d4af37;
+            --accent2: #f5d77a;
             --red: #dc2626;
             --green: #16a34a;
+            --blue: #3b82f6;
             --border: #262626;
+            --input: #1a1a1a;
         }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg);
             color: var(--text);
             min-height: 100dvh;
             line-height: 1.5;
+            overflow-x: hidden;
         }
-        .app {
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 12px;
-            padding-bottom: 90px;
-        }
-        .header {
+        .app { max-width: 500px; margin: 0 auto; padding: 12px; padding-bottom: 100px; position: relative; }
+        
+        /* TOP BAR */
+        .topbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 8px 0;
             border-bottom: 1px solid var(--border);
-            margin-bottom: 12px;
-            font-size: 0.7rem;
-            color: var(--text-secondary);
+            margin-bottom: 16px;
         }
-        .logo {
-            text-align: center;
-            padding: 24px 0;
+        .topbar .status { font-size: 0.7rem; color: var(--text2); }
+        .topbar .status.online { color: var(--green); }
+        .topbar .status.offline { color: var(--red); }
+        .burger-btn {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 10px;
+            line-height: 1;
         }
+        
+        /* LOGO */
+        .logo { text-align: center; padding: 16px 0; }
         .logo h1 {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 800;
             letter-spacing: 3px;
             background: linear-gradient(135deg, #d4af37, #f5d77a, #d4af37);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .logo .subtitle {
-            font-size: 0.65rem;
-            color: var(--text-secondary);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
+        .logo .sub { font-size: 0.6rem; color: var(--text2); letter-spacing: 3px; }
+        
+        /* SCORE */
+        .score-wrap { display: flex; justify-content: center; margin: 16px 0; }
         .score-circle {
-            width: 130px;
-            height: 130px;
-            border-radius: 50%;
+            width: 120px; height: 120px; border-radius: 50%;
             border: 3px solid var(--accent);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin: 16px auto;
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: radial-gradient(circle, rgba(212,175,55,0.1), transparent);
+            box-shadow: 0 0 30px rgba(212,175,55,0.2);
         }
-        .score-num {
-            font-size: 2.8rem;
-            font-weight: 800;
-            color: var(--accent);
-        }
-        .score-label {
-            font-size: 0.65rem;
-            letter-spacing: 2px;
-            color: var(--text-secondary);
-        }
-        .nav {
-            display: flex;
-            gap: 6px;
-            overflow-x: auto;
-            padding: 12px 0;
-            scrollbar-width: none;
-        }
-        .nav::-webkit-scrollbar {
+        .score-num { font-size: 2.5rem; font-weight: 800; color: var(--accent); }
+        
+        /* BURGER MENU OVERLAY */
+        .burger-overlay {
             display: none;
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8); z-index: 1000;
         }
-        .nav-btn {
-            flex-shrink: 0;
-            padding: 10px 16px;
-            border-radius: 20px;
-            border: 1px solid var(--border);
-            background: var(--surface);
-            color: var(--text-secondary);
-            font-size: 0.8rem;
-            cursor: pointer;
-            white-space: nowrap;
-            font-weight: 600;
-            transition: all 0.2s;
+        .burger-overlay.show { display: block; }
+        .burger-menu {
+            position: fixed; top: 0; right: -300px; width: 280px; height: 100dvh;
+            background: var(--card); z-index: 1001; transition: right 0.3s ease;
+            border-left: 1px solid var(--border); padding: 20px; overflow-y: auto;
         }
-        .nav-btn.active {
-            background: var(--accent);
-            color: #000;
-            border-color: var(--accent);
+        .burger-menu.show { right: 0; }
+        .burger-menu h3 { color: var(--accent); margin-bottom: 16px; font-size: 0.9rem; letter-spacing: 1px; }
+        .menu-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 12px; margin: 4px 0; border-radius: 12px;
+            cursor: pointer; transition: 0.2s; font-size: 0.85rem;
+            border: 1px solid transparent;
         }
-        .card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 16px;
-            margin: 12px 0;
-        }
-        .card-title {
-            font-weight: 700;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            color: var(--accent);
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
-        }
-        .upload-zone {
-            border: 2px dashed var(--border);
-            border-radius: 16px;
-            padding: 30px;
-            text-align: center;
-            cursor: pointer;
-            background: var(--surface);
-            transition: 0.3s;
-        }
-        .upload-zone:active {
-            border-color: var(--accent);
-            background: rgba(212, 175, 55, 0.05);
-        }
-        .upload-zone img {
-            max-width: 100%;
-            max-height: 250px;
-            border-radius: 12px;
-        }
-        .btn {
-            width: 100%;
-            padding: 14px;
-            border-radius: 25px;
-            border: none;
-            font-weight: 700;
-            font-size: 0.85rem;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-family: inherit;
-            transition: 0.2s;
-        }
-        .btn:active {
-            transform: scale(0.97);
-        }
-        .btn-gold {
-            background: var(--accent);
-            color: #000;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
-        }
-        .btn-red {
-            background: var(--red);
-            color: #fff;
-        }
-        .ai-box {
-            background: linear-gradient(135deg, #1a1a1a, #0d0d0d);
-            border: 1px solid var(--accent);
-            border-radius: 16px;
-            padding: 14px;
-            margin: 10px 0;
-            font-size: 0.8rem;
-            line-height: 1.6;
-            max-height: 350px;
-            overflow-y: auto;
-        }
-        .spinner {
-            display: inline-block;
-            width: 24px;
-            height: 24px;
-            border: 3px solid var(--border);
-            border-top-color: var(--accent);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-        .tracker-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
-        .track-item {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 10px;
-            text-align: center;
-            transition: 0.2s;
-        }
-        .track-item.done {
-            border-color: var(--green);
-            background: rgba(22, 163, 74, 0.1);
-        }
-        .track-emoji {
-            font-size: 1.5rem;
-        }
-        .track-name {
-            font-size: 0.65rem;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            margin-top: 4px;
-        }
-        .streak-dots {
-            display: flex;
-            gap: 4px;
-            margin: 8px 0;
-            flex-wrap: wrap;
-        }
-        .streak-dot {
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.6rem;
-            font-weight: 700;
-        }
-        .streak-dot.active {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: #000;
-        }
-        .streak-dot.today {
-            border-color: var(--accent);
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
-        }
-        .toast {
-            position: fixed;
-            bottom: 100px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--accent);
-            color: #000;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 0.8rem;
-            z-index: 999;
-            animation: slideUp 0.3s ease, fadeOut 0.5s 2s forwards;
-            max-width: 90%;
-            text-align: center;
-        }
-        @keyframes slideUp {
-            from {
-                transform: translate(-50%, 30px);
-                opacity: 0;
-            }
-            to {
-                transform: translate(-50%, 0);
-                opacity: 1;
-            }
-        }
-        @keyframes fadeOut {
-            to {
-                opacity: 0;
-                transform: translate(-50%, 20px);
-            }
-        }
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 998;
-            align-items: center;
-            justify-content: center;
-        }
-        .modal-overlay.show {
-            display: flex;
-        }
-        .modal {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 20px;
-            width: 90%;
-            max-width: 450px;
-        }
-        .modal h2 {
-            color: var(--accent);
-            margin-bottom: 12px;
-            font-size: 1rem;
-        }
-        .chat-input {
-            width: 100%;
-            background: #1a1a1a;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 12px;
-            color: #fff;
-            font-family: inherit;
-            font-size: 0.85rem;
-            margin: 8px 0;
-            outline: none;
-            -webkit-appearance: none;
-        }
-        .chat-input:focus {
-            border-color: var(--accent);
-        }
-        .rating-bg {
-            flex: 1;
-            height: 6px;
-            background: var(--border);
-            border-radius: 3px;
-            overflow: hidden;
-            margin: 2px 0;
-        }
-        .rating-fill {
-            height: 6px;
-            background: var(--accent);
-            border-radius: 3px;
-        }
-        input[type="range"] {
-            -webkit-appearance: none;
-            height: 6px;
-            background: var(--border);
-            border-radius: 3px;
-            outline: none;
-        }
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 24px;
-            height: 24px;
-            background: var(--accent);
-            border-radius: 50%;
-            cursor: pointer;
-        }
-        input[type="checkbox"] {
-            accent-color: var(--accent);
-        }
+        .menu-item:active { background: var(--surface); border-color: var(--border); }
+        .menu-item.danger { color: var(--red); }
+        .menu-divider { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
+        
+        /* CONTENT */
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin: 12px 0; }
+        .card-title { font-weight: 700; font-size: 0.85rem; text-transform: uppercase; color: var(--accent); letter-spacing: 0.5px; margin-bottom: 12px; }
+        .upload-zone { border: 2px dashed var(--border); border-radius: 16px; padding: 30px; text-align: center; cursor: pointer; background: var(--surface); }
+        .upload-zone img { max-width: 100%; max-height: 250px; border-radius: 12px; }
+        .btn { width: 100%; padding: 14px; border-radius: 25px; border: none; font-weight: 700; font-size: 0.85rem; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; font-family: inherit; }
+        .btn:active { transform: scale(0.97); }
+        .btn-gold { background: var(--accent); color: #000; }
+        .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); margin-top: 8px; }
+        .btn-red { background: var(--red); color: #fff; }
+        .ai-box { background: linear-gradient(135deg, #1a1a1a, #0d0d0d); border: 1px solid var(--accent); border-radius: 16px; padding: 14px; margin: 10px 0; font-size: 0.8rem; line-height: 1.6; max-height: 400px; overflow-y: auto; }
+        .spinner { display: inline-block; width: 24px; height: 24px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .tracker-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .track-item { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px; text-align: center; }
+        .track-item.done { border-color: var(--green); background: rgba(22,163,74,0.1); }
+        .track-emoji { font-size: 1.5rem; }
+        .track-name { font-size: 0.6rem; color: var(--text2); text-transform: uppercase; margin-top: 2px; }
+        .streak-dots { display: flex; gap: 4px; margin: 8px 0; flex-wrap: wrap; }
+        .streak-dot { width: 26px; height: 26px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 0.6rem; font-weight: 700; }
+        .streak-dot.active { background: var(--accent); border-color: var(--accent); color: #000; }
+        .streak-dot.today { border-color: var(--accent); box-shadow: 0 0 10px rgba(212,175,55,0.5); }
+        .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #000; padding: 10px 20px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; z-index: 999; animation: slideUp 0.3s ease, fadeOut 0.5s 2s forwards; max-width: 90%; text-align: center; }
+        @keyframes slideUp { from { transform: translate(-50%,30px); opacity: 0; } to { transform: translate(-50%,0); opacity: 1; } }
+        @keyframes fadeOut { to { opacity: 0; transform: translate(-50%,20px); } }
+        .chat-input { width: 100%; background: var(--input); border: 1px solid var(--border); border-radius: 12px; padding: 12px; color: #fff; font-family: inherit; font-size: 0.85rem; margin: 8px 0; outline: none; -webkit-appearance: none; }
+        .chat-input:focus { border-color: var(--accent); }
+        .rating-bg { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; margin: 2px 0; }
+        .rating-fill { height: 6px; background: var(--accent); border-radius: 3px; }
+        input[type="range"] { -webkit-appearance: none; height: 6px; background: var(--border); border-radius: 3px; outline: none; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; background: var(--accent); border-radius: 50%; cursor: pointer; }
+        input[type="checkbox"] { accent-color: var(--accent); }
+        select.chat-input { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23d4af37' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
+        .api-provider-badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 0.65rem; font-weight: 700; background: var(--surface); border: 1px solid var(--border); }
+        .api-provider-badge.active { border-color: var(--accent); color: var(--accent); }
     </style>
 </head>
 <body>
     <div class="app" id="app"></div>
     <div id="toasts"></div>
-    <div class="modal-overlay" id="modalOverlay">
-        <div class="modal" id="modalContent"></div>
-    </div>
+    <div class="burger-overlay" id="burgerOverlay" onclick="closeBurger()"></div>
+    <div class="burger-menu" id="burgerMenu"></div>
 
     <script>
-        const API_URL = 'https://api.x.ai/v1/chat/completions';
+        // ============ CONFIG ============
+        const API_PROVIDERS = {
+            grok: {
+                name: 'Grok (xAI)',
+                url: 'https://api.x.ai/v1/chat/completions',
+                model: 'grok-2-vision-1212',
+                needsKey: true
+            },
+            groq: {
+                name: 'Groq',
+                url: 'https://api.groq.com/openai/v1/chat/completions',
+                model: 'llama-3.2-90b-vision-preview',
+                needsKey: true
+            }
+        };
 
+        // ============ STATE ============
         let S = {
             tab: 'dash',
             score: 0,
-            tasks: {},
             streak: [],
             gallery: [],
             lastDate: '',
             stats: { sleep: 0, water: 0, workout: 0, skincare: 0, mewing: 0, posture: 0, nutrition: 0, sun: 0 },
-            apiKey: ''
+            apiProvider: 'grok',
+            apiKeys: {}
         };
 
-        function getAPIKey() {
-            if (S.apiKey) return S.apiKey;
-            let k = localStorage.getItem('lmx_apikey');
-            if (k) S.apiKey = k;
-            return S.apiKey;
-        }
-
-        function setAPIKey(key) {
-            S.apiKey = key;
-            localStorage.setItem('lmx_apikey', key);
-        }
-
+        // ============ STORAGE ============
         function load() {
             try {
-                let s = localStorage.getItem('lmx_state');
-                if (s) {
-                    let p = JSON.parse(s);
-                    S = { ...S, ...p };
-                }
-                let k = localStorage.getItem('lmx_apikey');
-                if (k) S.apiKey = k;
+                let s = localStorage.getItem('lmx_state_v2');
+                if (s) { let p = JSON.parse(s);
+                    S = { ...S, ...p }; }
+                let k = localStorage.getItem('lmx_apikeys_v2');
+                if (k) S.apiKeys = JSON.parse(k);
                 let t = new Date().toDateString();
                 if (S.lastDate !== t) {
-                    S.tasks = {};
                     S.stats = { sleep: 0, water: 0, workout: 0, skincare: 0, mewing: 0, posture: 0, nutrition: 0, sun: 0 };
                     S.lastDate = t;
                 }
-            } catch (e) {}
+            } catch (e) { console.log('Load error:', e); }
             calcScore();
         }
 
         function save() {
             S.lastDate = new Date().toDateString();
             let ts = { ...S };
-            delete ts.apiKey;
-            localStorage.setItem('lmx_state', JSON.stringify(ts));
+            delete ts.apiKeys;
+            localStorage.setItem('lmx_state_v2', JSON.stringify(ts));
+            localStorage.setItem('lmx_apikeys_v2', JSON.stringify(S.apiKeys));
             calcScore();
         }
 
+        function getAPIKey() {
+            return S.apiKeys[S.apiProvider] || '';
+        }
+
+        function setAPIKey(key) {
+            S.apiKeys[S.apiProvider] = key;
+            localStorage.setItem('lmx_apikeys_v2', JSON.stringify(S.apiKeys));
+        }
+
+        // ============ SCORE ============
         function calcScore() {
             let sc = 50,
                 s = S.stats;
@@ -437,6 +227,7 @@
             S.score = Math.min(100, Math.max(0, Math.round(sc)));
         }
 
+        // ============ TOAST ============
         function toast(m) {
             let c = document.getElementById('toasts');
             let t = document.createElement('div');
@@ -446,26 +237,185 @@
             setTimeout(() => { if (t.parentNode) t.remove(); }, 2500);
         }
 
-        function closeModal() { document.getElementById('modalOverlay').classList.remove('show'); }
-
-        function showModal(t, h) {
-            let m = document.getElementById('modalContent');
-            m.innerHTML =
-                `<h2>${t}</h2>${h}<button class="btn btn-gold" style="margin-top:12px" onclick="closeModal()">LUK</button>`;
-            document.getElementById('modalOverlay').classList.add('show');
+        // ============ BURGER MENU ============
+        function openBurger() {
+            document.getElementById('burgerOverlay').classList.add('show');
+            document.getElementById('burgerMenu').classList.add('show');
+            renderBurgerMenu();
         }
 
-        function updateStreak() {
-            let t = new Date().toDateString();
-            if (!S.streak.includes(t)) {
-                S.streak.push(t);
-                if (S.streak.length > 90) S.streak = S.streak.slice(-90);
+        function closeBurger() {
+            document.getElementById('burgerOverlay').classList.remove('show');
+            document.getElementById('burgerMenu').classList.remove('show');
+        }
+
+        function renderBurgerMenu() {
+            let m = document.getElementById('burgerMenu');
+            let p = API_PROVIDERS[S.apiProvider];
+            m.innerHTML = `
+<h3>☰ Menu</h3>
+<div class="menu-item" onclick="switchTab('dash');closeBurger()">📊 Dashboard</div>
+<div class="menu-item" onclick="switchTab('ai');closeBurger()">🤖 AI Analyse</div>
+<div class="menu-item" onclick="switchTab('track');closeBurger()">✅ Tracker</div>
+<div class="menu-item" onclick="switchTab('coach');closeBurger()">💬 Coach</div>
+<hr class="menu-divider">
+<div class="menu-item" onclick="showAPIKeyPrompt();closeBurger()">🔑 Skift API-nøgle</div>
+<div class="menu-item" onclick="showProviderSelect()">🔄 Skift API-udbyder</div>
+<div style="padding:12px;font-size:0.65rem;color:var(--text2);text-align:center">
+<span class="api-provider-badge active">${p.name}</span>
+${getAPIKey()?'🟢':'🔴'}
+</div>
+<hr class="menu-divider">
+<div class="menu-item" onclick="showOptimalGuide()">📖 Optimale værdier</div>
+<div class="menu-item danger" onclick="resetAll()">🗑️ Nulstil alt data</div>
+<div style="margin-top:20px;text-align:center;font-size:0.6rem;color:#444">LooksMax AI Pro v2.0</div>`;
+        }
+
+        function showProviderSelect() {
+            let opts = Object.entries(API_PROVIDERS).map(([k, v]) =>
+                `<option value="${k}" ${S.apiProvider===k?'selected':''}>${v.name}</option>`
+            ).join('');
+            let h = `
+<p style="color:var(--text2);font-size:0.8rem;margin-bottom:12px">Vælg hvilken AI-udbyder du vil bruge:</p>
+<select class="chat-input" id="providerSelect">${opts}</select>
+<button class="btn btn-gold" style="margin-top:8px" onclick="changeProvider()">✅ Skift</button>
+<p style="color:#666;font-size:0.6rem;margin-top:8px">Bemærk: Du skal have en API-nøgle til den valgte udbyder.</p>`;
+            showModal('🔄 Skift API-udbyder', h);
+        }
+
+        function changeProvider() {
+            let sel = document.getElementById('providerSelect').value;
+            S.apiProvider = sel;
+            save();
+            closeModal();
+            toast('✅ Skiftet til ' + API_PROVIDERS[sel].name);
+            if (!getAPIKey()) showAPIKeyPrompt();
+            render();
+        }
+
+        function showOptimalGuide() {
+            let h = `
+<div class="ai-box" style="border-color:var(--accent)">
+<strong style="color:var(--accent)">📖 Optimale daglige værdier:</strong><br><br>
+😴 <strong>Søvn:</strong> 7-9 timer (mænd 18-30 år)<br>
+💧 <strong>Vand:</strong> 8-12 glas (2-3 liter)<br>
+🏋️ <strong>Træning:</strong> 30-60 minutter, 4-5x om ugen<br>
+🧴 <strong>Hudpleje:</strong> Rens, fugt, SPF - morgen og aften<br>
+👅 <strong>Mewing:</strong> Hele dagen, tunge i ganen<br>
+🧍 <strong>Holdning:</strong> Ret ryg, skuldre tilbage<br>
+🥗 <strong>Ernæring:</strong> 4-5 måltider med protein og grønt<br>
+☀️ <strong>SPF:</strong> Hver dag, minimum SPF 30<br><br>
+<em>Følg disse og din Glow Score rammer 100!</em>
+</div>`;
+            showModal('📖 Optimale Værdier', h);
+        }
+
+        function resetAll() {
+            if (confirm('Er du HELT sikker? Al data slettes permanent!')) {
+                localStorage.clear();
+                S = {
+                    tab: 'dash',
+                    score: 0,
+                    streak: [],
+                    gallery: [],
+                    lastDate: '',
+                    stats: { sleep: 0, water: 0, workout: 0, skincare: 0, mewing: 0, posture: 0, nutrition: 0, sun: 0 },
+                    apiProvider: 'grok',
+                    apiKeys: {}
+                };
+                save();
+                render();
+                toast('🗑️ Alt data nulstillet');
             }
         }
 
-        async function grok(prompt, img = null) {
+        // ============ MODAL ============
+        function showModal(t, h) {
+            let overlay = document.createElement('div');
+            overlay.style.cssText =
+                'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.95);z-index:2000;display:flex;align-items:center;justify-content:center;';
+            overlay.id = 'modalOverlay2';
+            overlay.innerHTML = `
+<div style="background:#141414;border:1px solid #262626;border-radius:20px;padding:20px;width:90%;max-width:450px;max-height:80vh;overflow-y:auto;">
+<h2 style="color:#d4af37;margin-bottom:12px;font-size:1rem">${t}</h2>
+${h}
+<button class="btn btn-gold" style="margin-top:12px" onclick="this.closest('#modalOverlay2').remove()">LUK</button>
+</div>`;
+            overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
+            document.body.appendChild(overlay);
+        }
+
+        function closeModal() {
+            let m = document.getElementById('modalOverlay2');
+            if (m) m.remove();
+        }
+
+        // ============ API KEY ============
+        function showAPIKeyPrompt() {
+            let p = API_PROVIDERS[S.apiProvider];
+            let h = `
+<p style="color:var(--text2);font-size:0.8rem;margin-bottom:12px">Indtast API-nøgle til <strong>${p.name}</strong></p>
+<input type="password" class="chat-input" id="apiKeyInput" placeholder="Din API-nøgle..." autocomplete="off">
+<button class="btn btn-gold" onclick="saveAPIKeyFromPrompt()">💾 Gem nøgle</button>
+<button class="btn btn-outline" onclick="testAPIConnection()">🔍 Test forbindelse</button>
+<div id="apiTestResult" style="margin-top:8px;font-size:0.7rem;text-align:center"></div>
+<p style="color:#666;font-size:0.6rem;margin-top:8px">Nøglen gemmes KUN på din telefon (localStorage)</p>`;
+            showModal('🔑 API-nøgle - ' + p.name, h);
+        }
+
+        function saveAPIKeyFromPrompt() {
+            let k = document.getElementById('apiKeyInput').value.trim();
+            if (!k) { toast('❌ Indtast en nøgle'); return; }
+            setAPIKey(k);
+            let m = document.getElementById('modalOverlay2');
+            if (m) m.remove();
+            toast('✅ Nøgle gemt!');
+            render();
+        }
+
+        async function testAPIConnection() {
+            let k = document.getElementById('apiKeyInput').value.trim();
+            if (!k) k = getAPIKey();
+            if (!k) {
+                document.getElementById('apiTestResult').innerHTML =
+                    '<span style="color:#dc2626">❌ Ingen nøgle indtastet</span>';
+                return;
+            }
+            document.getElementById('apiTestResult').innerHTML =
+                '<span style="color:#d4af37">⏳ Tester...</span>';
+            try {
+                let p = API_PROVIDERS[S.apiProvider];
+                let r = await fetch(p.url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${k}` },
+                    body: JSON.stringify({ model: p.model, messages: [{ role: 'user',
+                            content: 'Sig "OK" på dansk' }], max_tokens: 10 })
+                });
+                if (r.ok) {
+                    document.getElementById('apiTestResult').innerHTML =
+                        '<span style="color:#16a34a">✅ Forbindelse OK! Nøglen virker.</span>';
+                } else {
+                    let e = await r.json();
+                    document.getElementById('apiTestResult').innerHTML =
+                        `<span style="color:#dc2626">❌ Fejl: ${e.error?.message||'Ukendt fejl'}</span>`;
+                }
+            } catch (e) {
+                document.getElementById('apiTestResult').innerHTML =
+                    `<span style="color:#dc2626">❌ Netværksfejl: ${e.message}</span>`;
+            }
+        }
+
+        // ============ STREAK ============
+        function updateStreak() {
+            let t = new Date().toDateString();
+            if (!S.streak.includes(t)) { S.streak.push(t); if (S.streak.length > 90) S.streak = S.streak.slice(-90); }
+        }
+
+        // ============ AI CALLS ============
+        async function callAI(prompt, img = null) {
             let key = getAPIKey();
-            if (!key) throw new Error('Manglende API-nøgle. Tryk på 🔑 for at indstille den.');
+            if (!key) throw new Error('Manglende API-nøgle. Åbn menuen ☰ og indstil den.');
+            let p = API_PROVIDERS[S.apiProvider];
             let msgs = [];
             if (img) {
                 msgs.push({
@@ -478,18 +428,18 @@
             } else {
                 msgs.push({ role: 'user', content: prompt });
             }
-            let r = await fetch(API_URL, {
+            let r = await fetch(p.url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
-                body: JSON.stringify({ model: 'grok-2-vision-1212', messages: msgs, max_tokens: 1000,
-                    temperature: 0.7 })
+                body: JSON.stringify({ model: p.model, messages: msgs, max_tokens: 1000, temperature: 0.7 })
             });
             if (!r.ok) { let e = await r.json();
-                throw new Error(e.error?.message || 'API Error'); }
+                throw new Error(e.error?.message || 'API-fejl. Tjek din nøgle.'); }
             let d = await r.json();
             return d.choices[0].message.content;
         }
 
+        // ============ IMAGE ============
         function compressImg(file) {
             return new Promise(r => {
                 let reader = new FileReader();
@@ -519,45 +469,33 @@
             let u = document.querySelector('.upload-zone');
             let r = document.getElementById('aiRes');
             r.innerHTML =
-                `<div style="text-align:center;padding:20px"><div class="spinner"></div><p style="color:#b0b0b0;margin-top:8px">Grok AI analyserer...</p></div>`;
+                `<div style="text-align:center;padding:20px"><div class="spinner"></div><p style="color:#b0b0b0;margin-top:8px">AI analyserer...</p></div>`;
             r.style.display = 'block';
             try {
                 let { b64, url } = await compressImg(file);
                 u.innerHTML = `<img src="${url}">`;
                 let prompt =
                     `Du er ekspert i ansigtsanalyse og looksmaxing. Analyser dette billede på DANSK og returnér KUN JSON:{"rating":tal1-10,"symmetri":tal,"hud":tal,"kæbelinje":tal,"øjne":tal,"hår":tal,"harmoni":tal,"styrker":["s1","s2","s3"],"forbedringer":["f1","f2","f3"],"tips":["t1","t2","t3"],"potentiale":tal,"summary":"kort tekst"} Vær ærlig, konstruktiv, specifik. Brug dansk.`;
-                let res = await grok(prompt, b64);
+                let res = await callAI(prompt, b64);
                 let analysis;
                 try { let m = res.match(/\{[\s\S]*\}/); if (m) analysis = JSON.parse(m[0]);
                     else throw new Error('No JSON'); } catch (e) { r.innerHTML =
                         `<div class="ai-box">${res.replace(/\n/g,'<br>')}</div>`; return; }
-                S.aiHistory = S.aiHistory || [];
-                S.aiHistory.unshift({ date: new Date().toISOString(), url, analysis });
-                if (S.aiHistory.length > 20) S.aiHistory.pop();
+                S.gallery.unshift({ date: new Date().toISOString(), url, analysis });
+                if (S.gallery.length > 30) S.gallery.pop();
                 save();
                 let stars = '⭐'.repeat(Math.round(analysis.rating));
                 r.innerHTML = `<div class="ai-box">
-<div style="text-align:center;margin-bottom:12px">
-<div style="font-size:2rem;color:#d4af37;font-weight:800">${analysis.rating}/10</div>
-<div style="font-size:1.3rem">${stars}</div></div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;text-align:center;font-size:0.7rem;margin-bottom:8px">
-${['symmetri','hud','kæbelinje','øjne','hår','harmoni'].map(k=>`<div>${k.charAt(0).toUpperCase()+k.slice(1)}: ${analysis[k]}/10<div class="rating-bg"><div class="rating-fill" style="width:${analysis[k]*10}%"></div></div></div>`).join('')}
-</div>
+<div style="text-align:center;margin-bottom:12px"><div style="font-size:2rem;color:#d4af37;font-weight:800">${analysis.rating}/10</div><div style="font-size:1.3rem">${stars}</div></div>
+${['symmetri','hud','kæbelinje','øjne','hår','harmoni'].map(k=>`<div style="display:flex;align-items:center;gap:8px;margin:4px 0;font-size:0.7rem"><span style="min-width:60px">${k.charAt(0).toUpperCase()+k.slice(1)}:</span><div class="rating-bg"><div class="rating-fill" style="width:${analysis[k]*10}%"></div></div><span>${analysis[k]}/10</span></div>`).join('')}
 <strong>💪 Styrker:</strong><br>${analysis.styrker.map(s=>'• '+s).join('<br>')}<br>
 <strong>📈 Forbedringer:</strong><br>${analysis.forbedringer.map(i=>'• '+i).join('<br>')}<br>
 <strong>🎯 Tips:</strong><br>${analysis.tips.map(t=>'• '+t).join('<br>')}<br>
-<strong>🚀 Potentiale:</strong> ${analysis.potentiale}/10<br>
-<i>${analysis.summary}</i><br>
-<button class="btn btn-gold" style="margin-top:8px" onclick="saveToGallery('${url}')">💾 Gem i galleri</button></div>`;
-                toast('✅ AI-analyse færdig!');
+<strong>🚀 Potentiale:</strong> ${analysis.potentiale}/10<br><i>${analysis.summary}</i></div>`;
+                toast('✅ Analyse færdig!');
             } catch (e) { r.innerHTML =
-                    `<div class="ai-box" style="border-color:#dc2626;text-align:center"><p style="color:#dc2626">❌ ${e.message}</p><button class="btn btn-gold" style="margin-top:8px" onclick="document.getElementById('aiRes').style.display='none'">OK</button></div>`; }
+                    `<div class="ai-box" style="border-color:#dc2626;text-align:center"><p style="color:#dc2626">❌ ${e.message}</p></div>`; }
         }
-
-        function saveToGallery(url) { S.gallery = S.gallery || [];
-            S.gallery.unshift({ date: new Date().toISOString(), url }); if (S.gallery.length > 50) S.gallery.pop();
-            save();
-            toast('💾 Gemt!'); }
 
         async function getCoachAdvice() {
             if (!getAPIKey()) { showAPIKeyPrompt(); return; }
@@ -568,9 +506,29 @@ ${['symmetri','hud','kæbelinje','øjne','hår','harmoni'].map(k=>`<div>${k.char
             try {
                 let s = S.stats;
                 let prompt =
-                    `Du er en personlig looksmaxing coach. Giv motiverende rådgivning på DANSK baseret på: Søvn: ${s.sleep}t, Vand: ${s.water} glas, Træning: ${s.workout?'Ja':'Nej'}, Hudpleje: ${s.skincare?'Ja':'Nej'}, Mewing: ${s.mewing?'Ja':'Nej'}, Holdning: ${s.posture?'Ja':'Nej'}, Ernæring: ${s.nutrition}/5, SPF: ${s.sun?'Ja':'Nej'}, Glow Score: ${S.score}/100, Streak: ${S.streak.length} dage. Giv: 1)Motiverende besked 2)3 tips 3)Hvad går godt 4)Hvad skal forbedres. Brug emojis.`;
-                let res = await grok(prompt);
-                d.innerHTML = `<div class="ai-box"><strong style="color:#d4af37">🤖 AI Coach</strong><br>${res.replace(/\n/g,'<br>')}</div>`;
+                    `Du er en personlig looksmaxing coach. Giv en DETALJERET, PERSONLIG analyse på DANSK baseret på disse daglige stats:
+
+AKTUEL STATUS:
+- Søvn: ${s.sleep} timer (optimalt: 7-9 timer)
+- Vand: ${s.water} glas (optimalt: 8-12 glas / 2-3 liter)
+- Træning: ${s.workout?'Ja ✅':'Nej ❌'} (optimalt: 4-5x om ugen)
+- Hudpleje: ${s.skincare?'Ja ✅':'Nej ❌'} (optimalt: 2x dagligt)
+- Mewing: ${s.mewing?'Ja ✅':'Nej ❌'} (optimalt: hele dagen)
+- Holdning: ${s.posture?'Ja ✅':'Nej ❌'} (optimalt: altid ret ryg)
+- Ernæring: ${s.nutrition}/5 måltider (optimalt: 4-5)
+- Solbeskyttelse: ${s.sun?'Ja ✅':'Nej ❌'} (optimalt: SPF 30+ dagligt)
+- Glow Score: ${S.score}/100
+- Streak: ${S.streak.length} dage
+
+GIV FØLGENDE (på dansk, med emojis):
+1. En motiverende, personlig besked (2-3 sætninger)
+2. PRÆCIS hvor meget søvn, vand, træning osv. jeg skal have for at optimere
+3. 3 KONKRETE, handlingsorienterede tips til i morgen
+4. Hvad jeg gør godt lige nu
+5. Hvad jeg SKAL forbedre (vær direkte!)
+6. Mit potentiale hvis jeg følger alle råd`;
+                let res = await callAI(prompt);
+                d.innerHTML = `<div class="ai-box"><strong style="color:#d4af37">🤖 AI Coach - Personlig Analyse</strong><br>${res.replace(/\n/g,'<br>')}</div>`;
             } catch (e) { d.innerHTML = `<div class="ai-box" style="border-color:#dc2626">❌ ${e.message}</div>`; }
         }
 
@@ -581,60 +539,44 @@ ${['symmetri','hud','kæbelinje','øjne','hår','harmoni'].map(k=>`<div>${k.char
             let d = document.getElementById('coachQRes');
             d.innerHTML = `<div style="text-align:center;padding:20px"><div class="spinner"></div></div>`;
             try {
-                let res = await grok(`Du er looksmaxing coach. Besvar på dansk: ${q}`);
+                let res = await callAI(`Du er looksmaxing coach. Besvar dette spørgsmål på dansk med konkrete, praktiske råd. Vær specifik omkring mængder (søvn, vand, træning osv.): ${q}`);
                 d.innerHTML =
                     `<div class="ai-box"><strong style="color:#d4af37">🤖 Svar:</strong><br>${res.replace(/\n/g,'<br>')}</div>`;
             } catch (e) { d.innerHTML = `<p style="color:#dc2626">❌ ${e.message}</p>`; }
         }
 
-        function showAPIKeyPrompt() {
-            showModal('🔑 Indtast Grok API-nøgle',
-                `<p style="color:#b0b0b0;font-size:0.8rem;margin-bottom:12px">Indtast din Grok API-nøgle. Den gemmes KUN på din telefon.</p>
-<input type="password" class="chat-input" id="apiKeyInput" placeholder="gsk_..." autocomplete="off">
-<button class="btn btn-gold" onclick="saveAPIKeyFromPrompt()">💾 Gem nøgle</button>
-<p style="color:#666;font-size:0.6rem;margin-top:8px">Få en nøgle på: console.x.ai</p>`);
-        }
-
-        function saveAPIKeyFromPrompt() {
-            let k = document.getElementById('apiKeyInput').value.trim();
-            if (!k) { toast('❌ Indtast en nøgle'); return; }
-            if (!k.startsWith('gsk_')) { toast('❌ Ugyldigt format - skal starte med gsk_'); return; }
-            setAPIKey(k);
-            closeModal();
-            toast('✅ API-nøgle gemt!');
-        }
-
+        // ============ RENDER ============
         function render() {
             let a = document.getElementById('app');
             let t = new Date();
             let ds = t.toLocaleDateString('da-DK', { weekday: 'long', day: 'numeric', month: 'short' });
             let hk = !!getAPIKey();
+            let p = API_PROVIDERS[S.apiProvider];
             let sn = '';
             if (S.streak.length >= 7) sn = ' 🔥';
             if (S.streak.length >= 30) sn = ' 👑';
             a.innerHTML = `
-<div class="header"><span>${hk?'🟢 AI Online':'🔴 AI Offline'}</span><span>${ds}</span><span style="cursor:pointer;text-decoration:underline" onclick="showAPIKeyPrompt()">🔑 API</span></div>
-<div class="logo"><h1>LOOKSMAX AI</h1><div class="subtitle">ULTIMATE GLOW UP</div></div>
-<div class="score-circle"><div class="score-num">${S.score}</div><div class="score-label">GLOW SCORE</div><div style="font-size:0.7rem;color:#d4af37">${S.streak.length} dage${sn}</div></div>
-<div class="nav">
-<button class="nav-btn active" onclick="switchTab('dash')">📊 Overblik</button>
-<button class="nav-btn" onclick="switchTab('ai')">🤖 AI Analyse</button>
-<button class="nav-btn" onclick="switchTab('track')">✅ Tracker</button>
-<button class="nav-btn" onclick="switchTab('coach')">💬 Coach</button>
+<div class="topbar">
+<span class="status ${hk?'online':'offline'}">${hk?'🟢 AI Online':'🔴 AI Offline'}</span>
+<span style="font-size:0.65rem;color:var(--text2)">${p.name.split(' ')[0]}</span>
+<span style="font-size:0.7rem;color:var(--text2)">${ds}</span>
+<button class="burger-btn" onclick="openBurger()">☰</button>
+</div>
+<div class="logo"><h1>LOOKSMAX AI</h1><div class="sub">ULTIMATE GLOW UP</div></div>
+<div class="score-wrap"><div class="score-circle"><div class="score-num">${S.score}</div><div style="font-size:0.6rem;letter-spacing:2px;color:var(--text2)">GLOW</div><div style="font-size:0.65rem;color:#d4af37">${S.streak.length}d${sn}</div></div></div>
+<div style="display:flex;gap:6px;overflow-x:auto;padding:12px 0;scrollbar-width:none" class="nav">
+<button class="btn" style="flex-shrink:0;padding:10px 16px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--text2);font-size:0.8rem;width:auto;${S.tab==='dash'?'background:var(--accent);color:#000;border-color:var(--accent)':''}" onclick="switchTab('dash')">📊</button>
+<button class="btn" style="flex-shrink:0;padding:10px 16px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--text2);font-size:0.8rem;width:auto;${S.tab==='ai'?'background:var(--accent);color:#000;border-color:var(--accent)':''}" onclick="switchTab('ai')">🤖</button>
+<button class="btn" style="flex-shrink:0;padding:10px 16px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--text2);font-size:0.8rem;width:auto;${S.tab==='track'?'background:var(--accent);color:#000;border-color:var(--accent)':''}" onclick="switchTab('track')">✅</button>
+<button class="btn" style="flex-shrink:0;padding:10px 16px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--text2);font-size:0.8rem;width:auto;${S.tab==='coach'?'background:var(--accent);color:#000;border-color:var(--accent)':''}" onclick="switchTab('coach')">💬</button>
 </div>
 <div id="content"></div>`;
             renderTab();
-            if (!hk) showAPIKeyPrompt();
         }
 
-        function switchTab(t) {
-            S.tab = t;
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            let em = { dash: '📊', ai: '🤖', track: '✅', coach: '💬' };
-            document.querySelectorAll('.nav-btn').forEach(b => { if (b.textContent.includes(em[t])) b.classList.add(
-                    'active'); });
-            renderTab();
-        }
+        function switchTab(t) { S.tab = t;
+            save();
+            render(); }
 
         function renderTab() {
             let c = document.getElementById('content');
@@ -658,11 +600,11 @@ ${['symmetri','hud','kæbelinje','øjne','hår','harmoni'].map(k=>`<div>${k.char
 <div class="card"><div class="card-title">🔥 Streak</div><div class="streak-dots">${ld.map(d=>{let is=S.streak.includes(d);let it=d===new Date().toDateString();let dn=new Date(d).toLocaleDateString('da-DK',{weekday:'short'}).charAt(0);return`<div class="streak-dot${is?' active':''}${it?' today':''}">${dn}</div>`}).join('')}</div></div>`;
             } else if (S.tab === 'ai') c.innerHTML = `
 <div class="card"><div class="card-title">🤖 AI Ansigtsanalyse</div>
-<div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileIn').click()"><div style="font-size:2.5rem">📸</div><p style="color:#b0b0b0">Tryk for at tage/upload billede</p><p style="font-size:0.6rem;color:#666">God belysning, frontalt selfie</p></div>
+<div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileIn').click()"><div style="font-size:2.5rem">📸</div><p style="color:#b0b0b0">Tryk for at tage/upload billede</p></div>
 <input type="file" id="fileIn" accept="image/*" capture="environment" style="display:none" onchange="handleFile(event)">
 <div id="aiRes" style="display:none"></div></div>`;
             else if (S.tab === 'track') c.innerHTML = `
-<div class="card"><div class="card-title">📝 Dagens Tracker</div>
+<div class="card"><div class="card-title">📝 Tracker</div>
 <div style="display:flex;flex-direction:column;gap:8px">
 <div style="display:flex;justify-content:space-between;align-items:center"><span>😴 Søvn (timer)</span><input type="number" class="chat-input" style="width:70px;text-align:center" id="sl" value="${S.stats.sleep}" min="0" max="24"></div>
 <div style="display:flex;justify-content:space-between;align-items:center"><span>💧 Vand (glas)</span><input type="number" class="chat-input" style="width:70px;text-align:center" id="wa" value="${S.stats.water}" min="0" max="20"></div>
@@ -672,34 +614,36 @@ ${['symmetri','hud','kæbelinje','øjne','hår','harmoni'].map(k=>`<div>${k.char
 ${[['🏋️ Træning','workout'],['🧴 Hudpleje','skincare'],['👅 Mewing','mewing'],['🧍 Holdning','posture'],['☀️ Solbeskyttelse','sun']].map(([l,k])=>`<label style="display:flex;align-items:center;gap:8px;padding:8px;background:#0d0d0d;border-radius:8px;margin:4px 0;cursor:pointer"><input type="checkbox" ${S.stats[k]?'checked':''} id="cb_${k}" style="width:18px;height:18px">${l}</label>`).join('')}
 </div><button class="btn btn-gold" onclick="saveTracker()">✅ Gem alt</button>`;
             else if (S.tab === 'coach') c.innerHTML = `
-<div class="card"><div class="card-title">💬 AI Coach</div><p style="color:#b0b0b0;margin-bottom:8px;font-size:0.8rem">Personlig coaching baseret på din data</p>
-<button class="btn btn-gold" onclick="getCoachAdvice()">🤖 Få Coach-råd</button><div id="coachRes" style="margin-top:8px"></div></div>
+<div class="card"><div class="card-title">💬 AI Coach</div>
+<p style="color:var(--text2);margin-bottom:8px;font-size:0.8rem">Få personlig coaching med PRÆCISE anbefalinger</p>
+<button class="btn btn-gold" onclick="getCoachAdvice()">🤖 Få Coach-råd</button>
+<div id="coachRes" style="margin-top:8px"></div></div>
 <div class="card"><div class="card-title">💡 Spørg om alt</div>
-<textarea class="chat-input" id="coachQ" placeholder="F.eks: Hvordan får jeg en skarpere kæbelinje?" rows="2"></textarea>
-<button class="btn btn-gold" style="margin-top:6px" onclick="askCoach()">💬 Send</button><div id="coachQRes" style="margin-top:8px"></div></div>`;
+<textarea class="chat-input" id="coachQ" placeholder="F.eks: Hvor meget vand skal jeg drikke for at få bedre hud?" rows="2"></textarea>
+<button class="btn btn-gold" style="margin-top:6px" onclick="askCoach()">💬 Send</button>
+<div id="coachQRes" style="margin-top:8px"></div></div>`;
         }
 
         function handleFile(e) { let f = e.target.files[0]; if (!f) return; if (f.size > 10 * 1024 * 1024) { toast(
-                '❌ For stort (max 10MB)'); return; };
+                '❌ For stort'); return; };
             analyzeFace(f); }
 
         function saveTracker() {
             S.stats.sleep = parseInt(document.getElementById('sl')?.value) || 0;
             S.stats.water = parseInt(document.getElementById('wa')?.value) || 0;
             S.stats.nutrition = parseInt(document.getElementById('nu')?.value) || 0;
-            S.stats.workout = document.getElementById('cb_workout')?.checked ? 1 : 0;
-            S.stats.skincare = document.getElementById('cb_skincare')?.checked ? 1 : 0;
-            S.stats.mewing = document.getElementById('cb_mewing')?.checked ? 1 : 0;
-            S.stats.posture = document.getElementById('cb_posture')?.checked ? 1 : 0;
-            S.stats.sun = document.getElementById('cb_sun')?.checked ? 1 : 0;
+            ['workout', 'skincare', 'mewing', 'posture', 'sun'].forEach(k => { S.stats[k] = document.getElementById(
+                    'cb_' + k)?.checked ? 1 : 0; });
             updateStreak();
             save();
             toast('✅ Gemt! 🔥');
             render();
         }
 
+        // ============ INIT ============
         load();
         render();
+        if (!getAPIKey()) setTimeout(() => showAPIKeyPrompt(), 500);
     </script>
 </body>
 </html>
