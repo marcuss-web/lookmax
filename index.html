@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>LooksMax AI</title>
+    <title>LooksMax AI Pro</title>
     <style>
         :root {
             --bg: #000;
@@ -25,7 +25,6 @@
         }
         .app { max-width: 500px; margin: 0 auto; padding: 20px; padding-bottom: 40px; }
 
-        /* HEADER */
         .header {
             display: flex; align-items: center; gap: 12px;
             padding: 16px 0; margin-bottom: 24px;
@@ -34,7 +33,6 @@
         .logo-text h1 { font-size: 1.4rem; font-weight: 800; color: #d4af37; letter-spacing: 1px; }
         .logo-text span { font-size: 0.7rem; color: #999; letter-spacing: 2px; }
 
-        /* SCORE */
         .score-card {
             background: #111; border: 1px solid #222; border-radius: 20px;
             padding: 24px; text-align: center; margin-bottom: 24px;
@@ -43,7 +41,6 @@
         .score-label { font-size: 0.8rem; color: #999; letter-spacing: 2px; text-transform: uppercase; margin: 8px 0; }
         .score-streak { font-size: 0.8rem; color: #d4af37; }
 
-        /* MAIN BUTTONS */
         .main-btns { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
         .main-btn {
             display: flex; align-items: center; gap: 16px;
@@ -57,14 +54,12 @@
         .main-btn .info p { font-size: 0.75rem; color: #999; margin-top: 2px; }
         .main-btn.gold { border-color: #d4af37; background: #1a1a0a; }
 
-        /* CARDS */
         .card {
             background: #111; border: 1px solid #222; border-radius: 16px;
             padding: 20px; margin: 16px 0;
         }
         .card h3 { font-size: 0.9rem; color: #d4af37; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
 
-        /* UPLOAD */
         .upload-box {
             border: 2px dashed #333; border-radius: 16px; padding: 40px 20px;
             text-align: center; cursor: pointer; transition: 0.3s;
@@ -73,7 +68,6 @@
         .upload-box img { max-width: 100%; max-height: 250px; border-radius: 12px; margin-top: 8px; }
         .upload-icon { font-size: 3rem; }
 
-        /* BUTTONS */
         .btn {
             width: 100%; padding: 16px; border-radius: 30px; border: none;
             font-weight: 700; font-size: 0.9rem; cursor: pointer;
@@ -85,7 +79,6 @@
         .btn-outline { background: transparent; border: 1px solid #d4af37; color: #d4af37; margin-top: 8px; }
         .btn-red { background: #ef4444; color: #fff; }
 
-        /* AI RESPONSE */
         .ai-box {
             background: #0a0a0a; border: 1px solid #d4af37; border-radius: 16px;
             padding: 16px; margin: 12px 0; font-size: 0.85rem; line-height: 1.7;
@@ -98,7 +91,6 @@
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* TRACKER */
         .track-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .track-item {
             background: #0a0a0a; border: 1px solid #222; border-radius: 12px;
@@ -110,7 +102,6 @@
         .track-name { font-size: 0.65rem; color: #999; text-transform: uppercase; margin-top: 4px; }
         .track-val { font-size: 0.7rem; color: #fff; }
 
-        /* TOAST */
         .toast {
             position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
             background: #d4af37; color: #000; padding: 12px 24px; border-radius: 25px;
@@ -121,7 +112,6 @@
         @keyframes pop { from { transform: translate(-50%,20px); opacity: 0; } to { transform: translate(-50%,0); opacity: 1; } }
         @keyframes fade { to { opacity: 0; } }
 
-        /* ONBOARDING */
         .onboarding {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0,0,0,0.95); z-index: 1000;
@@ -142,7 +132,6 @@
         }
         .step-text { font-size: 0.8rem; color: #ccc; }
 
-        /* INPUT */
         input, textarea {
             width: 100%; background: #0a0a0a; border: 1px solid #222;
             border-radius: 12px; padding: 14px; color: #fff; font-family: inherit;
@@ -151,7 +140,6 @@
         input:focus, textarea:focus { border-color: #d4af37; }
         textarea { min-height: 80px; resize: vertical; }
 
-        /* Streak dots */
         .streak-row { display: flex; gap: 4px; flex-wrap: wrap; margin: 8px 0; }
         .sdot {
             width: 28px; height: 28px; border-radius: 50%; background: #0a0a0a;
@@ -160,6 +148,16 @@
         }
         .sdot.on { background: #d4af37; border-color: #d4af37; color: #000; }
         .sdot.today { border-color: #d4af37; box-shadow: 0 0 10px rgba(212,175,55,0.4); }
+
+        .setup-card {
+            background: #111; border: 2px solid #d4af37; border-radius: 20px;
+            padding: 30px; text-align: center; margin-bottom: 20px;
+        }
+        .setup-card h3 { color: #d4af37; margin-bottom: 8px; }
+        .setup-card p { color: #999; font-size: 0.8rem; margin-bottom: 16px; }
+        .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+        .status-dot.online { background: #22c55e; }
+        .status-dot.offline { background: #ef4444; }
     </style>
 </head>
 <body>
@@ -169,9 +167,8 @@
 
     <script>
         // ============ CONFIG ============
-        const API_KEY = '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';
         const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-        const MODEL = 'llama-3.2-90b-vision-preview';
+        const MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct';
 
         // ============ STATE ============
         let S = {
@@ -179,16 +176,19 @@
             score: 50,
             streak: [],
             lastDate: '',
-            stats: { sleep: 7, water: 8, workout: 1, skincare: 1, mewing: 1, posture: 1, nutrition: 3, sun: 1 },
-            onboarded: false
+            stats: { sleep: 0, water: 0, workout: 0, skincare: 0, mewing: 0, posture: 0, nutrition: 0, sun: 0 },
+            onboarded: false,
+            apiKey: ''
         };
 
         // ============ STORAGE ============
         function load() {
             try {
-                let s = localStorage.getItem('lmx_easy');
+                let s = localStorage.getItem('lmx_secure');
                 if (s) { let p = JSON.parse(s);
                     S = { ...S, ...p }; }
+                let k = localStorage.getItem('lmx_apikey_secure');
+                if (k) S.apiKey = k;
                 let t = new Date().toDateString();
                 if (S.lastDate !== t) {
                     S.stats = { sleep: 0, water: 0, workout: 0, skincare: 0, mewing: 0, posture: 0, nutrition: 0, sun: 0 };
@@ -200,8 +200,21 @@
 
         function save() {
             S.lastDate = new Date().toDateString();
-            localStorage.setItem('lmx_easy', JSON.stringify(S));
+            let ts = { ...S };
+            delete ts.apiKey;
+            localStorage.setItem('lmx_secure', JSON.stringify(ts));
+            if (S.apiKey) localStorage.setItem('lmx_apikey_secure', S.apiKey);
             calcScore();
+        }
+
+        function getAPIKey() {
+            if (!S.apiKey) S.apiKey = localStorage.getItem('lmx_apikey_secure') || '';
+            return S.apiKey;
+        }
+
+        function setAPIKey(k) {
+            S.apiKey = k;
+            localStorage.setItem('lmx_apikey_secure', k);
         }
 
         function calcScore() {
@@ -237,14 +250,49 @@
             setTimeout(() => { if (t.parentNode) t.remove(); }, 2500);
         }
 
+        function showAPISetup() {
+            let c = document.getElementById('onboardingContainer');
+            c.innerHTML = `
+<div class="onboarding" id="apiSetupModal">
+<div class="onboarding-card">
+<div style="font-size:3rem">🔑</div>
+<h2>Opsæt din Groq API-nøgle</h2>
+<p>For at bruge AI-funktionerne skal du indtaste din personlige API-nøgle fra Groq.</p>
+<div class="step"><div class="step-num">1</div><div class="step-text">Gå til <strong>console.groq.com/keys</strong></div></div>
+<div class="step"><div class="step-num">2</div><div class="step-text">Opret en ny API-nøgle og kopier den</div></div>
+<div class="step"><div class="step-num">3</div><div class="step-text">Indsæt nøglen herunder</div></div>
+<input type="password" id="apiKeyInput" placeholder="gsk_..." autocomplete="off" style="margin-top:16px;text-align:center">
+<button class="btn btn-gold" style="margin-top:8px" onclick="saveAPIKey()">💾 Gem & Start</button>
+<p style="color:#666;font-size:0.6rem;margin-top:8px">Nøglen gemmes KUN på din telefon. Ingen andre kan se den.</p>
+</div></div>`;
+        }
+
+        function saveAPIKey() {
+            let k = document.getElementById('apiKeyInput').value.trim();
+            if (!k) { toast('❌ Indtast din API-nøgle'); return; }
+            if (!k.startsWith('gsk_')) { toast('❌ Nøglen skal starte med gsk_'); return; }
+            setAPIKey(k);
+            document.getElementById('onboardingContainer').innerHTML = '';
+            S.onboarded = true;
+            save();
+            toast('✅ API-nøgle gemt!');
+            render();
+        }
+
         // ============ AI CALL ============
         async function callAI(prompt, img = null) {
+            let key = getAPIKey();
+            if (!key) {
+                showAPISetup();
+                throw new Error('Indtast din API-nøgle først');
+            }
             let msgs = [];
             if (img) {
                 msgs.push({
                     role: 'user',
                     content: [
-                        { type: 'image_url', image_url: { url: `data:image/jpeg;base64,${img}`, detail: 'high' } },
+                        { type: 'image_url', image_url: { url: `data:image/jpeg;base64,${img}`,
+                            detail: 'high' } },
                         { type: 'text', text: prompt }
                     ]
                 });
@@ -253,11 +301,11 @@
             }
             let r = await fetch(API_URL, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${API_KEY}` },
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
                 body: JSON.stringify({ model: MODEL, messages: msgs, max_tokens: 1000, temperature: 0.7 })
             });
             if (!r.ok) { let e = await r.json();
-                throw new Error(e.error?.message || 'API Error'); }
+                throw new Error(e.error?.message || 'API-fejl. Tjek din nøgle.'); }
             let d = await r.json();
             return d.choices[0].message.content;
         }
@@ -308,7 +356,7 @@
   "harmoni": [1-10],
   "styrker": ["3 styrker"],
   "forbedringer": ["3 forbedringsområder"],
-  "tips": ["3 konkrete tips med specifikke handlinger"],
+  "tips": ["3 konkrete tips"],
   "potentiale": [1-10],
   "summary": "2-3 motiverende sætninger på dansk"
 }
@@ -360,24 +408,26 @@ DAGENS DATA:
 - Søvn: ${s.sleep}t (optimalt: 7-9t)
 - Vand: ${s.water} glas (optimalt: 8-12 glas)
 - Træning: ${s.workout?'✅':'❌'} (optimalt: 4-5x/uge)
-- Hudpleje: ${s.skincare?'✅':'❌'} (optimalt: morgen+aften)
+- Hudpleje: ${s.skincare?'✅':'❌'}
 - Mewing: ${s.mewing?'✅':'❌'}
 - Holdning: ${s.posture?'✅':'❌'}
-- Ernæring: ${s.nutrition}/5 måltider
+- Ernæring: ${s.nutrition}/5
 - SPF: ${s.sun?'✅':'❌'}
 - Glow Score: ${S.score}/100
 - Streak: ${S.streak.length} dage
 
-SVAR MED (på dansk, brug emojis):
+SVAR MED (dansk, emojis):
 1. Motiverende personlig besked
-2. PRÆCISE tal for hvad jeg skal nå i morgen (søvn, vand osv.)
-3. 3 konkrete handlinger til i morgen
-4. Hvad jeg gør godt
-5. Hvad jeg SKAL forbedre nu`;
+2. PRÆCISE tal for i morgen
+3. 3 konkrete handlinger
+4. Hvad går godt
+5. Hvad skal forbedres NU`;
                 let res = await callAI(prompt);
-                r.innerHTML = `<div class="ai-box"><strong style="color:#d4af37">🤖 Personlig Coach</strong><br><br>${res.replace(/\n/g,'<br>')}</div>`;
-            } catch (e) { r.innerHTML =
-                    `<div class="ai-box" style="border-color:#ef4444">❌ ${e.message}</div>`; }
+                r.innerHTML =
+                    `<div class="ai-box"><strong style="color:#d4af37">🤖 Personlig Coach</strong><br><br>${res.replace(/\n/g,'<br>')}</div>`;
+            } catch (e) { if (e.message.includes('API-nøgle')) showAPISetup();
+                else r.innerHTML =
+                `<div class="ai-box" style="border-color:#ef4444">❌ ${e.message}</div>`; }
         }
 
         // ============ ONBOARDING ============
@@ -389,33 +439,45 @@ SVAR MED (på dansk, brug emojis):
 <div style="font-size:4rem">🚀</div>
 <h2>Velkommen til LooksMax AI!</h2>
 <p>Din personlige AI-coach til at maksimere dit udseende</p>
-<div class="step"><div class="step-num">1</div><div class="step-text"><strong>Analyser dit ansigt</strong><br>Tag et billede og få en komplet AI-vurdering</div></div>
-<div class="step"><div class="step-num">2</div><div class="step-text"><strong>Følg dine daglige mål</strong><br>Søvn, vand, træning, hudpleje og meget mere</div></div>
-<div class="step"><div class="step-num">3</div><div class="step-text"><strong>Få personlig coaching</strong><br>AI'en giver dig PRÆCISE råd hver dag</div></div>
-<button class="btn btn-gold" style="margin-top:20px" onclick="finishOnboarding()">✨ Start Nu!</button>
+<div class="step"><div class="step-num">1</div><div class="step-text"><strong>Indtast din API-nøgle</strong><br>Fra console.groq.com/keys</div></div>
+<div class="step"><div class="step-num">2</div><div class="step-text"><strong>Analyser dit ansigt</strong><br>Tag et billede og få AI-vurdering</div></div>
+<div class="step"><div class="step-num">3</div><div class="step-text"><strong>Track dine habits</strong><br>Søvn, vand, træning, hudpleje</div></div>
+<div class="step"><div class="step-num">4</div><div class="step-text"><strong>Få personlig coaching</strong><br>AI'en giver PRÆCISE råd</div></div>
+<button class="btn btn-gold" style="margin-top:20px" onclick="startSetup()">✨ Start Nu!</button>
 </div></div>`;
         }
 
-        function finishOnboarding() {
-            S.onboarded = true;
-            save();
+        function startSetup() {
             document.getElementById('onboardingContainer').innerHTML = '';
-            toast('🚀 Lad os komme i gang!');
-            render();
+            showAPISetup();
         }
 
         // ============ RENDER ============
         function render() {
             let a = document.getElementById('app');
             let ds = new Date().toLocaleDateString('da-DK', { weekday: 'long', day: 'numeric', month: 'short' });
+            let hasKey = !!getAPIKey();
             let sn = '';
             if (S.streak.length >= 7) sn = ' 🔥';
             if (S.streak.length >= 30) sn = ' 👑';
 
+            if (!hasKey && !S.onboarded) {
+                a.innerHTML = `
+<div class="header"><div class="logo-icon">🦁</div><div class="logo-text"><h1>LooksMax AI</h1><span>${ds}</span></div></div>
+<div class="setup-card">
+<div style="font-size:3rem">🔑</div>
+<h3>API-nøgle mangler</h3>
+<p>Indtast din Groq API-nøgle for at aktivere AI-funktionerne</p>
+<button class="btn btn-gold" onclick="showAPISetup()">🔑 Indtast API-nøgle</button>
+<p style="color:#666;font-size:0.6rem;margin-top:12px">Få en gratis nøgle på:<br>console.groq.com/keys</p>
+</div>`;
+                return;
+            }
+
             a.innerHTML = `
 <div class="header">
 <div class="logo-icon">🦁</div>
-<div class="logo-text"><h1>LooksMax AI</h1><span>${ds}</span></div>
+<div class="logo-text"><h1>LooksMax AI</h1><span>${ds} · <span class="status-dot ${hasKey?'online':'offline'}"></span>${hasKey?'AI Online':'AI Offline'}</span></div>
 </div>
 
 <div class="score-card">
@@ -447,7 +509,10 @@ SVAR MED (på dansk, brug emojis):
         function switchTab(t) {
             S.tab = t;
             render();
-            window.scrollTo({ top: document.getElementById('tabContent').offsetTop - 20, behavior: 'smooth' });
+            setTimeout(() => {
+                let el = document.getElementById('tabContent');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
         }
 
         function renderTab() {
@@ -483,11 +548,11 @@ SVAR MED (på dansk, brug emojis):
 <div style="display:flex;flex-direction:column;gap:10px">
 <div style="display:flex;justify-content:space-between;align-items:center">
 <span>😴 Søvn</span>
-<input type="number" id="sl" value="${S.stats.sleep}" min="0" max="24" style="width:70px;text-align:center;background:#0a0a0a;border:1px solid #222;border-radius:8px;padding:10px;color:#fff;font-size:0.9rem;text-align:center"> timer
+<input type="number" id="sl" value="${S.stats.sleep}" min="0" max="24" style="width:70px;background:#0a0a0a;border:1px solid #222;border-radius:8px;padding:10px;color:#fff;font-size:0.9rem;text-align:center"> timer
 </div>
 <div style="display:flex;justify-content:space-between;align-items:center">
 <span>💧 Vand</span>
-<input type="number" id="wa" value="${S.stats.water}" min="0" max="20" style="width:70px;text-align:center;background:#0a0a0a;border:1px solid #222;border-radius:8px;padding:10px;color:#fff;font-size:0.9rem;text-align:center"> glas
+<input type="number" id="wa" value="${S.stats.water}" min="0" max="20" style="width:70px;background:#0a0a0a;border:1px solid #222;border-radius:8px;padding:10px;color:#fff;font-size:0.9rem;text-align:center"> glas
 </div>
 <div style="display:flex;justify-content:space-between;align-items:center">
 <span>🥗 Ernæring</span>
@@ -538,9 +603,14 @@ ${[
 
         // ============ INIT ============
         load();
-        if (!S.onboarded) {
-            showOnboarding();
+        if (!getAPIKey()) {
+            if (!S.onboarded) {
+                showOnboarding();
+            } else {
+                render();
+            }
         } else {
+            S.onboarded = true;
             render();
         }
     </script>
