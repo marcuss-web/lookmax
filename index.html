@@ -152,17 +152,33 @@
             }catch(e){}
         }
 
-        async function callAI(prompt,img=null){
-            let key=getAPIKey();
-            if(!key){showAPISetup();throw new Error('Indtast API-nøgle')}
-            let msgs=[];
-            if(img){msgs.push({role:'user',content:[{type:'image_url',image_url:{url:`data:image/jpeg;base64,${img}`,detail:'high'}},{type:'text',text:prompt}])}
-            }else{msgs.push({role:'user',content:prompt})}
-            let r=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${key}`},body:JSON.stringify({model:MODEL,messages:msgs,max_tokens:2000,temperature:0.7})});
-            if(!r.ok){let e=await r.json();throw new Error(e.error?.message||'API-fejl')}
-            let d=await r.json();return d.choices[0].message.content;
-        }
-
+  async function callAI(prompt, img = null) {
+    let key = getAPIKey();
+    if (!key) { showAPISetup(); throw new Error('Indtast API-nøgle'); }
+    
+    let msgs = [];
+    if (img) {
+        msgs.push({
+            role: 'user',
+            content: [
+                { type: 'image_url', image_url: { url: `data:image/jpeg;base64,${img}`, detail: 'high' } },
+                { type: 'text', text: prompt }
+            ]
+        });
+    } else {
+        msgs.push({ role: 'user', content: prompt });
+    }
+    
+    let r = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
+        body: JSON.stringify({ model: MODEL, messages: msgs, max_tokens: 2000, temperature: 0.7 })
+    });
+    
+    if (!r.ok) { let e = await r.json(); throw new Error(e.error?.message || 'API-fejl'); }
+    let d = await r.json();
+    return d.choices[0].message.content;
+}
         function compressImg(file){
             return new Promise(r=>{
                 let reader=new FileReader();
