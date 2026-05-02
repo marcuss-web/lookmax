@@ -3,71 +3,358 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>LooksMax AI v4.1</title>
+    <title>LooksMax AI • Premium</title>
     <style>
-        :root{--bg:#000;--card:#111;--text:#fff;--sub:#999;--gold:#d4af37;--green:#22c55e;--red:#ef4444;--border:#222;--blue:#3b82f6}
+        :root {
+            --bg: #000000;
+            --card: rgba(20,20,20,0.85);
+            --glass: rgba(255,255,255,0.03);
+            --text: #ffffff;
+            --sub: #9ca3af;
+            --gold: #d4af37;
+            --gold-light: #f0d060;
+            --green: #22c55e;
+            --red: #ef4444;
+            --border: rgba(255,255,255,0.06);
+            --glow: rgba(212,175,55,0.15);
+        }
         *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#000;color:#fff;min-height:100dvh;line-height:1.5}
-        .app{max-width:500px;margin:0 auto;padding:16px;padding-bottom:40px}
-        .header{display:flex;align-items:center;gap:10px;padding:12px 0;margin-bottom:20px}
-        .logo-icon{font-size:2.2rem}
-        .logo-text h1{font-size:1.3rem;font-weight:800;color:#d4af37;letter-spacing:1px}
-        .logo-text span{font-size:0.65rem;color:#999}
-        .score-card{background:#111;border:1px solid #222;border-radius:20px;padding:20px;text-align:center;margin-bottom:20px}
-        .score-big{font-size:3.5rem;font-weight:800;color:#d4af37;line-height:1}
-        .main-btns{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
-        .main-btn{display:flex;align-items:center;gap:14px;background:#111;border:1px solid #222;border-radius:16px;padding:18px;cursor:pointer;transition:.2s;text-align:left;font-family:inherit;color:#fff;width:100%;font-size:inherit}
-        .main-btn:active{transform:scale(.98);border-color:#d4af37}
-        .main-btn .icon{font-size:2.2rem;flex-shrink:0}
-        .main-btn .info h3{font-size:.95rem;font-weight:700}
-        .main-btn .info p{font-size:.7rem;color:#999;margin-top:2px}
-        .main-btn.gold{border-color:#d4af37;background:#1a1a0a}
-        .card{background:#111;border:1px solid #222;border-radius:16px;padding:18px;margin:14px 0}
-        .card h3{font-size:.85rem;color:#d4af37;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px}
-        .btn{width:100%;padding:15px;border-radius:30px;border:none;font-weight:700;font-size:.85rem;cursor:pointer;font-family:inherit;text-transform:uppercase;letter-spacing:.5px;transition:.2s}
-        .btn:active{transform:scale(.97)}
-        .btn-gold{background:#d4af37;color:#000}
-        .btn-outline{background:transparent;border:1px solid #d4af37;color:#d4af37;margin-top:8px}
-        .btn-sm{width:auto;padding:10px 18px;font-size:.7rem;display:inline-block;margin:3px}
-        .btn-blue{background:#3b82f6;color:#fff}
-        .ai-box{background:#0a0a0a;border:1px solid #d4af37;border-radius:16px;padding:14px;margin:10px 0;font-size:.8rem;line-height:1.7;max-height:500px;overflow-y:auto}
-        .ai-box a{color:#3b82f6;text-decoration:underline;word-break:break-all}
-        .spinner{display:inline-block;width:28px;height:28px;border:3px solid #222;border-top-color:#d4af37;border-radius:50%;animation:spin .8s linear infinite}
+        body{
+            font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Roboto,sans-serif;
+            background:#000;
+            color:#fff;
+            min-height:100dvh;
+            line-height:1.5;
+            -webkit-font-smoothing:antialiased;
+            -moz-osx-font-smoothing:grayscale;
+        }
+        .app{
+            max-width:480px;
+            margin:0 auto;
+            padding:20px 16px 40px;
+            position:relative;
+        }
+
+        /* Status bar */
+        .status-bar{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:8px 0 16px;
+            font-size:0.7rem;
+            color:#9ca3af;
+            letter-spacing:0.5px;
+        }
+        .status-dot{
+            width:7px;height:7px;border-radius:50%;
+            display:inline-block;margin-right:6px;
+            background:#22c55e;
+            box-shadow:0 0 8px rgba(34,197,94,0.5);
+        }
+
+        /* Glass card */
+        .glass{
+            background:rgba(20,20,20,0.7);
+            backdrop-filter:blur(20px);
+            -webkit-backdrop-filter:blur(20px);
+            border:1px solid rgba(255,255,255,0.06);
+            border-radius:24px;
+            padding:24px;
+            margin:12px 0;
+            position:relative;
+            overflow:hidden;
+        }
+        .glass::before{
+            content:'';
+            position:absolute;
+            top:-50%;left:-50%;
+            width:200%;height:200%;
+            background:radial-gradient(circle at 30% 20%,rgba(212,175,55,0.04) 0%,transparent 50%);
+            pointer-events:none;
+        }
+
+        /* Score display */
+        .score-hero{
+            text-align:center;
+            padding:32px 24px;
+            margin:16px 0;
+            position:relative;
+        }
+        .score-ring{
+            width:140px;height:140px;
+            border-radius:50%;
+            margin:0 auto 16px;
+            position:relative;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background:radial-gradient(circle,rgba(212,175,55,0.08),transparent 70%);
+            border:2px solid rgba(212,175,55,0.3);
+            box-shadow:0 0 60px rgba(212,175,55,0.1),inset 0 0 30px rgba(212,175,55,0.03);
+        }
+        .score-value{
+            font-size:3.8rem;
+            font-weight:800;
+            letter-spacing:-2px;
+            background:linear-gradient(180deg,#f0d060 0%,#b8941f 100%);
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+            background-clip:text;
+            line-height:1;
+        }
+        .score-label{
+            font-size:0.65rem;
+            text-transform:uppercase;
+            letter-spacing:3px;
+            color:#9ca3af;
+            margin-top:8px;
+        }
+
+        /* Menu grid */
+        .menu-grid{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin:16px 0;
+        }
+        .menu-card{
+            background:rgba(255,255,255,0.02);
+            border:1px solid rgba(255,255,255,0.04);
+            border-radius:20px;
+            padding:20px 16px;
+            cursor:pointer;
+            transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
+            position:relative;
+            overflow:hidden;
+            text-align:center;
+        }
+        .menu-card:active{
+            transform:scale(0.95);
+            border-color:rgba(212,175,55,0.3);
+            background:rgba(212,175,55,0.05);
+        }
+        .menu-card .icon{
+            font-size:2rem;
+            margin-bottom:8px;
+            display:block;
+        }
+        .menu-card .title{
+            font-size:0.8rem;
+            font-weight:700;
+            letter-spacing:0.5px;
+        }
+        .menu-card .sub{
+            font-size:0.6rem;
+            color:#9ca3af;
+            margin-top:2px;
+        }
+        .menu-card.primary{
+            grid-column:1/-1;
+            background:rgba(212,175,55,0.06);
+            border-color:rgba(212,175,55,0.2);
+        }
+
+        /* Buttons */
+        .btn{
+            width:100%;
+            padding:16px;
+            border-radius:16px;
+            border:none;
+            font-weight:700;
+            font-size:0.85rem;
+            cursor:pointer;
+            font-family:inherit;
+            letter-spacing:0.5px;
+            transition:all 0.2s;
+            position:relative;
+            overflow:hidden;
+        }
+        .btn:active{transform:scale(0.97)}
+        .btn-primary{
+            background:linear-gradient(135deg,#d4af37 0%,#b8941f 100%);
+            color:#000;
+            box-shadow:0 8px 30px rgba(212,175,55,0.2);
+        }
+        .btn-secondary{
+            background:rgba(255,255,255,0.04);
+            border:1px solid rgba(255,255,255,0.08);
+            color:#fff;
+            margin-top:8px;
+        }
+
+        /* Inputs */
+        input,textarea,select{
+            width:100%;
+            background:rgba(255,255,255,0.03);
+            border:1px solid rgba(255,255,255,0.06);
+            border-radius:14px;
+            padding:14px;
+            color:#fff;
+            font-family:inherit;
+            font-size:0.85rem;
+            margin:6px 0;
+            outline:none;
+            -webkit-appearance:none;
+            transition:border 0.3s;
+        }
+        input:focus,textarea:focus,select:focus{border-color:rgba(212,175,55,0.4)}
+        select{
+            background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%239ca3af' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+            background-repeat:no-repeat;
+            background-position:right 14px center;
+            padding-right:40px;
+        }
+
+        /* AI response */
+        .ai-card{
+            background:rgba(20,20,20,0.8);
+            backdrop-filter:blur(20px);
+            -webkit-backdrop-filter:blur(20px);
+            border:1px solid rgba(212,175,55,0.2);
+            border-radius:20px;
+            padding:20px;
+            margin:12px 0;
+            font-size:0.8rem;
+            line-height:1.7;
+            max-height:450px;
+            overflow-y:auto;
+        }
+        .ai-card a{color:#60a5fa;text-decoration:underline}
+
+        /* Spinner */
+        .spinner{
+            width:32px;height:32px;
+            border:2px solid rgba(255,255,255,0.1);
+            border-top-color:#d4af37;
+            border-radius:50%;
+            animation:spin 0.7s linear infinite;
+            margin:0 auto;
+        }
         @keyframes spin{to{transform:rotate(360deg)}}
-        .toast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%);background:#d4af37;color:#000;padding:12px 24px;border-radius:25px;font-weight:700;font-size:.8rem;z-index:999;animation:pop .3s ease,fade .5s 2s forwards;max-width:90%;text-align:center}
+
+        /* Toast */
+        .toast{
+            position:fixed;
+            bottom:40px;left:50%;transform:translateX(-50%);
+            background:rgba(30,30,30,0.95);
+            backdrop-filter:blur(20px);
+            -webkit-backdrop-filter:blur(20px);
+            border:1px solid rgba(255,255,255,0.1);
+            color:#fff;
+            padding:14px 24px;
+            border-radius:30px;
+            font-weight:600;
+            font-size:0.8rem;
+            z-index:999;
+            animation:pop 0.3s ease,fade 0.5s 2s forwards;
+            max-width:90%;
+            text-align:center;
+            box-shadow:0 20px 50px rgba(0,0,0,0.5);
+        }
         @keyframes pop{from{transform:translate(-50%,20px);opacity:0}to{transform:translate(-50%,0);opacity:1}}
-        @keyframes fade{to{opacity:0}}
-        input,textarea,select{width:100%;background:#0a0a0a;border:1px solid #222;border-radius:12px;padding:14px;color:#fff;font-family:inherit;font-size:.85rem;margin:6px 0;outline:0;-webkit-appearance:none}
-        input:focus,textarea:focus,select:focus{border-color:#d4af37}
-        textarea{min-height:80px;resize:vertical}
-        select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23d4af37' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px}
-        .tag{display:inline-block;padding:8px 14px;border-radius:20px;font-size:.7rem;margin:3px;border:1px solid #333;cursor:pointer;transition:.2s;background:#0a0a0a}
-        .tag.selected{background:#d4af37;color:#000;border-color:#d4af37}
-        .product-card{display:flex;gap:10px;align-items:center;background:#0a0a0a;border-radius:12px;padding:10px;margin:6px 0}
-        .product-card img{width:50px;height:50px;border-radius:8px;object-fit:cover;background:#1a1a1a}
-        .product-info{flex:1;font-size:.75rem}
-        .product-info strong{color:#d4af37}
-        .gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-        .gallery-item{aspect-ratio:3/4;background:#0a0a0a;border-radius:12px;overflow:hidden;position:relative;border:1px solid #222}
-        .gallery-item img{width:100%;height:100%;object-fit:cover}
-        .gallery-date{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.8);padding:4px;font-size:.6rem;text-align:center}
-        .camera-container{position:fixed;top:0;left:0;right:0;bottom:0;background:#000;z-index:3000;display:flex;flex-direction:column;align-items:center;justify-content:center}
-        .camera-container video{width:100%;max-height:65vh;object-fit:cover;border-radius:20px;transform:scaleX(-1)}
-        .camera-instruction{font-size:1.1rem;color:#d4af37;font-weight:700;padding:20px;text-align:center}
-        .routine-step{display:flex;align-items:center;gap:8px;padding:8px;background:#0a0a0a;border-radius:8px;margin:4px 0;font-size:.75rem}
-        .routine-step .time{background:#d4af37;color:#000;padding:4px 10px;border-radius:12px;font-weight:700;font-size:.65rem}
-        .checkbox-custom{width:22px;height:22px;border:2px solid #444;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:.2s;flex-shrink:0}
-        .checkbox-custom.checked{border-color:#d4af37;background:#d4af37}
-        .hairstyle-card{background:#0a0a0a;border-radius:16px;overflow:hidden;margin:12px 0;border:1px solid #222}
-        .hairstyle-card img{width:100%;aspect-ratio:4/5;object-fit:cover}
-        .hairstyle-info{padding:12px}
-        .hairstyle-info h4{color:#d4af37;margin-bottom:4px}
-        .hairstyle-info p{font-size:.7rem;color:#999}
-        .ref-images{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
-        .ref-images img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:8px}
-        .inspo-thumb{display:inline-block;margin:4px;position:relative}
-        .inspo-thumb img{width:70px;height:70px;object-fit:cover;border-radius:10px;border:2px solid #222}
-        .inspo-thumb .remove{position:absolute;top:-6px;right:-6px;background:#ef4444;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.6rem;cursor:pointer;border:none}
+        @keyframes fade{to{opacity:0;transform:translate(-50%,-10px)}}
+
+        /* Hairstyle card */
+        .hair-card{
+            border-radius:20px;
+            overflow:hidden;
+            margin:16px 0;
+            background:rgba(255,255,255,0.02);
+            border:1px solid rgba(255,255,255,0.04);
+        }
+        .hair-card img{
+            width:100%;
+            aspect-ratio:4/5;
+            object-fit:cover;
+            display:block;
+        }
+        .hair-card .info{
+            padding:16px;
+        }
+        .hair-card h4{color:#d4af37;margin-bottom:4px}
+        .hair-card p{font-size:0.75rem;color:#9ca3af;line-height:1.6}
+
+        /* Checkbox */
+        .checkbox-pill{
+            display:flex;align-items:center;gap:10px;
+            padding:14px;background:rgba(255,255,255,0.02);
+            border-radius:14px;margin:6px 0;cursor:pointer;
+            border:1px solid rgba(255,255,255,0.04);transition:0.2s;
+        }
+        .checkbox-pill:active{transform:scale(0.98)}
+        .check-box{
+            width:24px;height:24px;border-radius:8px;
+            border:2px solid rgba(255,255,255,0.2);
+            display:flex;align-items:center;justify-content:center;
+            transition:0.2s;flex-shrink:0;
+        }
+        .check-box.on{background:#d4af37;border-color:#d4af37}
+
+        /* Progress */
+        .progress-bar{
+            height:4px;background:rgba(255,255,255,0.06);
+            border-radius:2px;overflow:hidden;flex:1;
+        }
+        .progress-fill{height:100%;background:#d4af37;border-radius:2px;transition:width 0.5s}
+
+        /* Tags */
+        .tag{
+            display:inline-block;padding:10px 16px;border-radius:20px;
+            font-size:0.7rem;margin:3px;cursor:pointer;transition:0.2s;
+            background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);
+        }
+        .tag.selected{background:rgba(212,175,55,0.2);border-color:#d4af37;color:#d4af37}
+
+        /* Camera */
+        .cam-overlay{
+            position:fixed;top:0;left:0;right:0;bottom:0;
+            background:#000;z-index:3000;
+            display:flex;flex-direction:column;align-items:center;justify-content:center;
+        }
+        .cam-overlay video{
+            width:100%;max-height:60vh;object-fit:cover;
+            border-radius:24px;
+        }
+        .cam-instruction{
+            font-size:1.2rem;font-weight:700;color:#d4af37;
+            padding:20px;text-align:center;
+        }
+
+        /* Product card */
+        .prod-card{
+            display:flex;gap:12px;align-items:center;
+            background:rgba(255,255,255,0.02);border-radius:16px;
+            padding:12px;margin:6px 0;
+            border:1px solid rgba(255,255,255,0.04);
+        }
+        .prod-card img{width:56px;height:56px;border-radius:12px;object-fit:cover}
+        .prod-info{flex:1;font-size:0.75rem}
+        .prod-info strong{color:#d4af37}
+
+        /* Routine step */
+        .step-row{
+            display:flex;align-items:center;gap:10px;
+            padding:10px;background:rgba(255,255,255,0.02);
+            border-radius:10px;margin:4px 0;font-size:0.75rem;
+        }
+        .step-num{
+            width:28px;height:28px;border-radius:50%;
+            background:#d4af37;color:#000;
+            display:flex;align-items:center;justify-content:center;
+            font-weight:800;font-size:0.7rem;flex-shrink:0;
+        }
+
+        /* Scroll */
+        ::-webkit-scrollbar{width:3px}
+        ::-webkit-scrollbar-track{background:transparent}
+        ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:3px}
+
+        /* Section title */
+        .section-title{
+            font-size:0.7rem;text-transform:uppercase;
+            letter-spacing:2px;color:#9ca3af;
+            margin:20px 0 10px;padding-left:4px;
+        }
     </style>
 </head>
 <body>
@@ -85,16 +372,14 @@
             faceAnalysis:null,faceImage:null,
             hairProfile:{type:'',thickness:'',texture:'',lengthCm:'',concerns:'',preferences:''},
             products:{face:[],hair:[]},
-            progressGallery:[],
-            extraObservations:'',
-            hairInspo:[]
+            progressGallery:[],extraObservations:'',hairInspo:[]
         };
 
         function load(){
             try{
-                let s=localStorage.getItem('lmx_v41');
+                let s=localStorage.getItem('lmx_premium');
                 if(s){let p=JSON.parse(s);S={...S,...p}}
-                let k=localStorage.getItem('lmx_apikey_v41');
+                let k=localStorage.getItem('lmx_apikey_premium');
                 if(k)S.apiKey=k;
                 let t=new Date().toDateString();
                 if(S.lastDate!==t){
@@ -108,13 +393,13 @@
         function save(){
             S.lastDate=new Date().toDateString();
             let ts={...S};delete ts.apiKey;
-            localStorage.setItem('lmx_v41',JSON.stringify(ts));
-            if(S.apiKey)localStorage.setItem('lmx_apikey_v41',S.apiKey);
+            localStorage.setItem('lmx_premium',JSON.stringify(ts));
+            if(S.apiKey)localStorage.setItem('lmx_apikey_premium',S.apiKey);
             calcScore();
         }
 
-        function getAPIKey(){if(!S.apiKey)S.apiKey=localStorage.getItem('lmx_apikey_v41')||'';return S.apiKey}
-        function setAPIKey(k){S.apiKey=k;localStorage.setItem('lmx_apikey_v41',k)}
+        function getAPIKey(){if(!S.apiKey)S.apiKey=localStorage.getItem('lmx_apikey_premium')||'';return S.apiKey}
+        function setAPIKey(k){S.apiKey=k;localStorage.setItem('lmx_apikey_premium',k)}
 
         function calcScore(){
             let sc=50,s=S.stats;
@@ -157,90 +442,80 @@
                         let c=document.createElement('canvas');let w=img.width,h=img.height;
                         if(w>800){h=(800/w)*h;w=800}
                         c.width=w;c.height=h;let ctx=c.getContext('2d');ctx.drawImage(img,0,0,w,h);
-                        let b64=c.toDataURL('image/jpeg',0.85).split(',')[1];
-                        r({b64,url:c.toDataURL('image/jpeg',0.85)});
+                        let b64=c.toDataURL('image/jpeg',0.9).split(',')[1];
+                        r({b64,url:c.toDataURL('image/jpeg',0.9)});
                     };img.src=e.target.result;
                 };reader.readAsDataURL(file);
             });
         }
 
-        // ============ CAMERA SCAN ============
-        let cameraStream=null,scanStep=0,scanImages=[];
+        // ============ CAMERA ============
+        let camStream=null,scanStep=0,scanImgs=[];
 
-        async function startCameraScan(){
+        async function startScan(){
             try{
-                cameraStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:800},height:{ideal:800}}});
-                scanStep=0;scanImages=[];
-                showCameraUI();
-            }catch(e){toast('❌ Kunne ikke få adgang til kamera')}
+                camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:800},height:{ideal:800}}});
+                scanStep=0;scanImgs=[];showCamUI();
+            }catch(e){toast('❌ Kamera ikke tilgængeligt')}
         }
 
-        function showCameraUI(){
-            let overlay=document.createElement('div');
-            overlay.className='camera-container';overlay.id='cameraUI';
-            overlay.innerHTML=`
-<video id="camVideo" autoplay playsinline></video>
-<div class="camera-instruction" id="camInstr">1/5: Kig LIGE FREM 😐</div>
-<button class="btn btn-gold" style="width:80%;margin-top:16px" id="camBtn" onclick="captureScan()">📸 Tag billede</button>
-<button class="btn btn-outline btn-sm" style="margin-top:10px" onclick="stopCamera()">❌ Annuller</button>
-<p style="color:#999;font-size:.6rem;margin-top:8px">Følg INSTRUKTIONEN (DIN højre/venstre)</p>`;
-            document.body.appendChild(overlay);
-            document.getElementById('camVideo').srcObject=cameraStream;
+        function showCamUI(){
+            let o=document.createElement('div');o.className='cam-overlay';o.id='camUI';
+            o.innerHTML=`<video id="camVid" autoplay playsinline></video><div class="cam-instruction" id="camInst">1/5 • Kig LIGE FREM</div><button class="btn btn-primary" style="width:80%;margin-top:16px" id="camBtn" onclick="captureScan()">📸 Tag billede</button><button class="btn btn-secondary" style="width:80%;margin-top:8px" onclick="stopCam()">Annuller</button>`;
+            document.body.appendChild(o);document.getElementById('camVid').srcObject=camStream;
         }
 
         function captureScan(){
-            let video=document.getElementById('camVideo');
-            let canvas=document.createElement('canvas');
-            canvas.width=video.videoWidth;canvas.height=video.videoHeight;
-            let ctx=canvas.getContext('2d');
-            ctx.drawImage(video,0,0,canvas.width,canvas.height);
-            let dataUrl=canvas.toDataURL('image/jpeg',0.85);
-            scanImages.push(dataUrl);
-            let instructions=['1/5: Kig LIGE FREM 😐','2/5: Drej til DIN HØJRE ➡️','3/5: Drej til DIN VENSTRE ⬅️','4/5: Løft hagen OP ⬆️','5/5: Sænk hagen NED ⬇️'];
+            let v=document.getElementById('camVid');
+            let c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;
+            let ctx=c.getContext('2d');
+            // IKKE spejlvendt
+            ctx.drawImage(v,0,0,c.width,c.height);
+            scanImgs.push(c.toDataURL('image/jpeg',0.9));
+            let inst=['1/5 • Kig LIGE FREM','2/5 • Drej til DIN HØJRE','3/5 • Drej til DIN VENSTRE','4/5 • Løft hagen OP','5/5 • Sænk hagen NED'];
             scanStep++;
-            if(scanStep<5){document.getElementById('camInstr').textContent=instructions[scanStep];document.getElementById('camBtn').textContent=`📸 Tag (${scanStep+1}/5)`}
-            else{stopCamera();showExtraObservations()}
+            if(scanStep<5){document.getElementById('camInst').textContent=inst[scanStep];document.getElementById('camBtn').textContent=`📸 Tag (${scanStep+1}/5)`}
+            else{stopCam();showExtraObs()}
         }
 
-        function stopCamera(){if(cameraStream){cameraStream.getTracks().forEach(t=>t.stop());cameraStream=null}let ui=document.getElementById('cameraUI');if(ui)ui.remove()}
+        function stopCam(){if(camStream){camStream.getTracks().forEach(t=>t.stop());camStream=null}let u=document.getElementById('camUI');if(u)u.remove()}
 
-        function showExtraObservations(){
-            let overlay=document.createElement('div');
-            overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.95);z-index:3000;display:flex;align-items:center;justify-content:center;padding:20px';
-            overlay.innerHTML=`<div style="background:#111;border:1px solid #d4af37;border-radius:24px;padding:24px;width:100%;max-width:400px"><h3 style="color:#d4af37;text-align:center;margin-bottom:12px">🔍 Ekstra info til AI?</h3><p style="color:#999;font-size:.75rem;text-align:center;margin-bottom:16px">Tryk på relevante tags eller skriv selv:</p><div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:12px" id="tagContainer">${['Acne','Bumser','Blackheads','Ar','Rynker','Mørke rander','Skægvækst','Skæl','Tør hud','Fedtet hud','Store porer','Rødme'].map(t=>`<span class="tag" onclick="this.classList.toggle('selected')">${t}</span>`).join('')}</div><input id="extraObsInput" placeholder="Eller skriv selv..." style="text-align:center"><button class="btn btn-gold" style="margin-top:12px" onclick="finishObservations()">✅ Start AI-analyse</button><button class="btn btn-outline btn-sm" style="margin-top:8px" onclick="skipObservations()">Spring over</button></div>`;
-            overlay.id='obsOverlay';document.body.appendChild(overlay);
+        function showExtraObs(){
+            let o=document.createElement('div');
+            o.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.95);z-index:3000;display:flex;align-items:center;justify-content:center;padding:20px';
+            o.innerHTML=`<div class="glass" style="max-width:400px;width:100%"><h3 style="color:#d4af37;text-align:center;margin-bottom:12px">Noget AI'en skal vide?</h3><p style="color:#9ca3af;font-size:0.75rem;text-align:center;margin-bottom:16px">Vælg tags eller skriv selv</p><div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:12px">${['Acne','Bumser','Blackheads','Ar','Rynker','Mørke rander','Skægvækst','Skæl','Tør hud','Fedtet hud'].map(t=>`<span class="tag" onclick="this.classList.toggle('selected')">${t}</span>`).join('')}</div><input id="extraObs" placeholder="Eller skriv selv..." style="text-align:center"><button class="btn btn-primary" style="margin-top:12px" onclick="finishObs()">✅ Start AI-analyse</button><button class="btn btn-secondary" style="margin-top:6px" onclick="skipObs()">Spring over</button></div>`;
+            o.id='obsOverlay';document.body.appendChild(o);
         }
 
-        function finishObservations(){
-            let tags=[];document.querySelectorAll('#tagContainer .tag.selected').forEach(t=>tags.push(t.textContent));
-            let extra=document.getElementById('extraObsInput')?.value||'';
-            S.extraObservations=[...tags,extra].filter(Boolean).join(', ');
-            document.getElementById('obsOverlay')?.remove();processScanImages();
+        function finishObs(){
+            let tags=[];document.querySelectorAll('#obsOverlay .tag.selected').forEach(t=>tags.push(t.textContent));
+            S.extraObservations=[...tags,document.getElementById('extraObs')?.value||''].filter(Boolean).join(', ');
+            document.getElementById('obsOverlay')?.remove();processScan();
         }
 
-        function skipObservations(){S.extraObservations='';document.getElementById('obsOverlay')?.remove();processScanImages()}
+        function skipObs(){S.extraObservations='';document.getElementById('obsOverlay')?.remove();processScan()}
 
-        async function processScanImages(){
+        async function processScan(){
+            S.faceImage=scanImgs[0];
             let r=document.getElementById('aiRes');
-            r.innerHTML=`<div style="text-align:center;padding:20px"><div class="spinner"></div><p style="color:#999">AI analyserer 5 vinkler...</p></div>`;r.style.display='block';
+            r.innerHTML=`<div style="text-align:center;padding:30px"><div class="spinner"></div><p style="color:#9ca3af;margin-top:12px">Analyserer 5 vinkler...</p></div>`;r.style.display='block';
             try{
-                S.faceImage=scanImages[0];let frontB64=scanImages[0].split(',')[1];
-                let extra=S.extraObservations?`\nBRUGER HAR NÆVNT: ${S.extraObservations}. Fokuser på disse.`:'';
+                let frontB64=scanImgs[0].split(',')[1];
+                let extra=S.extraObservations?`\nBRUGER NÆVNT: ${S.extraObservations}`:'';
                 let prompt=`Du er EKSPERT i ansigtsanalyse. 5 billeder.${extra} Analyser på DANSK. Returnér KUN JSON:{"rating":1-10,"symmetri":1-10,"hud":1-10,"kæbelinje":1-10,"øjne":1-10,"hår":1-10,"harmoni":1-10,"styrker":["3"],"forbedringer":["3"],"tips":["3"],"potentiale":1-10,"summary":"kort","optimalSøvn":"timer","optimalVand":"glas","hudtype":"type","ansigtsform":"form","prognose":"tekst","kæbeØvelser":["øvelse"],"rutineMorgen":["trin"],"rutineAften":["trin"]}`;
                 let res=await callAI(prompt,frontB64);let analysis;
-                try{let m=res.match(/\{[\s\S]*\}/);if(m)analysis=JSON.parse(m[0]);else throw new Error('')}catch(e){r.innerHTML=`<div class="ai-box">${res.replace(/\n/g,'<br>')}</div>`;return}
+                try{let m=res.match(/\{[\s\S]*\}/);if(m)analysis=JSON.parse(m[0]);else throw new Error('')}catch(e){r.innerHTML=`<div class="ai-card">${res.replace(/\n/g,'<br>')}</div>`;return}
                 S.faceAnalysis=analysis;
-                let tw=getWeekNumber(new Date());if(!S.progressGallery.find(p=>p.week===tw)){S.progressGallery.push({week:tw,date:new Date().toISOString(),image:S.faceImage,score:analysis.rating});if(S.progressGallery.length>52)S.progressGallery.shift()}
+                let tw=getWeek();if(!S.progressGallery.find(p=>p.week===tw)){S.progressGallery.push({week:tw,date:new Date().toISOString(),image:S.faceImage,score:analysis.rating});if(S.progressGallery.length>52)S.progressGallery.shift()}
                 save();
-                let stars='⭐'.repeat(Math.round(analysis.rating));
-                r.innerHTML=`<div class="ai-box"><div style="text-align:center;margin-bottom:14px"><div style="font-size:2.5rem;color:#d4af37;font-weight:800">${analysis.rating}/10</div><div>${stars}</div></div>${['symmetri','hud','kæbelinje','øjne','hår','harmoni'].map(k=>`<div style="display:flex;align-items:center;gap:8px;margin:5px 0;font-size:.7rem"><span style="min-width:60px;color:#999">${k.charAt(0).toUpperCase()+k.slice(1)}</span><div style="flex:1;height:8px;background:#222;border-radius:4px"><div style="height:100%;background:#d4af37;border-radius:4px;width:${analysis[k]*10}%"></div></div><span style="font-weight:700">${analysis[k]}/10</span></div>`).join('')}<strong style="color:#22c55e">💪 Styrker:</strong><br>${(analysis.styrker||[]).map(s=>'• '+s).join('<br>')}<br><br><strong style="color:#ef4444">📈 Forbedringer:</strong><br>${(analysis.forbedringer||[]).map(i=>'• '+i).join('<br>')}<br><br><strong>🎯 Tips:</strong><br>${(analysis.tips||[]).map(t=>'• '+t).join('<br>')}<br><br><strong>🚀 Potentiale:</strong> ${analysis.potentiale}/10<br><strong>😴 Søvn:</strong> ${analysis.optimalSøvn}<br><strong>💧 Vand:</strong> ${analysis.optimalVand}<br><strong>🧴 Hudtype:</strong> ${analysis.hudtype}<br><strong>📅 Prognose:</strong> ${analysis.prognose}<br>${analysis.kæbeØvelser?`<strong>💪 Kæbe-øvelser:</strong><br>${analysis.kæbeØvelser.map(o=>'• '+o).join('<br>')}`:''}</div>`;
-                toast('✅ Analyse færdig!');
-            }catch(e){r.innerHTML=`<div class="ai-box" style="border-color:#ef4444">❌ ${e.message}</div>`}
+                r.innerHTML=`<div class="ai-card"><div style="text-align:center;margin-bottom:16px"><div style="font-size:3rem;font-weight:800;color:#d4af37">${analysis.rating}/10</div><div>${'⭐'.repeat(Math.round(analysis.rating))}</div></div>${['symmetri','hud','kæbelinje','øjne','hår','harmoni'].map(k=>`<div style="display:flex;align-items:center;gap:8px;margin:6px 0;font-size:0.7rem"><span style="min-width:60px;color:#9ca3af">${k.charAt(0).toUpperCase()+k.slice(1)}</span><div class="progress-bar"><div class="progress-fill" style="width:${analysis[k]*10}%"></div></div><span style="font-weight:700">${analysis[k]}/10</span></div>`).join('')}<div style="margin-top:12px"><strong style="color:#22c55e">💪 Styrker</strong><br>${(analysis.styrker||[]).map(s=>'• '+s).join('<br>')}<br><br><strong style="color:#ef4444">📈 Forbedringer</strong><br>${(analysis.forbedringer||[]).map(i=>'• '+i).join('<br>')}<br><br><strong style="color:#d4af37">🎯 Tips</strong><br>${(analysis.tips||[]).map(t=>'• '+t).join('<br>')}<br><br><strong>🚀 Potentiale</strong> ${analysis.potentiale}/10<br><strong>😴 Søvn</strong> ${analysis.optimalSøvn}<br><strong>💧 Vand</strong> ${analysis.optimalVand}<br><strong>🧴 Hudtype</strong> ${analysis.hudtype}<br><strong>📅 Prognose</strong> ${analysis.prognose}</div></div>`;
+                toast('✅ Analyse fuldført');
+            }catch(e){r.innerHTML=`<div class="ai-card" style="border-color:#ef4444"><p style="color:#ef4444">❌ ${e.message}</p></div>`}
         }
 
-        function getWeekNumber(d){d=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));d.setUTCDate(d.getUTCDate()+4-(d.getUTCDay()||7));let y=new Date(Date.UTC(d.getUTCFullYear(),0,1));return Math.ceil((((d-y)/86400000)+1)/7)}
+        function getWeek(){let d=new Date();d=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));d.setUTCDate(d.getUTCDate()+4-(d.getUTCDay()||7));let y=new Date(Date.UTC(d.getUTCFullYear(),0,1));return Math.ceil((((d-y)/86400000)+1)/7)}
 
-        // ============ HAIR INSPO ============
+        // ============ HAIR ============
         function uploadHairInspo(){
             let inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.capture='environment';
             inp.onchange=async function(e){
@@ -249,37 +524,31 @@
                 if(!S.hairInspo)S.hairInspo=[];
                 S.hairInspo.push({url,date:new Date().toISOString()});
                 if(S.hairInspo.length>6)S.hairInspo.shift();
-                save();toast('✅ Reference-billede tilføjet!');render();
+                save();toast('✅ Reference-billede tilføjet');render();
             };inp.click();
         }
 
         function removeInspo(idx){S.hairInspo.splice(idx,1);save();render()}
 
-        // ============ HAIR ADVICE MED BILLEDER ============
         async function getHairAdvice(){
-            if(!S.faceAnalysis){toast('❌ Scan ansigt først!');return}
+            if(!S.faceAnalysis){toast('❌ Scan ansigt først');return}
             let r=document.getElementById('hairRes');
-            r.innerHTML=`<div style="text-align:center;padding:20px"><div class="spinner"></div><p style="color:#999">Finder bedste frisure...</p></div>`;r.style.display='block';
+            r.innerHTML=`<div style="text-align:center;padding:30px"><div class="spinner"></div><p style="color:#9ca3af;margin-top:12px">Finder bedste frisure...</p></div>`;r.style.display='block';
             try{
                 let hp=S.hairProfile;
-                let inspoText=S.hairInspo&&S.hairInspo.length>0?'\nBRUGEREN HAR UPLOADET REFERENCE-BILLEDER af hårstile de kan lide. Brug disse som inspiration.':'';
-                let prefText=hp.preferences?`\nBRUGEREN KAN LIDE: ${hp.preferences}. Giv én der matcher ("Din stil") og én overall bedste.`:'';
-                let prompt=`Anbefal 2-3 FRISURER på DANSK med NAVNE. Ansigtsform: ${S.faceAnalysis.ansigtsform}, Hårtype: ${hp.type||'?'}, Tykkelse: ${hp.thickness||'?'}, Tekstur: ${hp.texture||'?'}, Længde: ${hp.lengthCm||'?'}.${prefText}${inspoText} Giv produkter (mærke+pris DKK) og frisør-brief. Returnér KUN JSON:{"frisurer":[{"navn":"","type":"din stil/overall bedste","begrundelse":"","styling":"","produkter":["navn (ca. pris)"],"frisørBrief":"tekst","imageSearch":"søgeord til Google Images"}]}`;
-                let res=await callAI(prompt,S.faceImage?S.faceImage.split(',')[1]:null);
-                let data;try{let m=res.match(/\{[\s\S]*\}/);if(m)data=JSON.parse(m[0]);else throw new Error('')}catch(e){r.innerHTML=`<div class="ai-box">${res.replace(/\n/g,'<br>')}</div>`;return}
-                let html='<div class="ai-box"><strong style="color:#d4af37">💇 Frisure-anbefalinger</strong><br><br>';
-                if(data.frisurer&&Array.isArray(data.frisurer)){
-                    data.frisurer.forEach((f,i)=>{
-                        let sq=encodeURIComponent((f.imageSearch||f.navn)+' men haircut');
-                        html+=`<div class="hairstyle-card"><img src="https://source.unsplash.com/800x1000/?${sq},portrait" alt="${f.navn}" onerror="this.src='https://source.unsplash.com/800x1000/?hairstyle,male,${sq}'"><div class="hairstyle-info"><h4>#${i+1}: ${f.navn} ${f.type?`<span style="color:#d4af37;font-size:.7rem">(${f.type})</span>`:''}</h4><p>${f.begrundelse}</p><p><strong>Styling:</strong> ${f.styling}</p><p><strong>Produkter:</strong> ${(f.produkter||[]).join(', ')}</p>${f.frisørBrief?`<p><strong>🫵 Sig til frisøren:</strong> "${f.frisørBrief}"</p>`:''}</div></div>`;
-                    });
-                }
-                html+='</div>';r.innerHTML=html;toast('✅ Frisure-råd klar med billeder!');
-            }catch(e){r.innerHTML=`<div class="ai-box" style="border-color:#ef4444">❌ ${e.message}</div>`}
+                let inspoText=S.hairInspo&&S.hairInspo.length>0?'\nBRUGER HAR UPLOADET REFERENCE-BILLEDER.':'';
+                let prefText=hp.preferences?`\nBRUGER KAN LIDE: ${hp.preferences}. Giv én "Din stil" og én "Overall bedste".`:'';
+                let prompt=`Anbefal 2-3 FRISURER med NAVNE på DANSK. Ansigtsform: ${S.faceAnalysis.ansigtsform}, Hårtype: ${hp.type||'?'}, Tykkelse: ${hp.thickness||'?'}, Tekstur: ${hp.texture||'?'}, Længde: ${hp.lengthCm||'?'}.${prefText}${inspoText} Returnér JSON:{"frisurer":[{"navn":"","type":"din stil/overall bedste","begrundelse":"","styling":"","produkter":["navn (ca. pris)"],"frisørBrief":"","imageSearch":"søgeord"}]}`;
+                let res=await callAI(prompt,S.faceImage?S.faceImage.split(',')[1]:null);let data;
+                try{let m=res.match(/\{[\s\S]*\}/);if(m)data=JSON.parse(m[0]);else throw new Error('')}catch(e){r.innerHTML=`<div class="ai-card">${res.replace(/\n/g,'<br>')}</div>`;return}
+                let html='<div class="ai-card"><strong style="color:#d4af37;font-size:0.9rem">💇 Frisure-anbefalinger</strong><br><br>';
+                if(data.frisurer&&Array.isArray(data.frisurer)){data.frisurer.forEach(f=>{let sq=encodeURIComponent((f.imageSearch||f.navn)+' men haircut');html+=`<div class="hair-card"><img src="https://source.unsplash.com/800x1000/?${sq},portrait" alt="${f.navn}" onerror="this.src='https://source.unsplash.com/800x1000/?hairstyle,male'"><div class="info"><h4>${f.navn} ${f.type?`<span style="color:#d4af37;font-size:0.65rem">· ${f.type}</span>`:''}</h4><p>${f.begrundelse}</p><p><strong>Styling:</strong> ${f.styling}</p><p><strong>Produkter:</strong> ${(f.produkter||[]).join(', ')}</p>${f.frisørBrief?`<p><strong>🫵 Sig til frisøren:</strong> "${f.frisørBrief}"</p>`:''}</div></div>`})}
+                html+='</div>';r.innerHTML=html;toast('✅ Frisure-råd klar');
+            }catch(e){r.innerHTML=`<div class="ai-card" style="border-color:#ef4444">❌ ${e.message}</div>`}
         }
 
         // ============ PRODUCTS ============
-        function addProductWithImage(type){
+        function addProduct(type){
             let inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.capture='environment';
             inp.onchange=async function(e){
                 let f=e.target.files[0];if(!f)return;
@@ -288,73 +557,73 @@
                 let{b64,url}=await compressImg(f);
                 if(!S.products[type])S.products[type]=[];
                 S.products[type].push({name,description:desc,image:url,date:new Date().toISOString()});
-                save();toast('✅ Tilføjet!');render();
+                save();toast('✅ Tilføjet');render();
             };inp.click();
         }
 
         async function getProductAdvice(type){
-            if(!S.faceAnalysis){toast('❌ Scan ansigt først!');return}
-            let r=document.getElementById(type==='face'?'faceProdRes':'hairProdRes');
-            r.innerHTML=`<div style="text-align:center;padding:20px"><div class="spinner"></div></div>`;r.style.display='block';
+            if(!S.faceAnalysis){toast('❌ Scan ansigt først');return}
+            let r=document.getElementById(type==='face'?'faceProd':'hairProd');
+            r.innerHTML=`<div style="text-align:center;padding:30px"><div class="spinner"></div></div>`;r.style.display='block';
             try{
-                let products=S.products[type]||[];
-                let plist=products.length>0?products.map(p=>`${p.name}: ${p.description}`).join('; '):'Ingen';
-                let prompt=type==='face'?`Hudpleje-ekspert. Hudtype: ${S.faceAnalysis.hudtype}. Bruger har: ${plist}. Returnér JSON:{"anbefalede":[{"navn":"","pris":"","link":"https://www.google.com/search?q=KØB+navn"}],"morgenRutine":["trin"],"aftenRutine":["trin"],"vurdering":["tekst"]}`:`Hårekspert. Type: ${S.hairProfile.type}, Tykkelse: ${S.hairProfile.thickness}. Bruger har: ${plist}. Returnér JSON:{"anbefalede":[{"navn":"","pris":"","link":"https://www.google.com/search?q=KØB+navn"}],"rutine":["trin"],"vurdering":["tekst"]}`;
+                let prods=S.products[type]||[];
+                let plist=prods.length>0?prods.map(p=>`${p.name}: ${p.description}`).join('; '):'Ingen';
+                let prompt=type==='face'?`Hudpleje-ekspert. Hudtype: ${S.faceAnalysis.hudtype}. Bruger har: ${plist}. JSON:{"anbefalede":[{"navn":"","pris":"","link":"https://www.google.com/search?q=KØB+navn"}],"morgenRutine":["trin"],"aftenRutine":["trin"],"vurdering":["tekst"]}`:`Hårekspert. Type: ${S.hairProfile.type}, Tykkelse: ${S.hairProfile.thickness}. Bruger har: ${plist}. JSON:{"anbefalede":[{"navn":"","pris":"","link":"https://www.google.com/search?q=KØB+navn"}],"rutine":["trin"],"vurdering":["tekst"]}`;
                 let res=await callAI(prompt);let data;
-                try{let m=res.match(/\{[\s\S]*\}/);if(m)data=JSON.parse(m[0]);else throw new Error('')}catch(e){r.innerHTML=`<div class="ai-box">${res.replace(/\n/g,'<br>')}</div>`;return}
-                let html=`<div class="ai-box"><strong style="color:#d4af37">${type==='face'?'🧴 Hudpleje':'💆 Hårpleje'}</strong><br><br>`;
-                if(data.anbefalede&&Array.isArray(data.anbefalede)){html+='<strong>🛒 Anbefalet:</strong><br>';data.anbefalede.forEach(p=>html+=`• <strong>${p.navn}</strong> - ${p.pris||''}<br><a href="${p.link||'#'}" target="_blank" style="color:#3b82f6">🔗 Søg →</a><br><br>`)}
-                if(data.morgenRutine&&Array.isArray(data.morgenRutine)){html+='<strong>🌅 Morgen:</strong><br>';data.morgenRutine.forEach((s,i)=>html+=`<div class="routine-step"><span class="time">${i+1}</span>${s}</div>`)}
-                if(data.aftenRutine&&Array.isArray(data.aftenRutine)){html+='<strong>🌙 Aften:</strong><br>';data.aftenRutine.forEach((s,i)=>html+=`<div class="routine-step"><span class="time">${i+1}</span>${s}</div>`)}
-                if(data.rutine&&Array.isArray(data.rutine)){html+='<strong>📋 Rutine:</strong><br>';data.rutine.forEach((s,i)=>html+=`<div class="routine-step"><span class="time">${i+1}</span>${s}</div>`)}
-                if(data.vurdering){html+='<strong>📊 Vurdering:</strong><br>';if(Array.isArray(data.vurdering))data.vurdering.forEach(v=>html+='• '+v+'<br>');else html+=data.vurdering+'<br>'}
-                html+='</div>';r.innerHTML=html;toast('✅ Klar!');
-            }catch(e){r.innerHTML=`<div class="ai-box" style="border-color:#ef4444">❌ ${e.message}</div>`}
+                try{let m=res.match(/\{[\s\S]*\}/);if(m)data=JSON.parse(m[0]);else throw new Error('')}catch(e){r.innerHTML=`<div class="ai-card">${res.replace(/\n/g,'<br>')}</div>`;return}
+                let html=`<div class="ai-card"><strong style="color:#d4af37">${type==='face'?'🧴 Hudpleje':'💆 Hårpleje'}</strong><br><br>`;
+                if(data.anbefalede&&Array.isArray(data.anbefalede)){html+='<strong>🛒 Anbefalet</strong><br>';data.anbefalede.forEach(p=>html+=`• <strong>${p.navn}</strong> ${p.pris||''}<br><a href="${p.link||'#'}" target="_blank" style="color:#60a5fa">🔗 Søg →</a><br><br>`)}
+                if(data.morgenRutine&&Array.isArray(data.morgenRutine)){html+='<strong>🌅 Morgen</strong><br>';data.morgenRutine.forEach((s,i)=>html+=`<div class="step-row"><div class="step-num">${i+1}</div>${s}</div>`)}
+                if(data.aftenRutine&&Array.isArray(data.aftenRutine)){html+='<strong>🌙 Aften</strong><br>';data.aftenRutine.forEach((s,i)=>html+=`<div class="step-row"><div class="step-num">${i+1}</div>${s}</div>`)}
+                if(data.rutine&&Array.isArray(data.rutine)){html+='<strong>📋 Rutine</strong><br>';data.rutine.forEach((s,i)=>html+=`<div class="step-row"><div class="step-num">${i+1}</div>${s}</div>`)}
+                if(data.vurdering){html+='<strong>📊 Vurdering</strong><br>';if(Array.isArray(data.vurdering))data.vurdering.forEach(v=>html+='• '+v+'<br>');else html+=data.vurdering+'<br>'}
+                html+='</div>';r.innerHTML=html;toast('✅ Klar');
+            }catch(e){r.innerHTML=`<div class="ai-card" style="border-color:#ef4444">❌ ${e.message}</div>`}
         }
 
         // ============ COACH ============
         async function getCoach(){
             let r=document.getElementById('coachRes');
-            r.innerHTML=`<div style="text-align:center;padding:20px"><div class="spinner"></div></div>`;r.style.display='block';
+            r.innerHTML=`<div style="text-align:center;padding:30px"><div class="spinner"></div></div>`;r.style.display='block';
             try{
                 let s=S.stats,f=S.faceAnalysis||{};
-                let prompt=`Personlig COACH. Kender ansigt: Score ${f.rating||'?'}/10, Hud ${f.hud||'?'}/10. Dagens data: Søvn ${s.sleep}t (mål:${f.optimalSøvn||'?'}), Vand ${s.water} glas (mål:${f.optimalVand||'?'}), Træning ${s.workout?'✅':'❌'}, Hudpleje ${s.skincare?'✅':'❌'}, SPF ${s.sun?'✅':'❌'}, Score ${S.score}/100. Giv: 1)Personlig besked 2)PRÆCISE mål i morgen 3)3 handlinger 4)Forbedringer NU. Brug emojis.`;
+                let prompt=`Personlig COACH. Ansigt: Score ${f.rating||'?'}/10, Hud ${f.hud||'?'}/10. Dag: Søvn ${s.sleep}t (mål:${f.optimalSøvn||'?'}), Vand ${s.water} glas (mål:${f.optimalVand||'?'}), Træning ${s.workout?'✅':'❌'}, Hudpleje ${s.skincare?'✅':'❌'}, SPF ${s.sun?'✅':'❌'}, Glow ${S.score}/100. Giv: 1)Personlig besked 2)PRÆCISE mål i morgen 3)3 handlinger 4)Forbedringer NU. Emojis.`;
                 let res=await callAI(prompt,S.faceImage?S.faceImage.split(',')[1]:null);
-                r.innerHTML=`<div class="ai-box"><strong style="color:#d4af37">🤖 Coach</strong><br><br>${res.replace(/\n/g,'<br>')}</div>`;
-            }catch(e){r.innerHTML=`<div class="ai-box" style="border-color:#ef4444">❌ ${e.message}</div>`}
+                r.innerHTML=`<div class="ai-card"><strong style="color:#d4af37">🤖 Personlig Coach</strong><br><br>${res.replace(/\n/g,'<br>')}</div>`;
+            }catch(e){r.innerHTML=`<div class="ai-card" style="border-color:#ef4444">❌ ${e.message}</div>`}
         }
 
         function aiFillTracker(){
             if(!S.faceAnalysis){toast('❌ Scan først');return}
             S.stats.sleep=parseInt(S.faceAnalysis.optimalSøvn)||8;S.stats.water=parseInt(S.faceAnalysis.optimalVand)||10;
             S.stats.nutrition=4;S.stats.workout=1;S.stats.skincare=1;S.stats.mewing=1;S.stats.posture=1;S.stats.sun=1;
-            updateStreak();save();toast('✅ AI udfyldt!');render();
+            updateStreak();save();toast('✅ AI har udfyldt alt');render();
         }
 
         async function sendChat(){
             let q=document.getElementById('chatInput').value.trim();if(!q)return;
-            let r=document.getElementById('chatRes');r.innerHTML=`<div style="text-align:center"><div class="spinner"></div></div>`;r.style.display='block';
+            let r=document.getElementById('chatRes');r.innerHTML=`<div style="text-align:center;padding:30px"><div class="spinner"></div></div>`;r.style.display='block';
             try{
                 let ctx=S.faceAnalysis?`Ansigt: Score ${S.faceAnalysis.rating}/10, Hudtype: ${S.faceAnalysis.hudtype}.`:'';
-                let res=await callAI(`Du er looksmaxing ekspert. ${ctx} Besvar på DANSK: ${q}`,S.faceImage?S.faceImage.split(',')[1]:null);
-                r.innerHTML=`<div class="ai-box"><strong style="color:#d4af37">💬 Svar:</strong><br>${res.replace(/\n/g,'<br>')}</div>`;
-                document.getElementById('chatInput').value='';toast('✅ Besvaret!');
-            }catch(e){r.innerHTML=`<div class="ai-box" style="border-color:#ef4444">❌ ${e.message}</div>`}
+                let res=await callAI(`Looksmaxing ekspert. ${ctx} Besvar på DANSK: ${q}`,S.faceImage?S.faceImage.split(',')[1]:null);
+                r.innerHTML=`<div class="ai-card"><strong style="color:#d4af37">💬 Svar</strong><br><br>${res.replace(/\n/g,'<br>')}</div>`;
+                document.getElementById('chatInput').value='';toast('✅ Besvaret');
+            }catch(e){r.innerHTML=`<div class="ai-card" style="border-color:#ef4444">❌ ${e.message}</div>`}
         }
 
         function showAPISetup(){
             let o=document.createElement('div');
             o.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.95);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px';
-            o.innerHTML=`<div style="background:#111;border:1px solid #d4af37;border-radius:24px;padding:30px;width:100%;max-width:400px;text-align:center"><div style="font-size:3rem">🔑</div><h2 style="color:#d4af37;margin:12px 0">API-nøgle</h2><p style="color:#999;font-size:.8rem">console.groq.com/keys</p><input type="password" id="apiKeyInput" placeholder="gsk_..." autocomplete="off" style="text-align:center"><button class="btn btn-gold" style="margin-top:8px" onclick="saveAPIKeyFromModal()">💾 Gem</button></div>`;
+            o.innerHTML=`<div class="glass" style="max-width:400px;width:100%"><div style="text-align:center;font-size:3rem">🔑</div><h3 style="color:#d4af37;text-align:center;margin:12px 0">API-nøgle</h3><p style="color:#9ca3af;font-size:0.75rem;text-align:center;margin-bottom:16px">console.groq.com/keys</p><input type="password" id="apiKeyInput" placeholder="gsk_..." autocomplete="off" style="text-align:center"><button class="btn btn-primary" style="margin-top:8px" onclick="saveAPIKeyFromModal()">💾 Gem nøgle</button></div>`;
             o.addEventListener('click',function(e){if(e.target===o)o.remove()});document.body.appendChild(o);
         }
 
         function saveAPIKeyFromModal(){
             let k=document.getElementById('apiKeyInput').value.trim();
-            if(!k||!k.startsWith('gsk_')){toast('❌ Ugyldig');return}
+            if(!k||!k.startsWith('gsk_')){toast('❌ Ugyldig nøgle');return}
             setAPIKey(k);S.onboarded=true;save();
             document.querySelectorAll('[style*="z-index:2000"]').forEach(el=>el.remove());
-            toast('✅ Klar!');render();
+            toast('✅ Nøgle gemt');render();
         }
 
         // ============ RENDER ============
@@ -362,48 +631,50 @@
             let a=document.getElementById('app');
             let ds=new Date().toLocaleDateString('da-DK',{weekday:'long',day:'numeric',month:'short'});
             let hasKey=!!getAPIKey();
+            if(!hasKey){
+                a.innerHTML=`<div class="status-bar"><span><span class="status-dot"></span>Afventer API</span><span>${ds}</span></div><div class="glass" style="text-align:center"><div style="font-size:4rem;margin-bottom:12px">🔑</div><h3 style="color:#d4af37">Velkommen til LooksMax AI</h3><p style="color:#9ca3af;font-size:0.8rem;margin:12px 0">Indtast din Groq API-nøgle for at aktivere premium-funktionerne</p><button class="btn btn-primary" onclick="showAPISetup()">🔑 Indtast API-nøgle</button><p style="color:#666;font-size:0.6rem;margin-top:12px">console.groq.com/keys</p></div>`;
+                return;
+            }
             let sn='';if(S.streak.length>=7)sn=' 🔥';if(S.streak.length>=30)sn=' 👑';
-            if(!hasKey){a.innerHTML=`<div class="header"><div class="logo-icon">🦁</div><div class="logo-text"><h1>LooksMax AI</h1><span>${ds}</span></div></div><div class="card" style="text-align:center"><div style="font-size:3rem">🔑</div><h3>API-nøgle</h3><p style="color:#999;font-size:.8rem">console.groq.com/keys</p><button class="btn btn-gold" onclick="showAPISetup()">🔑 Indtast nøgle</button></div>`;return}
-            a.innerHTML=`<div class="header"><div class="logo-icon">🦁</div><div class="logo-text"><h1>LooksMax AI v4.1</h1><span>${ds} · 🟢 Online</span></div></div><div class="score-card"><div class="score-big">${S.score}</div><div style="font-size:.7rem;color:#999;letter-spacing:2px">GLOW SCORE</div><div style="font-size:.75rem;color:#d4af37">${S.streak.length} dage${sn}</div></div><div class="main-btns"><button class="main-btn gold" onclick="switchTab('scan')"><span class="icon">📸</span><div class="info"><h3>3D Ansigtsscanning</h3><p>5 vinkler</p></div></button><button class="main-btn" onclick="switchTab('hair')"><span class="icon">💇</span><div class="info"><h3>Frisure-råd</h3><p>Med billeder + upload inspo</p></div></button><button class="main-btn" onclick="switchTab('products')"><span class="icon">🧴</span><div class="info"><h3>Produkter</h3><p>Upload + links</p></div></button><button class="main-btn" onclick="switchTab('coach')"><span class="icon">💬</span><div class="info"><h3>Coach</h3><p>Personlig rådgivning</p></div></button><button class="main-btn" onclick="switchTab('tracker')"><span class="icon">✅</span><div class="info"><h3>Tracker</h3><p>AI-auto</p></div></button><button class="main-btn" onclick="switchTab('progress')"><span class="icon">📈</span><div class="info"><h3>Progress</h3><p>Ugentlig</p></div></button><button class="main-btn" onclick="switchTab('chat')"><span class="icon">💡</span><div class="info"><h3>Spørg AI</h3><p>Tilpasset dig</p></div></button></div><div id="tabContent"></div>`;
+            a.innerHTML=`
+<div class="status-bar"><span><span class="status-dot"></span>AI Online</span><span>${ds}</span></div>
+<div class="score-hero"><div class="score-ring"><div class="score-value">${S.score}</div></div><div class="score-label">Glow Score</div><div style="color:#d4af37;font-size:0.7rem;margin-top:4px">${S.streak.length} dages streak${sn}</div></div>
+<div class="menu-grid">
+<div class="menu-card primary" onclick="switchTab('scan')"><span class="icon">📸</span><div class="title">3D Ansigtsscanning</div><div class="sub">5 vinkler • AI-analyse</div></div>
+<div class="menu-card" onclick="switchTab('hair')"><span class="icon">💇</span><div class="title">Frisure-råd</div><div class="sub">Med billeder</div></div>
+<div class="menu-card" onclick="switchTab('products')"><span class="icon">🧴</span><div class="title">Produkter</div><div class="sub">Upload & links</div></div>
+<div class="menu-card" onclick="switchTab('coach')"><span class="icon">💬</span><div class="title">Coach</div><div class="sub">Personlig</div></div>
+<div class="menu-card" onclick="switchTab('tracker')"><span class="icon">✅</span><div class="title">Tracker</div><div class="sub">AI-auto</div></div>
+<div class="menu-card" onclick="switchTab('progress')"><span class="icon">📈</span><div class="title">Progress</div><div class="sub">Ugentlig</div></div>
+<div class="menu-card" onclick="switchTab('chat')"><span class="icon">💡</span><div class="title">Spørg AI</div><div class="sub">Tilpasset</div></div>
+</div>
+<div id="tabContent"></div>`;
             renderTab();
         }
 
-        function switchTab(t){S.tab=t;render();setTimeout(()=>{let el=document.getElementById('tabContent');if(el)el.scrollIntoView({behavior:'smooth'})},100)}
+        function switchTab(t){S.tab=t;render();setTimeout(()=>{let el=document.getElementById('tabContent');if(el)el.scrollIntoView({behavior:'smooth'})},150)}
 
         function renderTab(){
             let c=document.getElementById('tabContent');if(!c)return;
-            if(S.tab==='scan'){
-                c.innerHTML=`<div class="card"><h3>📸 3D Scanning</h3><p style="color:#999;font-size:.8rem;margin-bottom:12px">5 billeder. Efter scanning tilføjer du ekstra info.</p><button class="btn btn-gold" onclick="startCameraScan()">🎥 Start</button><div id="aiRes" style="display:none"></div><button class="btn btn-outline" style="margin-top:8px" onclick="switchTab('home')">⬅ Tilbage</button></div>`;
-            }else if(S.tab==='hair'){
-                let inspoHtml='';
-                if(S.hairInspo&&S.hairInspo.length>0){
-                    inspoHtml='<div style="margin:8px 0"><strong style="color:#d4af37;font-size:.7rem">📸 Dine reference-billeder:</strong><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">';
-                    S.hairInspo.forEach((img,i)=>inspoHtml+=`<div class="inspo-thumb"><img src="${img.url}"><button class="remove" onclick="removeInspo(${i})">✕</button></div>`);
-                    inspoHtml+='</div></div>';
-                }
-                c.innerHTML=`<div class="card"><h3>💇 Hårprofil</h3><label style="font-size:.75rem;color:#999">Hårtype</label><select onchange="S.hairProfile.type=this.value;save()"><option value="">Vælg...</option><option value="glat" ${S.hairProfile.type==='glat'?'selected':''}>Glat</option><option value="bølget" ${S.hairProfile.type==='bølget'?'selected':''}>Bølget</option><option value="krøllet" ${S.hairProfile.type==='krøllet'?'selected':''}>Krøllet</option></select><label style="font-size:.75rem;color:#999">Tykkelse</label><select onchange="S.hairProfile.thickness=this.value;save()"><option value="">Vælg...</option><option value="tyndt" ${S.hairProfile.thickness==='tyndt'?'selected':''}>Tyndt</option><option value="medium" ${S.hairProfile.thickness==='medium'?'selected':''}>Medium</option><option value="tykt" ${S.hairProfile.thickness==='tykt'?'selected':''}>Tykt</option></select><label style="font-size:.75rem;color:#999">Tekstur</label><select onchange="S.hairProfile.texture=this.value;save()"><option value="">Vælg...</option><option value="let" ${S.hairProfile.texture==='let'?'selected':''}>Let</option><option value="tungt" ${S.hairProfile.texture==='tungt'?'selected':''}>Tungt</option><option value="normalt" ${S.hairProfile.texture==='normalt'?'selected':''}>Normalt</option></select><label style="font-size:.75rem;color:#999">Længde</label><select onchange="S.hairProfile.lengthCm=this.value;save()"><option value="">Vælg...</option><option value="2-4 cm" ${S.hairProfile.lengthCm==='2-4 cm'?'selected':''}>2-4 cm</option><option value="5-7 cm" ${S.hairProfile.lengthCm==='5-7 cm'?'selected':''}>5-7 cm</option><option value="8-12 cm" ${S.hairProfile.lengthCm==='8-12 cm'?'selected':''}>8-12 cm</option><option value="13-20 cm" ${S.hairProfile.lengthCm==='13-20 cm'?'selected':''}>13-20 cm</option><option value="20+ cm" ${S.hairProfile.lengthCm==='20+ cm'?'selected':''}>20+ cm</option></select><label style="font-size:.75rem;color:#999">Hvad kan du lide?</label><input id="hairPref" value="${S.hairProfile.preferences||''}" placeholder="F.eks: messy fringe, pompadour..." onchange="S.hairProfile.preferences=this.value;save()"><label style="font-size:.75rem;color:#999">Bekymringer</label><input id="hairConcern" value="${S.hairProfile.concerns||''}" placeholder="F.eks: tyndt hår..." onchange="S.hairProfile.concerns=this.value;save()">${inspoHtml}<button class="btn btn-outline btn-sm" style="margin-top:6px" onclick="uploadHairInspo()">📸 Upload reference-billede</button><button class="btn btn-gold" style="margin-top:12px" onclick="getHairAdvice()">💇 Få frisure-råd (med billeder)</button><div id="hairRes" style="display:none"></div><button class="btn btn-outline" style="margin-top:8px" onclick="switchTab('home')">⬅ Tilbage</button></div>`;
-            }else if(S.tab==='products'){
-                c.innerHTML=`<div class="card"><h3>🧴 Produkter</h3><p style="color:#999;font-size:.75rem;margin-bottom:10px">📸 Tag billede af hvert produkt enkeltvis</p><div style="display:flex;gap:6px;margin-bottom:12px"><button class="btn btn-outline btn-sm" onclick="addProductWithImage('face')">📸 + Ansigtsprodukt</button><button class="btn btn-outline btn-sm" onclick="addProductWithImage('hair')">📸 + Hårprodukt</button></div><div id="productList">${renderProducts()}</div><button class="btn btn-gold" style="margin-top:10px" onclick="getProductAdvice('face')">🧴 Hudpleje-anbefalinger</button><div id="faceProdRes" style="display:none"></div><button class="btn btn-gold" style="margin-top:6px" onclick="getProductAdvice('hair')">💆 Hårpleje-anbefalinger</button><div id="hairProdRes" style="display:none"></div><button class="btn btn-outline" style="margin-top:8px" onclick="switchTab('home')">⬅ Tilbage</button></div>`;
-            }else if(S.tab==='coach'){
-                c.innerHTML=`<div class="card"><h3>💬 Coach</h3><p style="color:#999;font-size:.8rem;margin-bottom:10px">${S.faceAnalysis?'✅ Kender dit ansigt':'⚠️ Scan først'}</p><button class="btn btn-gold" onclick="getCoach()">🤖 Få Coach-råd</button><div id="coachRes" style="margin-top:10px"></div><button class="btn btn-outline" style="margin-top:8px" onclick="switchTab('home')">⬅ Tilbage</button></div>`;
-            }else if(S.tab==='tracker'){
-                c.innerHTML=`<div class="card"><h3>✅ Tracker</h3><button class="btn btn-gold btn-sm" style="margin-bottom:12px" onclick="aiFillTracker()">🤖 AI auto-udfyld</button><div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;justify-content:space-between;align-items:center"><span>😴 Søvn</span><input type="number" id="sl" value="${S.stats.sleep}" min="0" max="24" style="width:70px;background:#0a0a0a;border:1px solid #222;border-radius:8px;padding:10px;color:#fff;text-align:center"> timer</div><div style="display:flex;justify-content:space-between;align-items:center"><span>💧 Vand</span><input type="number" id="wa" value="${S.stats.water}" min="0" max="20" style="width:70px;background:#0a0a0a;border:1px solid #222;border-radius:8px;padding:10px;color:#fff;text-align:center"> glas</div><div style="display:flex;justify-content:space-between;align-items:center"><span>🥗 Ernæring</span><input type="range" id="nu" value="${S.stats.nutrition}" min="0" max="5" style="width:100px" oninput="document.getElementById('nuv').textContent=this.value"><span id="nuv" style="font-weight:700;color:#d4af37">${S.stats.nutrition}</span>/5</div></div></div><div class="card"><h3>Afkrydsning</h3>${[['🏋️ Træning','workout'],['🧴 Hudpleje','skincare'],['👅 Mewing','mewing'],['🧍 Holdning','posture'],['☀️ SPF','sun']].map(([l,k])=>`<label style="display:flex;align-items:center;gap:10px;padding:12px;background:#0a0a0a;border-radius:10px;margin:6px 0;cursor:pointer" onclick="toggleCheckbox('${k}')"><div class="checkbox-custom ${S.stats[k]?'checked':''}">${S.stats[k]?'✓':''}</div><span style="font-size:.8rem">${l}</span></label>`).join('')}</div><button class="btn btn-gold" onclick="saveTracker()">✅ Gem</button><button class="btn btn-outline" style="margin-top:6px" onclick="switchTab('home')">⬅ Tilbage</button>`;
-            }else if(S.tab==='progress'){
-                let pg=S.progressGallery||[];
-                c.innerHTML=`<div class="card"><h3>📈 Progress</h3>${pg.length===0?'<p style="color:#999;font-size:.8rem;text-align:center">Scan for at starte!</p>':`<div class="gallery-grid">${pg.slice().reverse().map(p=>`<div class="gallery-item"><img src="${p.image}"><div class="gallery-date">Uge ${p.week} · ${p.score}/10</div></div>`).join('')}</div>${pg.length>=2?`<div style="margin-top:12px;text-align:center;color:#d4af37;font-weight:700">📊 ${pg[pg.length-1].score}/10 → ${pg[0].score}/10 (${pg[0].score-pg[pg.length-1].score>=0?'+':''}${pg[0].score-pg[pg.length-1].score})</div>`:''}`}<button class="btn btn-outline" style="margin-top:8px" onclick="switchTab('home')">⬅ Tilbage</button></div>`;
-            }else if(S.tab==='chat'){
-                c.innerHTML=`<div class="card"><h3>💡 Spørg AI</h3><p style="color:#999;font-size:.75rem;margin-bottom:8px">${S.faceAnalysis?'✅ AI kender dit ansigt':'⚠️ Scan først'}</p><textarea id="chatInput" placeholder="F.eks: Hvilken brille passer?" rows="2"></textarea><button class="btn btn-gold" onclick="sendChat()">💬 Send</button><div id="chatRes" style="margin-top:10px"></div><button class="btn btn-outline" style="margin-top:8px" onclick="switchTab('home')">⬅ Tilbage</button></div>`;
-            }
+            if(S.tab==='scan')c.innerHTML=`<div class="glass"><h3 style="color:#d4af37;font-size:0.9rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">📸 3D Scanning</h3><p style="color:#9ca3af;font-size:0.8rem;margin-bottom:16px">5 billeder fra forskellige vinkler. Efter scanning tilføjer du ekstra info.</p><button class="btn btn-primary" onclick="startScan()">🎥 Start scanning</button><div id="aiRes" style="display:none"></div><button class="btn btn-secondary" onclick="switchTab('home')">⬅ Tilbage</button></div>`;
+            else if(S.tab==='hair'){
+                let inspo='';if(S.hairInspo&&S.hairInspo.length>0){inspo='<div style="margin:8px 0"><strong style="color:#d4af37;font-size:0.7rem">📸 Dine reference-billeder</strong><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">';S.hairInspo.forEach((img,i)=>inspo+=`<div style="position:relative"><img src="${img.url}" style="width:60px;height:60px;object-fit:cover;border-radius:10px"><button onclick="removeInspo(${i})" style="position:absolute;top:-6px;right:-6px;background:#ef4444;color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:0.5rem;border:none;cursor:pointer">✕</button></div>`);inspo+='</div></div>';}
+                c.innerHTML=`<div class="glass"><h3 style="color:#d4af37;font-size:0.9rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">💇 Hårprofil</h3><select onchange="S.hairProfile.type=this.value;save()"><option value="">Hårtype</option><option value="glat" ${S.hairProfile.type==='glat'?'selected':''}>Glat</option><option value="bølget" ${S.hairProfile.type==='bølget'?'selected':''}>Bølget</option><option value="krøllet" ${S.hairProfile.type==='krøllet'?'selected':''}>Krøllet</option></select><select onchange="S.hairProfile.thickness=this.value;save()"><option value="">Tykkelse</option><option value="tyndt" ${S.hairProfile.thickness==='tyndt'?'selected':''}>Tyndt</option><option value="medium" ${S.hairProfile.thickness==='medium'?'selected':''}>Medium</option><option value="tykt" ${S.hairProfile.thickness==='tykt'?'selected':''}>Tykt</option></select><select onchange="S.hairProfile.texture=this.value;save()"><option value="">Tekstur</option><option value="let" ${S.hairProfile.texture==='let'?'selected':''}>Let</option><option value="tungt" ${S.hairProfile.texture==='tungt'?'selected':''}>Tungt</option><option value="normalt" ${S.hairProfile.texture==='normalt'?'selected':''}>Normalt</option></select><select onchange="S.hairProfile.lengthCm=this.value;save()"><option value="">Længde</option><option value="2-4 cm" ${S.hairProfile.lengthCm==='2-4 cm'?'selected':''}>2-4 cm</option><option value="5-7 cm" ${S.hairProfile.lengthCm==='5-7 cm'?'selected':''}>5-7 cm</option><option value="8-12 cm" ${S.hairProfile.lengthCm==='8-12 cm'?'selected':''}>8-12 cm</option><option value="13-20 cm" ${S.hairProfile.lengthCm==='13-20 cm'?'selected':''}>13-20 cm</option><option value="20+ cm" ${S.hairProfile.lengthCm==='20+ cm'?'selected':''}>20+ cm</option></select><input id="hairPref" value="${S.hairProfile.preferences||''}" placeholder="Hvad kan du lide? F.eks: jeg kan godt lide krøllet hår..." onchange="S.hairProfile.preferences=this.value;save()"><input id="hairConcern" value="${S.hairProfile.concerns||''}" placeholder="Bekymringer..." onchange="S.hairProfile.concerns=this.value;save()">${inspo}<button class="btn btn-secondary" style="margin-top:6px" onclick="uploadHairInspo()">📸 Upload reference-billede</button><button class="btn btn-primary" style="margin-top:12px" onclick="getHairAdvice()">💇 Få frisure-råd</button><div id="hairRes" style="display:none"></div><button class="btn btn-secondary" onclick="switchTab('home')">⬅ Tilbage</button></div>`;
+            }else if(S.tab==='products')c.innerHTML=`<div class="glass"><h3 style="color:#d4af37;font-size:0.9rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">🧴 Produkter</h3><p style="color:#9ca3af;font-size:0.75rem;margin-bottom:12px">📸 Tag billede af hvert produkt enkeltvis</p><div style="display:flex;gap:6px;margin-bottom:12px"><button class="btn btn-secondary" style="flex:1" onclick="addProduct('face')">📸 + Ansigt</button><button class="btn btn-secondary" style="flex:1" onclick="addProduct('hair')">📸 + Hår</button></div><div id="prodList">${renderProds()}</div><button class="btn btn-primary" style="margin-top:10px" onclick="getProductAdvice('face')">🧴 Hudpleje-anbefalinger</button><div id="faceProd" style="display:none"></div><button class="btn btn-primary" style="margin-top:6px" onclick="getProductAdvice('hair')">💆 Hårpleje-anbefalinger</button><div id="hairProd" style="display:none"></div><button class="btn btn-secondary" onclick="switchTab('home')">⬅ Tilbage</button></div>`;
+            else if(S.tab==='coach')c.innerHTML=`<div class="glass"><h3 style="color:#d4af37;font-size:0.9rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">💬 Coach</h3><p style="color:#9ca3af;font-size:0.8rem;margin-bottom:12px">${S.faceAnalysis?'✅ Kender dit ansigt':'⚠️ Scan ansigt først'}</p><button class="btn btn-primary" onclick="getCoach()">🤖 Få Coach-råd</button><div id="coachRes" style="margin-top:10px"></div><button class="btn btn-secondary" onclick="switchTab('home')">⬅ Tilbage</button></div>`;
+            else if(S.tab==='tracker')c.innerHTML=`<div class="glass"><h3 style="color:#d4af37;font-size:0.9rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">✅ Tracker</h3><button class="btn btn-primary" style="margin-bottom:16px" onclick="aiFillTracker()">🤖 AI auto-udfyld</button><div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:0.8rem">😴 Søvn</span><input type="number" id="sl" value="${S.stats.sleep}" min="0" max="24" style="width:70px;text-align:center"> timer</div><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:0.8rem">💧 Vand</span><input type="number" id="wa" value="${S.stats.water}" min="0" max="20" style="width:70px;text-align:center"> glas</div><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:0.8rem">🥗 Ernæring</span><input type="range" id="nu" value="${S.stats.nutrition}" min="0" max="5" style="width:100px" oninput="document.getElementById('nuv').textContent=this.value"><span id="nuv" style="font-weight:700;color:#d4af37">${S.stats.nutrition}</span>/5</div></div></div><div class="glass"><h3 style="color:#d4af37;font-size:0.9rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">Afkrydsning</h3>${[['🏋️ Træning','workout'],['🧴 Hudpleje','skincare'],['👅 Mewing','mewing'],['🧍 Holdning','posture'],['☀️ SPF','sun']].map(([l,k])=>`<div class="checkbox-pill" onclick="toggleCheck('${k}')"><div class="check-box ${S.stats[k]?'on':''}">${S.stats[k]?'✓':''}</div><span style="font-size:0.8rem">${l}</span></div>`).join('')}<button class="btn btn-primary" style="margin-top:12px" onclick="saveTracker()">✅ Gem</button></div><button class="btn btn-secondary" onclick="switchTab('home')">⬅ Tilbage</button>`;
+            else if(S.tab==='progress'){let pg=S.progressGallery||[];c.innerHTML=`<div class="glass"><h3 style="color:#d4af37;font-size:0.9rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">📈 Progress</h3>${pg.length===0?'<p style="color:#9ca3af;font-size:0.8rem;text-align:center">Scan for at starte</p>':`<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">${pg.slice().reverse().map(p=>`<div style="border-radius:16px;overflow:hidden;background:rgba(255,255,255,0.02)"><img src="${p.image}" style="width:100%;aspect-ratio:3/4;object-fit:cover;display:block"><div style="padding:6px;text-align:center;font-size:0.6rem;color:#9ca3af">Uge ${p.week} · ${p.score}/10</div></div>`).join('')}</div>${pg.length>=2?`<div style="text-align:center;margin-top:12px;color:#d4af37;font-weight:700">📊 ${pg[pg.length-1].score}/10 → ${pg[0].score}/10 (${pg[0].score-pg[pg.length-1].score>=0?'+':''}${pg[0].score-pg[pg.length-1].score})</div>`:''}`}<button class="btn btn-secondary" onclick="switchTab('home')">⬅ Tilbage</button></div>`}
+            else if(S.tab==='chat')c.innerHTML=`<div class="glass"><h3 style="color:#d4af37;font-size:0.9rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">💡 Spørg AI</h3><p style="color:#9ca3af;font-size:0.75rem;margin-bottom:10px">${S.faceAnalysis?'✅ AI kender dit ansigt':'⚠️ Scan først'}</p><textarea id="chatInput" placeholder="F.eks: Hvilken brille passer til mig?" rows="2"></textarea><button class="btn btn-primary" onclick="sendChat()">💬 Send</button><div id="chatRes" style="margin-top:10px"></div><button class="btn btn-secondary" onclick="switchTab('home')">⬅ Tilbage</button></div>`;
         }
 
-        function toggleCheckbox(k){S.stats[k]=S.stats[k]?0:1;save();renderTab()}
-        function renderProducts(){
+        function toggleCheck(k){S.stats[k]=S.stats[k]?0:1;save();renderTab()}
+        function renderProds(){
             let all=[...(S.products.face||[]).map(p=>({...p,type:'face'})),...(S.products.hair||[]).map(p=>({...p,type:'hair'}))];
-            if(all.length===0)return'<p style="color:#666;font-size:.7rem;text-align:center;margin:12px 0">Ingen produkter</p>';
-            return all.map(p=>{let arr=S.products[p.type]||[],idx=arr.indexOf(p);return`<div class="product-card">${p.image?`<img src="${p.image}">`:'<div style="width:50px;height:50px;background:#222;border-radius:8px;display:flex;align-items:center;justify-content:center">🧴</div>'}<div class="product-info"><strong>${p.name}</strong><br><span style="color:#999">${p.description||''}</span></div><button onclick="removeProduct('${p.type}',${idx})" style="background:none;border:none;color:#ef4444;font-size:1.2rem;cursor:pointer">✕</button></div>`}).join('');
+            if(all.length===0)return'<p style="color:#666;font-size:0.7rem;text-align:center;margin:12px 0">Ingen produkter</p>';
+            return all.map(p=>{let arr=S.products[p.type]||[],idx=arr.indexOf(p);return`<div class="prod-card">${p.image?`<img src="${p.image}">`:'<div style="width:56px;height:56px;background:rgba(255,255,255,0.03);border-radius:12px;display:flex;align-items:center;justify-content:center">🧴</div>'}<div class="prod-info"><strong>${p.name}</strong><br><span style="color:#9ca3af">${p.description||''}</span></div><button onclick="removeProd('${p.type}',${idx})" style="background:none;border:none;color:#ef4444;font-size:1.2rem;cursor:pointer">✕</button></div>`}).join('');
         }
-        function removeProduct(type,idx){S.products[type].splice(idx,1);save();toast('🗑️');render()}
-        function saveTracker(){S.stats.sleep=parseInt(document.getElementById('sl')?.value)||0;S.stats.water=parseInt(document.getElementById('wa')?.value)||0;S.stats.nutrition=parseInt(document.getElementById('nu')?.value)||0;updateStreak();save();toast('✅ Gemt!');switchTab('home')}
+        function removeProd(type,idx){S.products[type].splice(idx,1);save();toast('🗑️ Fjernet');render()}
+        function saveTracker(){S.stats.sleep=parseInt(document.getElementById('sl')?.value)||0;S.stats.water=parseInt(document.getElementById('wa')?.value)||0;S.stats.nutrition=parseInt(document.getElementById('nu')?.value)||0;updateStreak();save();toast('✅ Gemt');switchTab('home')}
 
         load();
         if(!getAPIKey()){render();showAPISetup()}else{S.onboarded=true;render()}
