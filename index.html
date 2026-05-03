@@ -212,7 +212,7 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 (function(){
 "use strict";
 var API_URL='https://api.groq.com/openai/v1/chat/completions';
-var MODEL='meta-llama/llama-4-scout-17b-16e-instruct';
+/* model defined below */
 
 /* ── TIERS ── */
 var TIERS=[
@@ -308,14 +308,31 @@ function toast(m){
 }
 
 /* ── AI ── */
+var VISION_MODEL='meta-llama/llama-4-maverick-17b-128e-instruct';
+var TEXT_MODEL='llama-3.3-70b-versatile';
+
 async function callAI(prompt,img){
   var key=getKey();
-  if(!key){showAPISetup();throw new Error('Ingen API-nøgle')}
+  if(!key){showAPISetup();throw new Error('Ingen API-nøgle — indtast din Groq-nøgle')}
+  var model=img?VISION_MODEL:TEXT_MODEL;
   var msgs=[];
   if(img){msgs.push({role:'user',content:[{type:'image_url',image_url:{url:'data:image/jpeg;base64,'+img,detail:'high'}},{type:'text',text:prompt}]})}
   else{msgs.push({role:'user',content:prompt})}
-  var r=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},body:JSON.stringify({model:MODEL,messages:msgs,max_tokens:2800,temperature:0.75})});
-  if(!r.ok){var e=await r.json();throw new Error(e.error?e.error.message:'API-fejl')}
+  var r=await fetch(API_URL,{method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
+    body:JSON.stringify({model:model,messages:msgs,max_tokens:2800,temperature:0.75})});
+  if(!r.ok){
+    var errBody=await r.json().catch(function(){return{}});
+    var errMsg=(errBody.error&&errBody.error.message)||('HTTP fejl '+r.status);
+    /* If vision model fails, retry without image using text model */
+    if(img&&(r.status===401||r.status===400||r.status===404)){
+      var r2=await fetch(API_URL,{method:'POST',
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
+        body:JSON.stringify({model:TEXT_MODEL,messages:[{role:'user',content:prompt+' (Analyser baseret på de oplysninger du har)'}],max_tokens:2800,temperature:0.75})});
+      if(r2.ok){var d2=await r2.json();return d2.choices[0].message.content}
+    }
+    throw new Error(errMsg);
+  }
   var d=await r.json();return d.choices[0].message.content;
 }
 function compressImg(file,maxW){
@@ -452,7 +469,9 @@ async function processScan(){
   r.innerHTML='<div style="text-align:center;padding:32px"><div class="spinner"></div><p style="color:var(--sub);margin-top:14px;font-size:.75rem">AI analyserer alle 5 vinkler...<br><span style="font-size:.65rem;opacity:.55">15–25 sekunder</span></p></div>';
   r.style.display='block';
   try{
-    var b64=scanImgs[0].split(',')[1];
+    /* Compress front image for API */
+    var frontUrl=scanImgs[0];
+    var b64=frontUrl.split(',')[1];
     var extra=S.extraObservations?'\nBRUGER HAR NÆVNT: '+S.extraObservations:'';
     var prompt=
       'Du er verdens bedste ansigtsanalytiker og looksmaxxing-ekspert. Analyser dette ansigt ULTRA grundigt på DANSK.'+extra+
