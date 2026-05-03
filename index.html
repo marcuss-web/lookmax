@@ -6,24 +6,11 @@
 <title>LooksMax AI</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
-
-:root{
-  --gold:#d4af37;--gold2:#f0cc5a;--gold3:#c9a227;
-  --glass:rgba(20,20,20,0.78);--border:rgba(255,255,255,0.07);
-  --sub:#9ca3af;--green:#22c55e;--red:#ef4444;
-}
+:root{--gold:#d4af37;--gold2:#f0cc5a;--gold3:#c9a227;--glass:rgba(20,20,20,0.78);--border:rgba(255,255,255,0.07);--sub:#9ca3af;--green:#22c55e;--red:#ef4444}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{background:#000;color:#fff;min-height:100dvh;overflow-x:hidden;
-  font-family:'DM Sans',-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
-body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
-  background:
-    radial-gradient(ellipse 55% 35% at 15% 8%,rgba(212,175,55,.07) 0%,transparent 65%),
-    radial-gradient(ellipse 45% 25% at 85% 85%,rgba(212,175,55,.05) 0%,transparent 65%),
-    radial-gradient(ellipse 70% 50% at 50% 50%,rgba(8,8,8,1) 0%,#000 100%)}
-.app{position:relative;z-index:1;max-width:480px;margin:0 auto;
-  padding:20px 16px 90px;opacity:0;animation:fadeIn .6s ease forwards}
-
-/* KEYFRAMES */
+html,body{background:#000;color:#fff;min-height:100dvh;overflow-x:hidden;font-family:'DM Sans',-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 55% 35% at 15% 8%,rgba(212,175,55,.07) 0%,transparent 65%),radial-gradient(ellipse 45% 25% at 85% 85%,rgba(212,175,55,.05) 0%,transparent 65%),radial-gradient(ellipse 70% 50% at 50% 50%,rgba(8,8,8,1) 0%,#000 100%)}
+.app{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:20px 16px 90px;opacity:0;animation:fadeIn .6s ease forwards}
 @keyframes fadeIn{to{opacity:1}}
 @keyframes slideUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -33,51 +20,42 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 @keyframes headBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
 @keyframes headRight{0%,100%{transform:rotate(0)}50%{transform:rotate(28deg)}}
 @keyframes headLeft{0%,100%{transform:rotate(0)}50%{transform:rotate(-28deg)}}
-@keyframes headUp{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-13px) rotate(-5deg)}}
+@keyframes headUp{0%,100%{transform:translateY(0)}50%{transform:translateY(-13px)}}
 @keyframes headDown{0%,100%{transform:translateY(0)}50%{transform:translateY(9px)}}
-@keyframes arrowPulse{0%,100%{opacity:.4;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.3)}}
+@keyframes arrowAbs{0%,100%{opacity:.4;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.3)}}
+@keyframes guideArrow{0%,100%{opacity:.45;transform:scale(1)}50%{opacity:1;transform:scale(1.25)}}
 @keyframes scanLine{0%{top:-2px}100%{top:102%}}
 @keyframes scoreIn{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
 @keyframes flashCapture{0%{opacity:0}20%{opacity:.7}100%{opacity:0}}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes slideDown{from{opacity:0;max-height:0}to{opacity:1;max-height:2000px}}
 
 /* TOPBAR */
-.topbar{display:flex;justify-content:space-between;align-items:center;
-  padding:8px 0 18px;font-size:.68rem;color:var(--sub);font-weight:500;letter-spacing:.5px}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:8px 0 18px;font-size:.68rem;color:var(--sub);font-weight:500;letter-spacing:.5px}
 .dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:6px}
 .dot.green{background:var(--green);animation:pulseDot 2s ease infinite}
 .dot.red{background:var(--red)}
 
 /* GLASS */
-.glass{background:var(--glass);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
-  border:1px solid var(--border);border-radius:24px;padding:22px;margin:10px 0;
-  animation:slideUp .45s ease both;position:relative;overflow:hidden}
-.glass::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.09),transparent)}
+.glass{background:var(--glass);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--border);border-radius:24px;padding:22px;margin:10px 0;animation:slideUp .45s ease both;position:relative;overflow:hidden}
+.glass::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.09),transparent)}
 
-/* SCORE RING */
+/* DUAL SCORE */
 .score-wrap{text-align:center;padding:22px 0 10px}
-.score-ring-wrap{position:relative;width:170px;height:170px;margin:0 auto 14px;
-  animation:pulseRing 3.5s ease infinite}
-.score-ring-wrap svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
-.score-inner{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;width:100%}
-.score-val{font-family:'Cormorant Garamond',serif;font-size:4rem;font-weight:700;
-  background:linear-gradient(135deg,#c9a227,#f0cc5a,#d4af37);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  line-height:1;animation:scoreIn .7s cubic-bezier(.34,1.56,.64,1) both}
-.score-tier{font-size:.65rem;font-weight:700;letter-spacing:1px;color:var(--gold);margin-top:2px}
-.score-label{font-size:.5rem;text-transform:uppercase;letter-spacing:3px;color:var(--sub);margin-top:3px}
-.streak-badge{display:inline-flex;align-items:center;gap:5px;
-  background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.2);
-  border-radius:20px;padding:5px 14px;font-size:.62rem;color:var(--gold);font-weight:600;margin-top:8px}
+.dual-ring-row{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:14px}
+.ring-box{display:flex;flex-direction:column;align-items:center;gap:6px}
+.ring-wrap{position:relative;animation:pulseRing 3.5s ease infinite}
+.ring-wrap svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.ring-inner{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;width:100%}
+.ring-val{font-family:'Cormorant Garamond',serif;font-weight:700;background:linear-gradient(135deg,#c9a227,#f0cc5a,#d4af37);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;animation:scoreIn .7s cubic-bezier(.34,1.56,.64,1) both}
+.ring-label{font-size:.52rem;text-transform:uppercase;letter-spacing:2px;color:var(--sub)}
+.ring-tier{font-size:.58rem;font-weight:700;color:var(--gold)}
+.ring-arrow{font-size:1.8rem;color:rgba(212,175,55,.5);margin-top:20px;flex-shrink:0}
+.streak-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.2);border-radius:20px;padding:5px 14px;font-size:.62rem;color:var(--gold);font-weight:600;margin-top:4px}
 
 /* GRID */
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
-.grid2 .item{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);
-  border-radius:20px;padding:18px 14px;text-align:center;cursor:pointer;
-  transition:all .25s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden}
-.grid2 .item::before{content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(212,175,55,.06),transparent);opacity:0;transition:opacity .25s}
+.grid2 .item{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);border-radius:20px;padding:18px 14px;text-align:center;cursor:pointer;transition:all .25s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden}
+.grid2 .item::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(212,175,55,.06),transparent);opacity:0;transition:opacity .25s}
 .grid2 .item:hover::before,.grid2 .item:active::before{opacity:1}
 .grid2 .item:hover{border-color:rgba(212,175,55,.22);transform:translateY(-2px)}
 .grid2 .item:active{transform:scale(.95);border-color:var(--gold)}
@@ -86,268 +64,145 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 .grid2 .title{font-size:.73rem;font-weight:700}
 .grid2 .sub{font-size:.58rem;color:var(--sub);margin-top:2px}
 
-/* SECTION HEAD */
-.sec-head{font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:1.1rem;
-  font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.sec-head::after{content:'';flex:1;height:1px;
-  background:linear-gradient(90deg,rgba(212,175,55,.3),transparent)}
+/* SEC HEAD */
+.sec-head{font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:1.1rem;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.sec-head::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(212,175,55,.3),transparent)}
 
 /* BUTTONS */
-.btn{width:100%;padding:15px;border-radius:16px;border:none;font-weight:700;
-  font-size:.8rem;cursor:pointer;font-family:'DM Sans',inherit;
-  transition:all .2s cubic-bezier(.4,0,.2,1);letter-spacing:.2px}
+.btn{width:100%;padding:15px;border-radius:16px;border:none;font-weight:700;font-size:.8rem;cursor:pointer;font-family:'DM Sans',inherit;transition:all .2s cubic-bezier(.4,0,.2,1);letter-spacing:.2px}
 .btn:active{transform:scale(.96)}
-.btn-gold{background:linear-gradient(135deg,#c9a227,#d4af37 40%,#e8c84a 70%,#d4af37);
-  background-size:200% auto;color:#000;font-weight:800;
-  box-shadow:0 4px 20px rgba(212,175,55,.28),inset 0 1px 0 rgba(255,255,255,.2)}
+.btn-gold{background:linear-gradient(135deg,#c9a227,#d4af37 40%,#e8c84a 70%,#d4af37);background-size:200% auto;color:#000;font-weight:800;box-shadow:0 4px 20px rgba(212,175,55,.28),inset 0 1px 0 rgba(255,255,255,.2)}
 .btn-gold:hover{background-position:right center;box-shadow:0 6px 30px rgba(212,175,55,.42)}
-.btn-outline{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.09);
-  color:#fff;margin-top:8px}
+.btn-outline{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.09);color:#fff;margin-top:8px}
 .btn-outline:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14)}
+.btn-red{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.25);color:#ef4444;margin-top:8px}
 
 /* INPUTS */
-input,textarea,select{width:100%;background:rgba(255,255,255,.03);
-  border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:13px 16px;
-  color:#fff;font-family:'DM Sans',inherit;font-size:.8rem;margin:5px 0;
-  outline:0;-webkit-appearance:none;transition:border-color .2s,box-shadow .2s}
-input:focus,textarea:focus,select:focus{border-color:rgba(212,175,55,.5);
-  box-shadow:0 0 0 3px rgba(212,175,55,.07)}
-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%239ca3af' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;cursor:pointer}
+input,textarea,select{width:100%;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:13px 16px;color:#fff;font-family:'DM Sans',inherit;font-size:.8rem;margin:5px 0;outline:0;-webkit-appearance:none;transition:border-color .2s,box-shadow .2s}
+input:focus,textarea:focus,select:focus{border-color:rgba(212,175,55,.5);box-shadow:0 0 0 3px rgba(212,175,55,.07)}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%239ca3af' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;cursor:pointer}
 
 /* AI CARD */
-.ai-card{background:rgba(16,16,16,.9);border:1px solid rgba(212,175,55,.15);
-  border-radius:20px;padding:18px;margin:10px 0;font-size:.75rem;
-  line-height:1.75;max-height:520px;overflow-y:auto}
+.ai-card{background:rgba(16,16,16,.9);border:1px solid rgba(212,175,55,.15);border-radius:20px;padding:18px;margin:10px 0;font-size:.75rem;line-height:1.75;max-height:520px;overflow-y:auto}
 .ai-card::-webkit-scrollbar{width:3px}
 .ai-card::-webkit-scrollbar-thumb{background:rgba(212,175,55,.3);border-radius:2px}
 
 /* SPINNER */
-.spinner{width:30px;height:30px;border:2px solid rgba(255,255,255,.07);
-  border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto}
+.spinner{width:30px;height:30px;border:2px solid rgba(255,255,255,.07);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto}
 
 /* TOAST */
-.toast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%);
-  background:rgba(22,22,22,.97);border:1px solid rgba(212,175,55,.22);
-  color:#fff;padding:12px 24px;border-radius:30px;font-weight:600;font-size:.75rem;
-  z-index:9999;animation:pop .35s cubic-bezier(.34,1.56,.64,1);
-  max-width:90%;text-align:center;
-  box-shadow:0 8px 30px rgba(0,0,0,.5);backdrop-filter:blur(20px)}
+.toast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%);background:rgba(22,22,22,.97);border:1px solid rgba(212,175,55,.22);color:#fff;padding:12px 24px;border-radius:30px;font-weight:600;font-size:.75rem;z-index:9999;animation:pop .35s cubic-bezier(.34,1.56,.64,1);max-width:90%;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.5);backdrop-filter:blur(20px)}
 
 /* CHECK ROW */
-.check-row{display:flex;align-items:center;gap:12px;padding:13px 14px;
-  background:rgba(255,255,255,.02);border-radius:14px;margin:5px 0;cursor:pointer;
-  border:1px solid rgba(255,255,255,.04);transition:all .2s ease;user-select:none}
-.check-row:hover{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.07)}
+.check-row{display:flex;align-items:center;gap:12px;padding:13px 14px;background:rgba(255,255,255,.02);border-radius:14px;margin:5px 0;cursor:pointer;border:1px solid rgba(255,255,255,.04);transition:all .2s ease;user-select:none}
+.check-row:hover{background:rgba(255,255,255,.04)}
 .check-row:active{transform:scale(.97);background:rgba(212,175,55,.06)}
-.check-box{width:24px;height:24px;border-radius:7px;border:2px solid rgba(255,255,255,.15);
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  transition:all .2s cubic-bezier(.34,1.56,.64,1);font-size:.75rem}
-.check-box.on{background:linear-gradient(135deg,#c9a227,#d4af37);border-color:var(--gold);
-  box-shadow:0 2px 12px rgba(212,175,55,.35);transform:scale(1.1)}
+.check-box{width:24px;height:24px;border-radius:7px;border:2px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s cubic-bezier(.34,1.56,.64,1);font-size:.75rem}
+.check-box.on{background:linear-gradient(135deg,#c9a227,#d4af37);border-color:var(--gold);box-shadow:0 2px 12px rgba(212,175,55,.35);transform:scale(1.1)}
 
 /* PROGRESS BAR */
 .progress-bar{height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;flex:1}
-.progress-fill{height:100%;background:linear-gradient(90deg,#c9a227,#f0cc5a);
-  border-radius:2px;transition:width .7s ease}
+.progress-fill{height:100%;background:linear-gradient(90deg,#c9a227,#f0cc5a);border-radius:2px;transition:width .7s ease}
 
 /* TAGS */
-.tag{display:inline-block;padding:8px 14px;border-radius:20px;font-size:.65rem;margin:2px;
-  cursor:pointer;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
-  transition:all .2s ease;font-weight:500}
+.tag{display:inline-block;padding:8px 14px;border-radius:20px;font-size:.65rem;margin:2px;cursor:pointer;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);transition:all .2s ease;font-weight:500}
 .tag:active{transform:scale(.93)}
 .tag.sel{background:rgba(212,175,55,.15);border-color:var(--gold);color:var(--gold)}
 
 /* BADGE */
-.badge{display:inline-block;padding:3px 10px;border-radius:10px;font-size:.58rem;font-weight:700;
-  background:rgba(212,175,55,.15);color:var(--gold);border:1px solid rgba(212,175,55,.2);margin-left:5px}
+.badge{display:inline-block;padding:3px 10px;border-radius:10px;font-size:.58rem;font-weight:700;background:rgba(212,175,55,.15);color:var(--gold);border:1px solid rgba(212,175,55,.2);margin-left:5px}
 
 /* STEP NUM */
-.step-num{display:inline-flex;width:22px;height:22px;border-radius:50%;
-  background:linear-gradient(135deg,#c9a227,#d4af37);color:#000;
-  align-items:center;justify-content:center;font-weight:800;font-size:.6rem;
-  margin-right:7px;flex-shrink:0}
+.step-num{display:inline-flex;width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#c9a227,#d4af37);color:#000;align-items:center;justify-content:center;font-weight:800;font-size:.6rem;margin-right:7px;flex-shrink:0}
 
 /* PROD CARD */
-.prod-card{display:flex;gap:12px;align-items:center;background:rgba(255,255,255,.02);
-  border-radius:14px;padding:11px;margin:5px 0;border:1px solid rgba(255,255,255,.04);
-  transition:border-color .2s}
+.prod-card{display:flex;gap:12px;align-items:center;background:rgba(255,255,255,.02);border-radius:14px;padding:11px;margin:5px 0;border:1px solid rgba(255,255,255,.04);transition:border-color .2s}
 .prod-card:hover{border-color:rgba(255,255,255,.08)}
-.prod-card img{width:52px;height:52px;border-radius:12px;object-fit:cover;
-  border:1px solid rgba(255,255,255,.07)}
+.prod-card img{width:52px;height:52px;border-radius:12px;object-fit:cover;border:1px solid rgba(255,255,255,.07)}
 
 /* REC CARD */
-.rec-card{background:rgba(14,14,14,.95);border:1px solid rgba(212,175,55,.15);
-  border-radius:18px;padding:16px;margin:8px 0}
-.rec-card-title{font-family:'Cormorant Garamond',serif;color:var(--gold);
-  font-size:.95rem;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
-.rec-row{display:flex;gap:10px;align-items:flex-start;padding:10px 0;
-  border-bottom:1px solid rgba(255,255,255,.04)}
+.rec-card{background:rgba(14,14,14,.95);border:1px solid rgba(212,175,55,.15);border-radius:18px;padding:16px;margin:8px 0}
+.rec-card-title{font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:.95rem;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.rec-row{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04)}
 .rec-row:last-child{border-bottom:none}
-.rec-rank{width:28px;height:28px;border-radius:50%;
-  background:linear-gradient(135deg,#c9a227,#d4af37);color:#000;
-  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.7rem;flex-shrink:0}
-.rec-link{display:inline-block;margin-top:5px;padding:5px 11px;border-radius:8px;
-  background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.2);
-  color:#60a5fa;font-size:.62rem;font-weight:600;text-decoration:none}
+.rec-rank{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#c9a227,#d4af37);color:#000;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.7rem;flex-shrink:0}
+.rec-link{display:inline-block;margin-top:5px;padding:5px 11px;border-radius:8px;background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.2);color:#60a5fa;font-size:.62rem;font-weight:600;text-decoration:none}
 
-/* CAMERA OVERLAY — fullscreen */
-.cam-overlay{position:fixed;inset:0;background:#000;z-index:3000;
-  display:flex;flex-direction:column;align-items:center;overflow:hidden}
+/* HAIR CARD COLLAPSIBLE */
+.hair-summary{cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:16px;transition:all .2s ease;user-select:none}
+.hair-summary:hover{border-color:rgba(212,175,55,.2);background:rgba(212,175,55,.04)}
+.hair-summary:active{transform:scale(.98)}
+.hair-detail{overflow:hidden;transition:max-height .4s ease,opacity .3s ease;max-height:0;opacity:0}
+.hair-detail.open{max-height:3000px;opacity:1}
+.hair-chevron{font-size:.8rem;color:var(--gold);transition:transform .3s ease;flex-shrink:0}
+.hair-chevron.open{transform:rotate(180deg)}
 
-/* Video fills top ~60% */
-.cam-video-wrap{
-  position:relative;width:100%;
-  flex:0 0 60vh;overflow:hidden;
-}
-.cam-video-wrap video{
-  width:100%;height:100%;object-fit:cover;
-  transform:scaleX(-1); /* mirror so user feels natural */
-  display:block;
-}
-
-/* Golden oval face guide */
-.cam-face-oval{
-  position:absolute;top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  width:55%;height:80%;
-  border-radius:50%;
-  border:2px solid rgba(212,175,55,.55);
-  box-shadow:0 0 0 4000px rgba(0,0,0,.28);
-  pointer-events:none;
-  transition:border-color .3s;
-}
-
-/* Direction arrow — LARGE, centered over face */
-.cam-dir-arrow{
-  position:absolute;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  font-size:4rem;
-  filter:drop-shadow(0 0 12px rgba(212,175,55,.9));
-  animation:arrowPulse .75s ease infinite;
-  pointer-events:none;
-  line-height:1;
-}
-
-/* Step label on top of video */
-.cam-video-label{
-  position:absolute;bottom:10px;left:50%;transform:translateX(-50%);
-  background:rgba(0,0,0,.65);
-  border:1px solid rgba(212,175,55,.35);
-  border-radius:20px;padding:6px 16px;
-  font-size:.75rem;font-weight:700;color:var(--gold);
-  white-space:nowrap;backdrop-filter:blur(8px);
-}
-
-/* Scan line */
-.scan-line{position:absolute;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,transparent,rgba(212,175,55,.85),transparent);
-  animation:scanLine 2.2s linear infinite;pointer-events:none}
-
-/* Flash on capture */
-.cam-flash{position:absolute;inset:0;background:#fff;
-  opacity:0;pointer-events:none;animation:none}
+/* CAMERA */
+.cam-overlay{position:fixed;inset:0;background:#000;z-index:3000;display:flex;flex-direction:column;align-items:center;overflow:hidden}
+.cam-video-wrap{position:relative;width:100%;flex:0 0 60vh;overflow:hidden}
+.cam-video-wrap video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);display:block}
+.cam-face-oval{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:55%;height:80%;border-radius:50%;border:2px solid rgba(212,175,55,.55);box-shadow:0 0 0 4000px rgba(0,0,0,.28);pointer-events:none}
+.cam-dir-arrow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:4rem;filter:drop-shadow(0 0 12px rgba(212,175,55,.9));animation:arrowAbs .75s ease infinite;pointer-events:none;line-height:1}
+.cam-video-label{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.65);border:1px solid rgba(212,175,55,.35);border-radius:20px;padding:6px 16px;font-size:.75rem;font-weight:700;color:var(--gold);white-space:nowrap;backdrop-filter:blur(8px)}
+.scan-line{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(212,175,55,.85),transparent);animation:scanLine 2.2s linear infinite;pointer-events:none}
+.cam-flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
 .cam-flash.on{animation:flashCapture .35s ease forwards}
-
-/* Controls panel below video */
-.cam-controls{
-  width:100%;flex:1;
-  display:flex;flex-direction:column;align-items:center;
-  justify-content:space-between;
-  padding:12px 20px 24px;background:#000;
-}
+.cam-controls{width:100%;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:12px 20px 24px;background:#000}
 .cam-progress-row{display:flex;gap:5px;justify-content:center;margin-bottom:4px}
-.cam-pdot{width:8px;height:8px;border-radius:4px;background:rgba(255,255,255,.13);
-  transition:all .3s ease}
+.cam-pdot{width:8px;height:8px;border-radius:4px;background:rgba(255,255,255,.13);transition:all .3s ease}
 .cam-pdot.active{background:var(--gold);width:24px;box-shadow:0 0 8px rgba(212,175,55,.5)}
 .cam-pdot.done{background:rgba(212,175,55,.45)}
-
-.cam-step-label{font-family:'Cormorant Garamond',serif;font-size:1.05rem;
-  font-weight:700;color:var(--gold);text-align:center}
+.cam-step-label{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:700;color:var(--gold);text-align:center}
 .cam-step-sub{font-size:.65rem;color:var(--sub);text-align:center;margin-top:2px}
 .cam-counter{font-size:.58rem;color:#555;text-align:center;margin-top:3px}
-
 .cam-btn-row{display:flex;gap:10px;width:100%;max-width:320px;align-items:center;margin-top:8px}
-.cam-capture-btn{
-  flex:1;padding:15px;border-radius:16px;border:none;
-  background:linear-gradient(135deg,#c9a227,#d4af37);
-  color:#000;font-weight:800;font-size:.85rem;cursor:pointer;
-  font-family:'DM Sans',inherit;
-  box-shadow:0 4px 20px rgba(212,175,55,.35);
-  transition:all .15s ease;
-}
+.cam-capture-btn{flex:1;padding:15px;border-radius:16px;border:none;background:linear-gradient(135deg,#c9a227,#d4af37);color:#000;font-weight:800;font-size:.85rem;cursor:pointer;font-family:'DM Sans',inherit;box-shadow:0 4px 20px rgba(212,175,55,.35);transition:all .15s ease}
 .cam-capture-btn:active{transform:scale(.94)}
-.cam-cancel-btn{
-  width:50px;height:50px;border-radius:50%;border:2px solid rgba(255,255,255,.18);
-  background:rgba(255,255,255,.05);color:#fff;font-size:1rem;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  transition:all .15s ease;
-}
-.cam-cancel-btn:active{background:rgba(239,68,68,.2);border-color:var(--red)}
+.cam-cancel-btn{width:50px;height:50px;border-radius:50%;border:2px solid rgba(255,255,255,.18);background:rgba(255,255,255,.05);color:#fff;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s ease}
+.cam-cancel-btn:active{background:rgba(239,68,68,.2)}
 
-/* GUIDE OVERLAY */
-.guide-overlay{position:fixed;inset:0;background:#000;z-index:3001;
-  display:flex;flex-direction:column;align-items:center;
-  justify-content:center;padding:28px 24px}
-.guide-counter{font-size:.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);
-  margin-bottom:20px;font-weight:600;background:rgba(212,175,55,.1);
-  border:1px solid rgba(212,175,55,.2);padding:6px 16px;border-radius:20px}
-.guide-emoji{font-size:5.5rem;line-height:1;margin:6px 0;
-  filter:drop-shadow(0 0 20px rgba(212,175,55,.3))}
+/* GUIDE */
+.guide-overlay{position:fixed;inset:0;background:#000;z-index:3001;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 24px}
+.guide-counter{font-size:.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:20px;font-weight:600;background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.2);padding:6px 16px;border-radius:20px}
+.guide-emoji{font-size:5.5rem;line-height:1;margin:6px 0;filter:drop-shadow(0 0 20px rgba(212,175,55,.3))}
 .guide-emoji.anim-straight{animation:headBob 1s ease infinite}
 .guide-emoji.anim-right{animation:headRight .85s ease infinite}
 .guide-emoji.anim-left{animation:headLeft .85s ease infinite}
 .guide-emoji.anim-up{animation:headUp .85s ease infinite}
 .guide-emoji.anim-down{animation:headDown .85s ease infinite}
-.guide-arrow{font-size:2.8rem;color:var(--gold);
-  animation:arrowPulse .7s ease infinite;margin:6px 0;
-  transform-origin:center;
-  /* override arrowPulse translate for non-absolute context */
-  animation-name:guideArrowPulse}
-@keyframes guideArrowPulse{0%,100%{opacity:.45;transform:scale(1)}50%{opacity:1;transform:scale(1.25)}}
-.guide-label{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;
-  text-align:center;margin:5px 0 3px}
+.guide-arrow{font-size:2.8rem;color:var(--gold);animation:guideArrow .7s ease infinite;margin:6px 0}
+.guide-label{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;text-align:center;margin:5px 0 3px}
 .guide-sub{font-size:.72rem;color:var(--sub);text-align:center;margin-bottom:24px}
 .guide-bar{display:flex;gap:6px;margin-bottom:24px}
 .guide-dot{width:8px;height:8px;border-radius:4px;background:rgba(255,255,255,.13);transition:all .3s ease}
 .guide-dot.active{background:var(--gold);width:24px;box-shadow:0 0 8px rgba(212,175,55,.5)}
 .guide-dot.done{background:rgba(212,175,55,.45)}
 
-/* INSPO GRID */
+/* INSPO */
 .inspo-grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .inspo-thumb{position:relative}
-.inspo-thumb img{width:64px;height:64px;object-fit:cover;border-radius:10px;
-  border:2px solid rgba(212,175,55,.22);display:block;cursor:pointer}
-.inspo-thumb .rm{position:absolute;top:-5px;right:-5px;background:var(--red);color:#fff;
-  border-radius:50%;width:19px;height:19px;font-size:.5rem;border:none;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;font-weight:700;z-index:1}
+.inspo-thumb img{width:64px;height:64px;object-fit:cover;border-radius:10px;border:2px solid rgba(212,175,55,.22);display:block;cursor:pointer}
+.inspo-thumb .rm{position:absolute;top:-5px;right:-5px;background:var(--red);color:#fff;border-radius:50%;width:19px;height:19px;font-size:.5rem;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;z-index:1}
 
-/* PROD SOURCE BUTTONS */
+/* PSRC BTNS */
 .prod-source-row{display:flex;gap:8px;margin:6px 0}
-.psb{flex:1;padding:13px 6px;border-radius:14px;border:1px solid rgba(255,255,255,.08);
-  background:rgba(255,255,255,.03);color:#fff;font-size:.72rem;font-weight:600;cursor:pointer;
-  font-family:'DM Sans',inherit;transition:all .2s ease;text-align:center}
+.psb{flex:1;padding:13px 6px;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);color:#fff;font-size:.72rem;font-weight:600;cursor:pointer;font-family:'DM Sans',inherit;transition:all .2s ease;text-align:center}
 .psb:active{transform:scale(.96);background:rgba(212,175,55,.08);border-color:var(--gold)}
 
 /* OBS OVERLAY */
-.obs-overlay{position:fixed;inset:0;background:rgba(0,0,0,.96);z-index:3002;
-  display:flex;align-items:center;justify-content:center;padding:20px;
-  backdrop-filter:blur(12px)}
+.obs-overlay{position:fixed;inset:0;background:rgba(0,0,0,.96);z-index:3002;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(12px)}
 
-/* STAT INPUT ROW */
-.stat-row{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);
-  border-radius:14px;padding:14px;margin-bottom:8px}
+/* STAT ROW */
+.stat-row{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);border-radius:14px;padding:14px;margin-bottom:8px}
 
-/* LINK BUTTONS */
-.link-btn{display:inline-flex;align-items:center;gap:5px;padding:8px 13px;
-  border-radius:10px;font-size:.65rem;font-weight:600;text-decoration:none;
-  transition:opacity .2s;border:1px solid}
+/* LINK BTN */
+.link-btn{display:inline-flex;align-items:center;gap:5px;padding:8px 13px;border-radius:10px;font-size:.65rem;font-weight:600;text-decoration:none;transition:opacity .2s;border:1px solid}
 .link-btn:hover{opacity:.8}
 .link-btn-blue{background:rgba(66,133,244,.12);border-color:rgba(66,133,244,.25);color:#60a5fa}
 .link-btn-red{background:rgba(255,0,0,.1);border-color:rgba(255,0,0,.2);color:#ff5555}
 .link-btn-pink{background:rgba(230,0,35,.1);border-color:rgba(230,0,35,.2);color:#ff4458}
 .link-btn-gold{background:rgba(212,175,55,.1);border-color:rgba(212,175,55,.25);color:var(--gold)}
+.link-btn-green{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.25);color:#22c55e}
 </style>
 </head>
 <body>
@@ -356,7 +211,6 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 <script>
 (function(){
 "use strict";
-
 var API_URL='https://api.groq.com/openai/v1/chat/completions';
 var MODEL='meta-llama/llama-4-scout-17b-16e-instruct';
 
@@ -369,13 +223,12 @@ var TIERS=[
   {min:60,label:'Over Gennemsnit',icon:'⭐',color:'#d4af37'},
   {min:50,label:'Gennemsnit',icon:'📈',color:'#9ca3af'},
   {min:40,label:'Under Gennemsnit',icon:'💪',color:'#9ca3af'},
-  {min:0,label:'Looksmaxxing Starter',icon:'🌱',color:'#9ca3af'}
+  {min:0,label:'Starter',icon:'🌱',color:'#9ca3af'}
 ];
 function getTier(sc){for(var i=0;i<TIERS.length;i++){if(sc>=TIERS[i].min)return TIERS[i]}return TIERS[TIERS.length-1]}
 
-/* ── GUIDE STEPS ── */
 var GUIDE=[
-  {label:'Kig LIGE FREM',sub:'Hold ansigtet neutralt og kig direkte ind i kameraet',arrow:'',anim:'anim-straight'},
+  {label:'Kig LIGE FREM',sub:'Hold ansigtet neutralt direkte mod kameraet',arrow:'',anim:'anim-straight'},
   {label:'Drej til HØJRE',sub:'Drej dit hoved langsomt mod din højre side',arrow:'➡',anim:'anim-right'},
   {label:'Drej til VENSTRE',sub:'Drej dit hoved langsomt mod din venstre side',arrow:'⬅',anim:'anim-left'},
   {label:'Løft hagen OP',sub:'Løft hagen let og kig en smule opad',arrow:'⬆',anim:'anim-up'},
@@ -388,9 +241,12 @@ function defState(){
     stats:{sleep:0,water:0,workout:0,skincare:0,mewing:0,posture:0,nutrition:0,sun:0},
     onboarded:false,apiKey:'',
     faceAnalysis:null,faceImage:null,
+    facePotential:null, /* stores potential score from scan */
+    firstScan:null,     /* {image, score, date} */
+    lastScan:null,      /* {image, score, date} */
     hairProfile:{type:'',thickness:'',texture:'',lengthCm:'',concerns:'',preferences:''},
     products:{face:[],hair:[]},
-    progressGallery:[],extraObservations:'',hairInspo:[]};
+    extraObservations:'',hairInspo:[]};
 }
 var S=defState();
 var camStream=null,scanStep=0,scanImgs=[],guideStep=0;
@@ -398,41 +254,32 @@ var camStream=null,scanStep=0,scanImgs=[],guideStep=0;
 /* ── STORAGE ── */
 function load(){
   try{
-    var raw=localStorage.getItem('lmx_v4');
+    var raw=localStorage.getItem('lmx_v5');
     if(raw){var p=JSON.parse(raw);S=Object.assign(defState(),p)}
     if(!Array.isArray(S.streak))S.streak=[];
     if(!S.products||typeof S.products!=='object')S.products={face:[],hair:[]};
     if(!Array.isArray(S.products.face))S.products.face=[];
     if(!Array.isArray(S.products.hair))S.products.hair=[];
-    if(!Array.isArray(S.progressGallery))S.progressGallery=[];
     if(!Array.isArray(S.hairInspo))S.hairInspo=[];
-    if(!S.stats||typeof S.stats!=='object')
-      S.stats={sleep:0,water:0,workout:0,skincare:0,mewing:0,posture:0,nutrition:0,sun:0};
-    if(!S.hairProfile||typeof S.hairProfile!=='object')
-      S.hairProfile={type:'',thickness:'',texture:'',lengthCm:'',concerns:'',preferences:''};
-    var k=localStorage.getItem('lmx_apikey_v4');
-    if(k)S.apiKey=k;
+    if(!S.stats||typeof S.stats!=='object')S.stats={sleep:0,water:0,workout:0,skincare:0,mewing:0,posture:0,nutrition:0,sun:0};
+    if(!S.hairProfile||typeof S.hairProfile!=='object')S.hairProfile={type:'',thickness:'',texture:'',lengthCm:'',concerns:'',preferences:''};
+    var k=localStorage.getItem('lmx_apikey_v5');if(k)S.apiKey=k;
     var t=new Date().toDateString();
-    if(S.lastDate!==t){
-      S.stats={sleep:0,water:0,workout:0,skincare:0,mewing:0,posture:0,nutrition:0,sun:0};
-      S.lastDate=t;
-    }
+    if(S.lastDate!==t){S.stats={sleep:0,water:0,workout:0,skincare:0,mewing:0,posture:0,nutrition:0,sun:0};S.lastDate=t}
   }catch(e){S=defState()}
   calcScore();
 }
-
 function save(){
   try{
     S.lastDate=new Date().toDateString();
     var ts=JSON.parse(JSON.stringify(S));delete ts.apiKey;
-    localStorage.setItem('lmx_v4',JSON.stringify(ts));
-    if(S.apiKey)localStorage.setItem('lmx_apikey_v4',S.apiKey);
+    localStorage.setItem('lmx_v5',JSON.stringify(ts));
+    if(S.apiKey)localStorage.setItem('lmx_apikey_v5',S.apiKey);
     calcScore();
   }catch(e){}
 }
-
-function getKey(){try{if(!S.apiKey)S.apiKey=localStorage.getItem('lmx_apikey_v4')||''}catch(e){}return S.apiKey||''}
-function setKey(k){S.apiKey=k;try{localStorage.setItem('lmx_apikey_v4',k)}catch(e){}}
+function getKey(){try{if(!S.apiKey)S.apiKey=localStorage.getItem('lmx_apikey_v5')||''}catch(e){}return S.apiKey||''}
+function setKey(k){S.apiKey=k;try{localStorage.setItem('lmx_apikey_v5',k)}catch(e){}}
 
 function calcScore(){
   try{
@@ -446,14 +293,12 @@ function calcScore(){
     S.score=Math.min(100,Math.max(0,Math.round(sc)));
   }catch(e){S.score=50}
 }
-
 function updateStreak(){
   var t=new Date().toDateString();
   if(!Array.isArray(S.streak))S.streak=[];
   if(!S.streak.includes(t)){S.streak.push(t);if(S.streak.length>90)S.streak=S.streak.slice(-90)}
   save();
 }
-
 function toast(m){
   try{
     var c=document.getElementById('toasts');if(!c)return;
@@ -462,597 +307,386 @@ function toast(m){
   }catch(e){}
 }
 
-/* ── AI CALL ── */
+/* ── AI ── */
 async function callAI(prompt,img){
   var key=getKey();
-  if(!key){showAPISetup();throw new Error('Ingen API-nøgle — indtast din Groq-nøgle')}
+  if(!key){showAPISetup();throw new Error('Ingen API-nøgle')}
   var msgs=[];
-  if(img){
-    msgs.push({role:'user',content:[
-      {type:'image_url',image_url:{url:'data:image/jpeg;base64,'+img,detail:'high'}},
-      {type:'text',text:prompt}
-    ]});
-  }else{msgs.push({role:'user',content:prompt})}
-  var r=await fetch(API_URL,{method:'POST',
-    headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
-    body:JSON.stringify({model:MODEL,messages:msgs,max_tokens:2800,temperature:0.75})});
+  if(img){msgs.push({role:'user',content:[{type:'image_url',image_url:{url:'data:image/jpeg;base64,'+img,detail:'high'}},{type:'text',text:prompt}]})}
+  else{msgs.push({role:'user',content:prompt})}
+  var r=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},body:JSON.stringify({model:MODEL,messages:msgs,max_tokens:2800,temperature:0.75})});
   if(!r.ok){var e=await r.json();throw new Error(e.error?e.error.message:'API-fejl')}
   var d=await r.json();return d.choices[0].message.content;
 }
-
 function compressImg(file,maxW){
   maxW=maxW||900;
   return new Promise(function(resolve,reject){
-    var reader=new FileReader();
-    reader.onerror=reject;
+    var reader=new FileReader();reader.onerror=reject;
     reader.onload=function(e){
-      var img=new Image();
-      img.onerror=reject;
+      var img=new Image();img.onerror=reject;
       img.onload=function(){
-        var c=document.createElement('canvas');
-        var w=img.width,h=img.height;
+        var c=document.createElement('canvas');var w=img.width,h=img.height;
         if(w>maxW){h=Math.round((maxW/w)*h);w=maxW}
-        c.width=w;c.height=h;
-        c.getContext('2d').drawImage(img,0,0,w,h);
-        var url=c.toDataURL('image/jpeg',.88);
-        resolve({b64:url.split(',')[1],url:url});
-      };
-      img.src=e.target.result;
-    };
-    reader.readAsDataURL(file);
+        c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);
+        var url=c.toDataURL('image/jpeg',.88);resolve({b64:url.split(',')[1],url:url});
+      };img.src=e.target.result;
+    };reader.readAsDataURL(file);
   });
 }
 
-/* ══════════════════════════════════
-   CAMERA / SCAN
-══════════════════════════════════ */
+/* ══ CAMERA / SCAN ══ */
 function startScan(){guideStep=0;showGuide()}
-
 function showGuide(){
   var ex=document.getElementById('scanGuideUI');if(ex)ex.remove();
   var g=GUIDE[guideStep];
-  var dotsH='';
-  for(var i=0;i<GUIDE.length;i++){
-    var cls='guide-dot';
-    if(i===guideStep)cls+=' active';else if(i<guideStep)cls+=' done';
-    dotsH+='<div class="'+cls+'"></div>';
-  }
+  var dH='';for(var i=0;i<GUIDE.length;i++){var cls='guide-dot';if(i===guideStep)cls+=' active';else if(i<guideStep)cls+=' done';dH+='<div class="'+cls+'"></div>'}
   var o=document.createElement('div');o.className='guide-overlay';o.id='scanGuideUI';
   o.innerHTML=
     '<div class="guide-counter">'+(guideStep+1)+' / '+GUIDE.length+'</div>'+
-    '<div class="guide-bar">'+dotsH+'</div>'+
+    '<div class="guide-bar">'+dH+'</div>'+
     '<div class="guide-emoji '+g.anim+'">🧑</div>'+
-    (g.arrow?'<div class="guide-arrow">'+g.arrow+'</div>':
-      '<div style="font-size:2rem;margin:8px 0;opacity:.5">📷</div>')+
+    (g.arrow?'<div class="guide-arrow">'+g.arrow+'</div>':'<div style="font-size:2rem;margin:8px 0;opacity:.4">📷</div>')+
     '<div class="guide-label">'+g.label+'</div>'+
     '<div class="guide-sub">'+g.sub+'</div>'+
     '<button class="btn btn-gold" style="width:82%;max-width:300px" id="guideNextBtn">'+
-      (guideStep===0?'▶ Se guide':(guideStep===GUIDE.length-1?'✓ Åbn kamera':'Næste →'))+
-    '</button>'+
-    '<button class="btn btn-outline" style="width:82%;max-width:300px;margin-top:6px" '+
-      'onclick="window._cancelGuide()">Annuller</button>';
+      (guideStep===0?'▶ Se guide':(guideStep===GUIDE.length-1?'✓ Åbn kamera':'Næste →'))+'</button>'+
+    '<button class="btn btn-outline" style="width:82%;max-width:300px;margin-top:6px" onclick="window._cancelGuide()">Annuller</button>';
   document.body.appendChild(o);
   document.getElementById('guideNextBtn').onclick=function(){
     guideStep++;
-    if(guideStep>=GUIDE.length){
-      var g2=document.getElementById('scanGuideUI');if(g2)g2.remove();
-      openCamera();
-    }else{showGuide()}
+    if(guideStep>=GUIDE.length){var g2=document.getElementById('scanGuideUI');if(g2)g2.remove();openCamera()}
+    else{showGuide()}
   };
 }
-
 window._cancelGuide=function(){var g=document.getElementById('scanGuideUI');if(g)g.remove()};
-
 async function openCamera(){
   try{
-    camStream=await navigator.mediaDevices.getUserMedia(
-      {video:{facingMode:'user',width:{ideal:1080},height:{ideal:1080}}});
-    scanStep=0;scanImgs=[];
-    buildCamUI();
-  }catch(e){toast('Kamera ikke tilgængeligt — tjek tilladelser i indstillinger')}
+    camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:1080},height:{ideal:1080}}});
+    scanStep=0;scanImgs=[];buildCamUI();
+  }catch(e){toast('Kamera ikke tilgængeligt — tjek tilladelser')}
 }
-
 function buildCamUI(){
   var g=GUIDE[scanStep];
-  var dotsH='';
-  for(var i=0;i<GUIDE.length;i++){
-    var cls='cam-pdot';
-    if(i===scanStep)cls+=' active';else if(i<scanStep)cls+=' done';
-    dotsH+='<div class="'+cls+'"></div>';
-  }
+  var dH='';for(var i=0;i<GUIDE.length;i++){var cls='cam-pdot';if(i===scanStep)cls+=' active';else if(i<scanStep)cls+=' done';dH+='<div class="'+cls+'"></div>'}
   var o=document.createElement('div');o.className='cam-overlay';o.id='camUI';
   o.innerHTML=
     '<div class="cam-video-wrap">'+
       '<video id="camVid" autoplay playsinline muted></video>'+
       '<div class="scan-line"></div>'+
-      '<div class="cam-face-oval" id="camOval"></div>'+
-      /* Direction arrow centred over the face guide */
-      (g.arrow?'<div class="cam-dir-arrow" id="camArrow">'+g.arrow+'</div>':
-        '<div class="cam-dir-arrow" id="camArrow" style="opacity:0">·</div>')+
+      '<div class="cam-face-oval"></div>'+
+      (g.arrow?'<div class="cam-dir-arrow" id="camArrow">'+g.arrow+'</div>':'<div class="cam-dir-arrow" id="camArrow" style="opacity:0">·</div>')+
       '<div class="cam-video-label" id="camVidLabel">'+g.label+'</div>'+
       '<div class="cam-flash" id="camFlash"></div>'+
     '</div>'+
     '<div class="cam-controls">'+
       '<div>'+
-        '<div class="cam-progress-row" id="camDots">'+dotsH+'</div>'+
+        '<div class="cam-progress-row" id="camDots">'+dH+'</div>'+
         '<div class="cam-step-label" id="camLabel">'+g.label+'</div>'+
         '<div class="cam-step-sub" id="camSub">'+g.sub+'</div>'+
         '<div class="cam-counter" id="camCnt">Billede '+(scanStep+1)+' af '+GUIDE.length+'</div>'+
       '</div>'+
       '<div class="cam-btn-row">'+
-        '<button class="cam-capture-btn" id="camCapBtn" onclick="window._capture()">'+
-          '📷 Tag billede (1/'+GUIDE.length+')'+
-        '</button>'+
-        '<button class="cam-cancel-btn" onclick="window._stopCam()" title="Annuller">✕</button>'+
+        '<button class="cam-capture-btn" id="camCapBtn" onclick="window._capture()">📷 Tag billede (1/'+GUIDE.length+')</button>'+
+        '<button class="cam-cancel-btn" onclick="window._stopCam()">✕</button>'+
       '</div>'+
     '</div>';
   document.body.appendChild(o);
-  var vid=document.getElementById('camVid');
-  if(vid)vid.srcObject=camStream;
+  var vid=document.getElementById('camVid');if(vid)vid.srcObject=camStream;
 }
-
 function refreshCamUI(){
   var g=GUIDE[scanStep];
-  var lbl=document.getElementById('camLabel');
-  var sub=document.getElementById('camSub');
-  var cnt=document.getElementById('camCnt');
-  var btn=document.getElementById('camCapBtn');
-  var arrow=document.getElementById('camArrow');
-  var vidLbl=document.getElementById('camVidLabel');
-  var dots=document.getElementById('camDots');
-  if(lbl)lbl.textContent=g.label;
-  if(sub)sub.textContent=g.sub;
-  if(cnt)cnt.textContent='Billede '+(scanStep+1)+' af '+GUIDE.length;
-  if(btn)btn.textContent='📷 Tag billede ('+(scanStep+1)+'/'+GUIDE.length+')';
-  if(vidLbl)vidLbl.textContent=g.label;
-  /* Update arrow */
-  if(arrow){
-    arrow.textContent=g.arrow||'';
-    arrow.style.opacity=g.arrow?'1':'0';
-  }
-  /* Update dots */
-  if(dots){
-    var dH='';
-    for(var i=0;i<GUIDE.length;i++){
-      var cls='cam-pdot';
-      if(i===scanStep)cls+=' active';else if(i<scanStep)cls+=' done';
-      dH+='<div class="'+cls+'"></div>';
-    }
-    dots.innerHTML=dH;
-  }
+  var el=function(id){return document.getElementById(id)};
+  if(el('camLabel'))el('camLabel').textContent=g.label;
+  if(el('camSub'))el('camSub').textContent=g.sub;
+  if(el('camCnt'))el('camCnt').textContent='Billede '+(scanStep+1)+' af '+GUIDE.length;
+  if(el('camCapBtn'))el('camCapBtn').textContent='📷 Tag billede ('+(scanStep+1)+'/'+GUIDE.length+')';
+  if(el('camVidLabel'))el('camVidLabel').textContent=g.label;
+  var ar=el('camArrow');if(ar){ar.textContent=g.arrow||'';ar.style.opacity=g.arrow?'1':'0'}
+  var dots=el('camDots');
+  if(dots){var dH='';for(var i=0;i<GUIDE.length;i++){var cls='cam-pdot';if(i===scanStep)cls+=' active';else if(i<scanStep)cls+=' done';dH+='<div class="'+cls+'"></div>'}dots.innerHTML=dH}
 }
-
 window._capture=function(){
   try{
     var v=document.getElementById('camVid');if(!v)return;
-    /* Flash effect */
-    var fl=document.getElementById('camFlash');
-    if(fl){fl.classList.remove('on');void fl.offsetWidth;fl.classList.add('on')}
-    /* Draw unmirrored (camera native) */
-    var c=document.createElement('canvas');
-    c.width=v.videoWidth;c.height=v.videoHeight;
+    var fl=document.getElementById('camFlash');if(fl){fl.classList.remove('on');void fl.offsetWidth;fl.classList.add('on')}
+    var c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;
     c.getContext('2d').drawImage(v,0,0,c.width,c.height);
     scanImgs.push(c.toDataURL('image/jpeg',.92));
     scanStep++;
-    if(scanStep<GUIDE.length){
-      refreshCamUI();
-    }else{
-      stopCam();
-      showExtraObs();
-    }
+    if(scanStep<GUIDE.length){refreshCamUI()}else{stopCam();showExtraObs()}
   }catch(e){console.error(e);stopCam()}
 };
-
 window._stopCam=function(){stopCam()};
-
 function stopCam(){
   try{if(camStream){camStream.getTracks().forEach(function(t){t.stop()});camStream=null}}catch(e){}
   var u=document.getElementById('camUI');if(u)u.remove();
 }
 
-/* ── EXTRA OBSERVATIONS ── */
+/* ── EXTRA OBS ── */
 function showExtraObs(){
   var o=document.createElement('div');o.className='obs-overlay';o.id='obsOverlay';
   o.innerHTML=
     '<div class="glass" style="max-width:430px;width:100%;padding:26px">'+
       '<div class="sec-head" style="justify-content:center;margin-bottom:6px">Fortæl AI mere</div>'+
-      '<p style="color:var(--sub);font-size:.68rem;text-align:center;margin-bottom:14px">'+
-        'Vælg hvad der gælder — giver en langt bedre analyse</p>'+
+      '<p style="color:var(--sub);font-size:.68rem;text-align:center;margin-bottom:14px">Vælg hvad der gælder — giver mere præcis analyse</p>'+
       '<div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-bottom:12px">'+
-        ['Akne','Bumser','Hudorme','Ar','Rynker','Mørke rande','Skæg','Skel',
-         'Tør hud','Fedtet hud','Rødme','Pigmentpletter'].map(function(t){
-          return '<span class="tag" onclick="this.classList.toggle(\'sel\')">'+t+'</span>';
-        }).join('')+
+        ['Akne','Bumser','Hudorme','Ar','Rynker','Mørke rande','Skæg','Skel','Tør hud','Fedtet hud','Rødme','Pigmentpletter'].map(function(t){return '<span class="tag" onclick="this.classList.toggle(\'sel\')">'+t+'</span>'}).join('')+
       '</div>'+
-      '<input id="extraObs" placeholder="Skriv selv... (fx: rynker omkring øjnene)">'+
-      '<button class="btn btn-gold" style="margin-top:12px" onclick="window._finishObs()">'+
-        '🔍 Start AI-analyse</button>'+
-      '<button class="btn btn-outline" style="margin-top:6px" onclick="window._skipObs()">'+
-        'Spring over</button>'+
+      '<input id="extraObs" placeholder="Skriv selv... (fx rynker omkring øjnene)">'+
+      '<button class="btn btn-gold" style="margin-top:12px" onclick="window._finishObs()">🔍 Start AI-analyse</button>'+
+      '<button class="btn btn-outline" style="margin-top:6px" onclick="window._skipObs()">Spring over</button>'+
     '</div>';
   document.body.appendChild(o);
 }
 window._finishObs=function(){
-  var tags=[];
-  try{document.querySelectorAll('#obsOverlay .tag.sel').forEach(function(t){tags.push(t.textContent)})}catch(e){}
-  var ex=document.getElementById('extraObs');
-  S.extraObservations=tags.concat([ex?ex.value.trim():'']).filter(Boolean).join(', ');
-  var o=document.getElementById('obsOverlay');if(o)o.remove();
-  processScan();
+  var tags=[];try{document.querySelectorAll('#obsOverlay .tag.sel').forEach(function(t){tags.push(t.textContent)})}catch(e){}
+  var ex=document.getElementById('extraObs');S.extraObservations=tags.concat([ex?ex.value.trim():'']).filter(Boolean).join(', ');
+  var o=document.getElementById('obsOverlay');if(o)o.remove();processScan();
 };
-window._skipObs=function(){
-  S.extraObservations='';
-  var o=document.getElementById('obsOverlay');if(o)o.remove();
-  processScan();
-};
+window._skipObs=function(){S.extraObservations='';var o=document.getElementById('obsOverlay');if(o)o.remove();processScan()};
 
 /* ── PROCESS SCAN ── */
 async function processScan(){
   S.faceImage=scanImgs[0];
   var r=document.getElementById('aiRes');if(!r)return;
-  r.innerHTML=
-    '<div style="text-align:center;padding:32px">'+
-      '<div class="spinner"></div>'+
-      '<p style="color:var(--sub);margin-top:14px;font-size:.75rem">'+
-        'AI analyserer alle '+GUIDE.length+' vinkler...<br>'+
-        '<span style="font-size:.65rem;opacity:.55">Dette tager 15–25 sekunder</span></p>'+
-    '</div>';
+  r.innerHTML='<div style="text-align:center;padding:32px"><div class="spinner"></div><p style="color:var(--sub);margin-top:14px;font-size:.75rem">AI analyserer alle 5 vinkler...<br><span style="font-size:.65rem;opacity:.55">15–25 sekunder</span></p></div>';
   r.style.display='block';
   try{
     var b64=scanImgs[0].split(',')[1];
     var extra=S.extraObservations?'\nBRUGER HAR NÆVNT: '+S.extraObservations:'';
     var prompt=
-      'Du er verdens absolut bedste ansigtsanalytiker og looksmaxxing-ekspert.'+
-      ' Analyser dette ansigt ULTRA grundigt og DETALJERET på DANSK.'+extra+
-      '\nReturner KUN gyldigt JSON (ingen forklaring udenfor JSON):'+
-      '{"rating":tal 1-10,"symmetri":tal,"hud":tal,"kæbelinje":tal,"øjne":tal,"hår":tal,"harmoni":tal,'+
-      '"styrker":["mindst 6 meget specifikke styrker med anatomiske detaljer"],'+
-      '"forbedringer":["mindst 6 konkrete forbedringsområder med PRÆCIS forklaring på WHY og konkret HOW"],'+
-      '"tips":["mindst 12 meget specifikke og actionable tips — inkl. PRÆCISE søvntimer, PRÆCISE vandglas antal per dag, specifikke kæbeøvelser med sæt og gentagelser, specifikke vitaminer og doser fx Zink 15mg, Biotin 5000mcg, Magnesium 400mg, specifikke hudplejeprodukter og typer, mewing teknik forklaret, zygomaticus øvelser, specifikke kostråd fx øg proteinindtag til 2g per kg kropsvægt, SPF-niveau fx SPF 50+ daglig, frisure retning baseret på ansigtsform, specifikke stilråd for tøj og farver der komplementerer, holdningsøvelser som chin tucks 3x15"],'+
-      '"potentiale":tal 1-10,'+
-      '"summary":"2-3 præcise sætninger om overordnet vurdering",'+
-      '"optimalSøvn":"antal timer som tal-string fx 8",'+
-      '"optimalVand":"antal glas som tal-string fx 10",'+
-      '"hudtype":"normal/tør/fedtet/kombineret/sensitiv",'+
-      '"ansigtsform":"oval/rund/firkantet/hjerteformet/diamant/aflangt",'+
-      '"prognose":"detaljeret og specifik beskrivelse af realistisk potentiale om 3-6 måneder med konsekvent looksmaxxing",'+
-      '"dagligRoutine":["6-8 meget konkrete daglige handlinger nummereret og ekstremt detaljerede med tidspunkt og varighed"]}';
+      'Du er verdens bedste ansigtsanalytiker og looksmaxxing-ekspert. Analyser dette ansigt ULTRA grundigt på DANSK.'+extra+
+      '\nReturner KUN gyldigt JSON:'+
+      '{"rating":tal 1-10,"potentiale":tal 1-10,"symmetri":tal,"hud":tal,"kæbelinje":tal,"øjne":tal,"hår":tal,"harmoni":tal,'+
+      '"styrker":["mindst 6 specifikke styrker med anatomiske detaljer"],'+
+      '"forbedringer":["mindst 6 konkrete forbedringsområder med PRÆCIS HVORFOR og HVORDAN"],'+
+      '"tips":["mindst 12 ekstremt specifikke og handlingsrettede tips — inkl. PRÆCISE søvntimer, PRÆCISE vandglas per dag, specifikke kæbeøvelser med sæt og gentagelser, specifikke vitaminer og doser, specifikke hudplejeprodukter, mewing teknik detaljeret, kost med gram, SPF-niveau, frisure retning, holdningsøvelser med reps — ALDRIG vage råd som bare \'drik mere vand\'"],'+
+      '"summary":"2-3 præcise sætninger","optimalSøvn":"tal-string fx 8","optimalVand":"tal-string fx 10",'+
+      '"hudtype":"normal/tør/fedtet/kombineret/sensitiv","ansigtsform":"oval/rund/firkantet/hjerteformet/diamant/aflangt",'+
+      '"prognose":"specifik beskrivelse af realistisk potentiale om 3-6 måneder"}';
     var res=await callAI(prompt,b64);
     var an;
     try{var m=res.match(/\{[\s\S]*\}/);if(m)an=JSON.parse(m[0]);else throw new Error('')}
     catch(e){r.innerHTML='<div class="ai-card">'+res.replace(/\n/g,'<br>')+'</div>';return}
     S.faceAnalysis=an;
-    /* Save to gallery */
-    var tw=getWeek();
-    if(!Array.isArray(S.progressGallery))S.progressGallery=[];
-    if(!S.progressGallery.find(function(p){return p.week===tw})){
-      S.progressGallery.push({week:tw,date:new Date().toISOString(),image:S.faceImage,score:an.rating});
-      if(S.progressGallery.length>52)S.progressGallery.shift();
-    }
+    S.facePotential=an.potentiale||an.rating;
+    /* Store first/last scan */
+    var scanEntry={image:S.faceImage,score:an.rating,date:new Date().toISOString()};
+    if(!S.firstScan){S.firstScan=scanEntry}
+    S.lastScan=scanEntry;
     save();
-    var tier=getTier(an.rating*10);
-    /* Render result */
-    r.innerHTML=renderScanResult(an,tier);
+    r.innerHTML=renderScanResult(an);
     toast('✓ Analyse færdig!');
   }catch(e){
     r.innerHTML='<div class="ai-card" style="border-color:var(--red)"><p style="color:var(--red)">'+e.message+'</p></div>';
   }
 }
 
-function renderScanResult(an,tier){
+function renderScanResult(an){
+  var tier=getTier((an.rating||0)*10);
   var metrics=['symmetri','hud','kæbelinje','øjne','hår','harmoni'];
   return '<div class="ai-card" style="max-height:none">'+
-    /* Big score */
     '<div style="text-align:center;padding-bottom:16px;margin-bottom:16px;border-bottom:1px solid rgba(255,255,255,.06)">'+
-      '<div style="font-family:\'Cormorant Garamond\',serif;font-size:3.4rem;font-weight:700;'+
-        'background:linear-gradient(135deg,#c9a227,#f0cc5a);-webkit-background-clip:text;'+
-        '-webkit-text-fill-color:transparent;background-clip:text;line-height:1">'+
-        an.rating+'/10</div>'+
+      '<div style="font-family:\'Cormorant Garamond\',serif;font-size:3.4rem;font-weight:700;background:linear-gradient(135deg,#c9a227,#f0cc5a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1">'+an.rating+'/10</div>'+
       '<div style="font-size:.85rem;font-weight:700;color:'+tier.color+';margin:5px 0">'+tier.icon+' '+tier.label+'</div>'+
       '<div style="font-size:.68rem;color:var(--sub);line-height:1.55;max-width:320px;margin:0 auto">'+an.summary+'</div>'+
     '</div>'+
-    /* Metrics */
-    '<div style="margin-bottom:16px">'+
-      metrics.map(function(k){
-        var val=an[k]||0;
-        var label=k.charAt(0).toUpperCase()+k.slice(1);
-        return '<div style="display:flex;align-items:center;gap:8px;margin:6px 0;font-size:.65rem">'+
-          '<span style="min-width:68px;color:var(--sub)">'+label+'</span>'+
-          '<div class="progress-bar"><div class="progress-fill" style="width:'+(val*10)+'%"></div></div>'+
-          '<span style="font-weight:700;min-width:34px;text-align:right;color:'+(val>=8?'#22c55e':val>=5?'#d4af37':'#9ca3af')+'">'+val+'/10</span>'+
-        '</div>';
-      }).join('')+
-    '</div>'+
-    /* Strengths */
+    '<div style="margin-bottom:16px">'+metrics.map(function(k){var v=an[k]||0;return '<div style="display:flex;align-items:center;gap:8px;margin:6px 0;font-size:.65rem"><span style="min-width:68px;color:var(--sub)">'+k.charAt(0).toUpperCase()+k.slice(1)+'</span><div class="progress-bar"><div class="progress-fill" style="width:'+(v*10)+'%"></div></div><span style="font-weight:700;min-width:34px;text-align:right;color:'+(v>=8?'#22c55e':v>=5?'#d4af37':'#9ca3af')+'">'+v+'/10</span></div>'}).join('')+'</div>'+
     '<div style="font-size:.68rem;font-weight:700;color:#22c55e;letter-spacing:.5px;margin-bottom:7px">✓ STYRKER</div>'+
-    '<div style="margin-bottom:16px">'+
-      ((an.styrker||[]).map(function(s){
-        return '<div style="display:flex;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04)">'+
-          '<span style="color:#22c55e;flex-shrink:0;font-size:.8rem">✓</span>'+
-          '<div style="font-size:.71rem;color:var(--sub);line-height:1.55">'+s+'</div>'+
-        '</div>';
-      }).join(''))+
-    '</div>'+
-    /* Improvements */
+    '<div style="margin-bottom:16px">'+((an.styrker||[]).map(function(s){return '<div style="display:flex;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04)"><span style="color:#22c55e;flex-shrink:0">✓</span><div style="font-size:.71rem;color:var(--sub);line-height:1.55">'+s+'</div></div>'}).join(''))+'</div>'+
     '<div style="font-size:.68rem;font-weight:700;color:var(--red);letter-spacing:.5px;margin-bottom:7px">↑ FORBEDRINGSOMRÅDER</div>'+
-    '<div style="margin-bottom:16px">'+
-      ((an.forbedringer||[]).map(function(x){
-        return '<div style="display:flex;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04)">'+
-          '<span style="color:var(--red);flex-shrink:0;font-size:.8rem">↑</span>'+
-          '<div style="font-size:.71rem;color:var(--sub);line-height:1.55">'+x+'</div>'+
-        '</div>';
-      }).join(''))+
-    '</div>'+
-    /* Tips */
+    '<div style="margin-bottom:16px">'+((an.forbedringer||[]).map(function(x){return '<div style="display:flex;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04)"><span style="color:var(--red);flex-shrink:0">↑</span><div style="font-size:.71rem;color:var(--sub);line-height:1.55">'+x+'</div></div>'}).join(''))+'</div>'+
     '<div style="font-size:.68rem;font-weight:700;color:var(--gold);letter-spacing:.5px;margin-bottom:7px">💡 PRÆCISE TIPS</div>'+
-    '<div style="margin-bottom:16px">'+
-      ((an.tips||[]).map(function(t,i){
-        return '<div style="display:flex;gap:9px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04)">'+
-          '<div style="width:21px;height:21px;border-radius:50%;flex-shrink:0;'+
-            'background:linear-gradient(135deg,#c9a227,#d4af37);color:#000;'+
-            'display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.58rem">'+(i+1)+'</div>'+
-          '<div style="font-size:.71rem;color:var(--sub);line-height:1.55">'+t+'</div>'+
-        '</div>';
-      }).join(''))+
+    '<div style="margin-bottom:16px">'+((an.tips||[]).map(function(t,i){
+      /* Detect mewing tips and add video link */
+      var isMewing=t.toLowerCase().indexOf('mewing')!==-1||t.toLowerCase().indexOf('tunge')!==-1;
+      var ytLink=isMewing?'<br><a href="https://www.youtube.com/results?search_query=mewing+tutorial+how+to+mew+properly" target="_blank" class="link-btn link-btn-red" style="margin-top:5px;font-size:.6rem">▶ Se mewing video tutorial</a>':'';
+      return '<div style="display:flex;gap:9px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04)">'+
+        '<div style="width:21px;height:21px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#c9a227,#d4af37);color:#000;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.58rem">'+(i+1)+'</div>'+
+        '<div style="font-size:.71rem;color:var(--sub);line-height:1.55">'+t+ytLink+'</div>'+
+      '</div>';
+    }).join(''))+'</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px">'+
+      sBox('POTENTIALE',(an.potentiale||0)+'/10','🏆')+sBox('HUDTYPE',an.hudtype||'-','🧴')+sBox('ANSIGTSFORM',an.ansigtsform||'-','🔍')+
     '</div>'+
-    /* Daily routine */
-    (an.dagligRoutine&&an.dagligRoutine.length?
-      '<div style="font-size:.68rem;font-weight:700;color:#60a5fa;letter-spacing:.5px;margin-bottom:7px">📋 DIN DAGLIGE RUTINE</div>'+
-      '<div style="margin-bottom:16px">'+
-        an.dagligRoutine.map(function(x,i){
-          return '<div style="display:flex;gap:9px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04)">'+
-            '<div class="step-num">'+(i+1)+'</div>'+
-            '<div style="font-size:.71rem;color:var(--sub);line-height:1.55">'+x+'</div>'+
-          '</div>';
-        }).join('')+
-      '</div>':'')+ 
-    /* Stats grid */
-    '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:6px;margin-bottom:12px">'+
-      statBox('POTENTIALE',(an.potentiale||0)+'/10','🏆')+
-      statBox('HUDTYPE',an.hudtype||'-','🧴')+
-      statBox('ANSIGTSFORM',an.ansigtsform||'-','🔍')+
-    '</div>'+
-    /* Sleep/Water */
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">'+
-      statBox('OPTIMAL SØVN',(an.optimalSøvn||'-')+' timer','😴')+
-      statBox('OPTIMAL VAND',(an.optimalVand||'-')+' glas','💧')+
+      sBox('OPTIMAL SØVN',(an.optimalSøvn||'-')+'t','😴')+sBox('OPTIMAL VAND',(an.optimalVand||'-')+' glas','💧')+
     '</div>'+
-    /* Prognosis */
-    '<div style="background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.15);'+
-      'border-radius:14px;padding:14px">'+
-      '<div style="font-size:.62rem;color:var(--gold);font-weight:700;margin-bottom:5px">'+
-        '🚀 PROGNOSE OM 3-6 MÅN.</div>'+
+    '<div style="background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.15);border-radius:14px;padding:14px">'+
+      '<div style="font-size:.62rem;color:var(--gold);font-weight:700;margin-bottom:5px">🚀 PROGNOSE OM 3-6 MÅN.</div>'+
       '<div style="font-size:.72rem;color:var(--sub);line-height:1.6">'+(an.prognose||'-')+'</div>'+
     '</div>'+
   '</div>';
 }
+function sBox(label,val,icon){return '<div style="background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);border-radius:12px;padding:10px;text-align:center"><div style="font-size:1.1rem">'+icon+'</div><div style="font-size:.52rem;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin:3px 0">'+label+'</div><div style="font-size:.8rem;font-weight:700;color:#fff">'+val+'</div></div>'}
 
-function statBox(label,val,icon){
-  return '<div style="background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);'+
-    'border-radius:12px;padding:10px;text-align:center">'+
-    '<div style="font-size:1.1rem">'+icon+'</div>'+
-    '<div style="font-size:.52rem;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin:3px 0">'+label+'</div>'+
-    '<div style="font-size:.8rem;font-weight:700;color:#fff">'+val+'</div>'+
-  '</div>';
-}
-
-function getWeek(){
-  try{
-    var d=new Date();
-    d=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));
-    d.setUTCDate(d.getUTCDate()+4-(d.getUTCDay()||7));
-    var y=new Date(Date.UTC(d.getUTCFullYear(),0,1));
-    return Math.ceil((((d-y)/86400000)+1)/7);
-  }catch(e){return 1}
-}
-
-/* ══════════════════════════════════
-   HAIR
-══════════════════════════════════ */
+/* ══ HAIR ══ */
 window._uploadHairInspo=function(){
-  var inp=document.createElement('input');
-  inp.type='file';inp.accept='image/*';inp.multiple=true;
+  var inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.multiple=true;
   inp.onchange=async function(e){
-    var files=Array.from(e.target.files||[]);
-    if(!files.length)return;
+    var files=Array.from(e.target.files||[]);if(!files.length)return;
     if(!Array.isArray(S.hairInspo))S.hairInspo=[];
-    var remaining=10-S.hairInspo.length;
-    if(remaining<=0){toast('Du har nået maks 10 billeder');return}
-    var toAdd=files.slice(0,remaining);
-    toast('Uploader '+toAdd.length+' billede(r)...');
-    for(var i=0;i<toAdd.length;i++){
-      try{var img=await compressImg(toAdd[i],600);
-        S.hairInspo.push({url:img.url,date:new Date().toISOString()})
-      }catch(er){}
-    }
-    save();toast('✓ '+toAdd.length+' billede(r) tilføjet ('+(S.hairInspo.length)+'/10)');renderTab();
-  };
-  inp.click();
+    var remaining=10-S.hairInspo.length;if(remaining<=0){toast('Maks 10 billeder nået');return}
+    var toAdd=files.slice(0,remaining);toast('Uploader '+toAdd.length+' billede(r)...');
+    for(var i=0;i<toAdd.length;i++){try{var img=await compressImg(toAdd[i],600);S.hairInspo.push({url:img.url,date:new Date().toISOString()})}catch(er){}}
+    save();toast('✓ '+toAdd.length+' billede(r) tilføjet ('+S.hairInspo.length+'/10)');renderTab();
+  };inp.click();
 };
-
-window._removeInspo=function(idx){
-  if(!Array.isArray(S.hairInspo))return;
-  S.hairInspo.splice(idx,1);save();renderTab();
-};
-
+window._removeInspo=function(idx){if(!Array.isArray(S.hairInspo))return;S.hairInspo.splice(idx,1);save();renderTab()};
 window._previewInspo=function(idx){
   if(!S.hairInspo||!S.hairInspo[idx])return;
-  var o=document.createElement('div');
-  o.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:4000;'+
-    'display:flex;align-items:center;justify-content:center;cursor:pointer;padding:20px';
+  var o=document.createElement('div');o.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:4000;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:20px';
   o.innerHTML='<img src="'+S.hairInspo[idx].url+'" style="max-width:100%;max-height:90vh;border-radius:16px;object-fit:contain">';
-  o.onclick=function(){o.remove()};
-  document.body.appendChild(o);
+  o.onclick=function(){o.remove()};document.body.appendChild(o);
+};
+
+/* Toggle hair card expand/collapse */
+window._toggleHairCard=function(idx){
+  var det=document.getElementById('hairDetail_'+idx);
+  var chev=document.getElementById('hairChev_'+idx);
+  if(!det||!chev)return;
+  var isOpen=det.classList.contains('open');
+  det.classList.toggle('open',!isOpen);
+  chev.classList.toggle('open',!isOpen);
 };
 
 async function getHairAdvice(){
   if(!S.faceAnalysis){toast('Scan dit ansigt først');return}
   var r=document.getElementById('hairRes');if(!r)return;
-  r.innerHTML='<div style="text-align:center;padding:32px"><div class="spinner"></div>'+
-    '<p style="color:var(--sub);margin-top:14px;font-size:.75rem">Finder din ideelle frisure...</p></div>';
+  r.innerHTML='<div style="text-align:center;padding:32px"><div class="spinner"></div><p style="color:var(--sub);margin-top:14px;font-size:.75rem">Finder dine ideelle frisurer...</p></div>';
   r.style.display='block';
   try{
     var hp=S.hairProfile||{};
-    var inspoNote=S.hairInspo&&S.hairInspo.length>0?
-      ' Brugeren har uploadet '+S.hairInspo.length+' reference-billeder som inspiration.':'';
-    var prefText=hp.preferences?'\nBRUGER ØNSKER: '+hp.preferences+'.':'';
+    var inspoCount=S.hairInspo&&S.hairInspo.length>0?S.hairInspo.length:0;
+    var inspoNote=inspoCount>0?' Brugeren har uploadet '+inspoCount+' reference-billeder som stil-inspiration.':'';
+    var prefText=hp.preferences?'\nBRUGER ØNSKER STIL: '+hp.preferences+'.':'';
+    var hairProds=(S.products&&S.products.hair)||[];
+    var prodNote=hairProds.length>0?
+      '\nBRUGERENS HÅRPRODUKTER: '+hairProds.map(function(p){return p.name+(p.brand?' ('+p.brand+')':'')+(p.description?' — '+p.description:'')}).join(', ')+
+      '. For hvert frisureforslag: angiv præcis HVILKE af disse produkter kan bruges og PRÆCIS HVORDAN.':'';
     var prompt=
-      'Du er Danmarks bedste frisør, stilekspert og hårcoach. '+
-      'Anbefal 3 PERFEKTE frisurer til denne person baseret på alle data. '+
-      'Svar KUN på DANSK. Vær ekstremt specifik og detaljeret — som en professionel topfrisør.'+
-      '\nAnsigtsform: '+S.faceAnalysis.ansigtsform+
-      '\nHårtype: '+(hp.type||'ukendt')+', Tykkelse: '+(hp.thickness||'ukendt')+
-      ', Tekstur: '+(hp.texture||'ukendt')+', Nuværende længde: '+(hp.lengthCm||'ukendt')+'.'+
-      inspoNote+prefText+
+      'Du er Danmarks bedste frisør og hårcoach. Anbefal 3 PERFEKTE frisurer til denne person. Svar KUN på DANSK.'+
+      '\nAnsigtsform: '+S.faceAnalysis.ansigtsform+', Hårtype: '+(hp.type||'ukendt')+
+      ', Tykkelse: '+(hp.thickness||'ukendt')+', Tekstur: '+(hp.texture||'ukendt')+', Længde: '+(hp.lengthCm||'ukendt')+'.'+
+      inspoNote+prefText+prodNote+
+      '\nVIGTIGT: Anbefal frisurer der passer ANSIGTSFORMEN BEDST — mindst 1 der er objektivt bedst for ansigtsformen.'+
+      '\nSTYLING TRIN REGLER: Brug ALTID konkrete mål: "en ært hårvoks", "en 10-krones størrelse hårler", "2-3 sprøjt sea salt spray", "en knappenålshoved finish spray". ALDRIG "lidt" eller "en smule". Brug rigtige produktnavne som hårvoks, hårler, sea salt spray, finish spray, tørshampoo — ALDRIG bare "hårcreme".'+
       '\nReturner KUN gyldigt JSON:{"frisurer":[{'+
-        '"navn":"dansk og engelsk navn på frisuren",'+
-        '"type":"Din stil-match / Bedste overall / Nemmest hverdag",'+
+        '"navn":"dansk og engelsk navn",'+
+        '"type":"Bedst for din ansigtsform / Din stil-match / Nemmest hverdag",'+
         '"sværhed":"nem/medium/svær",'+
-        '"begrundelse":"3 sætninger om PRÆCIS HVORFOR denne frisure passer til netop denne ansigtsform og hårtype",'+
-        '"imageSearchDA":"dansk søgeterm til Google Billeder fx curtain hair mænd",'+
+        '"passerAnsigt":true/false,'+
+        '"begrundelse":"3 sætninger PRÆCIS HVORFOR passer til ansigtsform og hårtype",'+
+        '"imageSearchDA":"dansk søgeterm fx curtain hair mænd",'+
         '"imageSearchEN":"engelsk søgeterm fx mens curtain hair oval face 2024",'+
-        '"youtubeEN":"youtube tutorial søgeord engelsk fx curtain hair tutorial mens",'+
-        '"frisørScript":["præcis sætning 1 til frisøren","sætning 2 med mål fx 3 cm på toppen","sætning 3 om teknik fx scissor over comb","sætning 4 om finish"],'+
-        '"stylingTrin":["trin 1 med præcist produkt og mængde","trin 2","trin 3","trin 4","trin 5 finish"],'+
+        '"youtubeEN":"youtube søgeord",'+
+        '"frisørScript":["sætning 1 til frisøren","sætning 2 med præcise mål fx 3 cm på toppen","sætning 3 teknik fx scissor over comb","sætning 4 finish"],'+
+        '"stylingTrin":["trin 1: PRODUKTNAVN (fx hårvoks) på størrelsen af EN ÆRT — varm mellem hænderne og fordel fra rod til spids","trin 2: konkret styling handling","trin 3","trin 4","trin 5: finish fx 1-2 sprøjt finish spray for holdbarhed"],'+
         '"stylingTid":"antal minutter",'+
-        '"produkter":[{"navn":"præcist produktnavn","type":"produktkategori","brug":"hvornår og hvordan","pris":"ca. DKK","link":"https://www.google.com/search?q=k%C3%B8b+PRODUKTNAVN+h%C3%A5r"}],'+
-        '"vedligeholdelse":"klip hver X uger, daglig vedligeholdelse"'+
+        '"eksisterendeProdukter":["præcis hvilke af brugerens egne produkter der KAN bruges og PRÆCIS HVORDAN"],'+
+        '"anbefaledeProdukter":[{"navn":"specifikt produktnavn fx American Crew Fiber","type":"hårvoks/hårler/sea salt spray/tørshampoo/finish spray","brug":"præcis mål og hvornår fx en ært i tørt hår","pris":"DKK ca.","link":"https://www.google.com/search?q=k%C3%B8b+NAVN+h%C3%A5r"}],'+
+        '"vedligeholdelse":"klip hver X uger, daglig rutine"'+
       '}]}';
     var res=await callAI(prompt,S.faceImage?S.faceImage.split(',')[1]:null);
     var data;
     try{var m=res.match(/\{[\s\S]*\}/);if(m)data=JSON.parse(m[0]);else throw new Error('')}
     catch(e){r.innerHTML='<div class="ai-card">'+res.replace(/\n/g,'<br>')+'</div>';return}
-    var html='';
+    var html='<div style="margin-top:4px">';
     if(data.frisurer&&Array.isArray(data.frisurer)){
       data.frisurer.forEach(function(f,i){
+        var svrColor=f.sværhed==='nem'?'#22c55e':f.sværhed==='svær'?'#ef4444':'#f0cc5a';
+        var isAnsigtsFocus=f.passerAnsigt===true;
         var qEN=encodeURIComponent((f.imageSearchEN||f.navn)+' haircut');
-        var qDA=encodeURIComponent(f.imageSearchDA||f.navn);
-        var qYT=encodeURIComponent(f.youtubeEN||(f.imageSearchEN||f.navn)+' how to style tutorial');
         var gImgUrl='https://www.google.com/search?q='+qEN+'&tbm=isch&hl=da';
         var pinterestUrl='https://www.pinterest.dk/search/pins/?q='+qEN;
-        var ytUrl='https://www.youtube.com/results?search_query='+qYT;
-        var svrColor=f.sværhed==='nem'?'#22c55e':f.sværhed==='svær'?'#ef4444':'#f0cc5a';
+        var ytUrl='https://www.youtube.com/results?search_query='+encodeURIComponent(f.youtubeEN||(f.imageSearchEN||f.navn)+' tutorial');
         html+=
-          '<div class="rec-card" style="margin-bottom:12px">'+
-            /* Header */
-            '<div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:12px">'+
-              '<div class="rec-rank" style="width:32px;height:32px;font-size:.8rem;flex-shrink:0">'+(i+1)+'</div>'+
-              '<div style="flex:1;min-width:0">'+
-                '<div style="font-family:\'Cormorant Garamond\',serif;font-size:1rem;font-weight:700;'+
-                  'line-height:1.2">'+f.navn+'</div>'+
-                (f.type?'<div style="font-size:.6rem;color:var(--gold);font-weight:600;'+
-                  'letter-spacing:.5px;margin-top:3px">'+f.type.toUpperCase()+'</div>':'')+
-              '</div>'+
-              '<div style="flex-shrink:0;font-size:.6rem;font-weight:700;padding:4px 10px;'+
-                'border-radius:10px;background:'+svrColor+'1a;color:'+svrColor+';'+
-                'border:1px solid '+svrColor+'44">'+(f.sværhed||'medium')+'</div>'+
-            '</div>'+
-            /* Reason */
-            '<div style="font-size:.72rem;color:var(--sub);line-height:1.65;margin-bottom:12px;'+
-              'padding:11px;background:rgba(255,255,255,.02);border-radius:12px;'+
-              'border-left:2px solid rgba(212,175,55,.4)">'+f.begrundelse+'</div>'+
-            /* ── SE HVORDAN DET SER UD ── */
-            '<div style="margin-bottom:14px">'+
-              '<div style="font-size:.6rem;color:var(--gold);font-weight:700;letter-spacing:.5px;'+
-                'margin-bottom:8px">🔍 SE HVORDAN DET SER UD</div>'+
-              '<div style="display:flex;gap:6px;flex-wrap:wrap">'+
-                '<a href="'+gImgUrl+'" target="_blank" class="link-btn link-btn-blue">'+
-                  '🖼 Google Billeder</a>'+
-                '<a href="'+pinterestUrl+'" target="_blank" class="link-btn link-btn-pink">'+
-                  '📌 Pinterest</a>'+
-                '<a href="'+ytUrl+'" target="_blank" class="link-btn link-btn-red">'+
-                  '▶ YouTube Tutorial</a>'+
-              '</div>'+
-              '<div style="font-size:.6rem;color:#444;margin-top:5px">'+
-                'Søg: "'+( f.imageSearchDA||f.navn)+'"</div>'+
-            '</div>'+
-            /* ── FRISØRSCRIPT ── */
-            (f.frisørScript&&f.frisørScript.length?
-              '<div style="background:linear-gradient(135deg,rgba(212,175,55,.08),rgba(212,175,55,.03));'+
-                'border:1px solid rgba(212,175,55,.2);border-radius:14px;padding:14px;margin-bottom:12px">'+
-                '<div style="font-size:.6rem;color:var(--gold);font-weight:700;letter-spacing:.5px;'+
-                  'margin-bottom:10px">✂️ HVAD DU SIGER TIL FRISØREN</div>'+
-                f.frisørScript.map(function(s,si){
-                  return '<div style="display:flex;gap:8px;padding:6px 0;'+
-                    'border-bottom:1px solid rgba(255,255,255,.04)">'+
-                    '<div style="color:var(--gold);font-weight:700;font-size:.7rem;flex-shrink:0">'+(si+1)+'.</div>'+
-                    '<div style="font-size:.72rem;color:#fff;line-height:1.5;font-style:italic">"'+s+'"</div>'+
-                  '</div>';
-                }).join('')+
-              '</div>':'')+
-            /* ── STYLING TRIN ── */
-            (f.stylingTrin&&f.stylingTrin.length?
-              '<div style="margin-bottom:12px">'+
-                '<div style="font-size:.6rem;color:#fff;font-weight:700;letter-spacing:.5px;margin-bottom:8px">'+
-                  '💆 TRIN-FOR-TRIN STYLING'+
-                  (f.stylingTid?' <span style="color:var(--sub);font-weight:400">(ca. '+f.stylingTid+' min)</span>':'')+
+          '<div style="margin-bottom:10px">'+
+            '<div class="hair-summary" onclick="window._toggleHairCard('+i+')">'+
+              '<div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0">'+
+                '<div class="rec-rank" style="width:30px;height:30px;font-size:.78rem;flex-shrink:0">'+(i+1)+'</div>'+
+                '<div style="min-width:0">'+
+                  '<div style="font-family:'Cormorant Garamond',serif;font-size:.95rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+f.navn+'</div>'+
+                  '<div style="display:flex;gap:4px;align-items:center;margin-top:3px;flex-wrap:wrap">'+
+                    (f.type?'<span style="font-size:.58rem;color:var(--gold);font-weight:600">'+f.type+'</span>':'')+
+                    (isAnsigtsFocus?'<span style="font-size:.56rem;background:rgba(212,175,55,.15);border:1px solid rgba(212,175,55,.3);border-radius:6px;padding:2px 6px;color:var(--gold)">✓ Bedst for dit ansigt</span>':'')+
+                  '</div>'+
                 '</div>'+
-                f.stylingTrin.map(function(s,si){
-                  return '<div style="display:flex;gap:9px;padding:8px 0;'+
-                    'border-bottom:1px solid rgba(255,255,255,.04)">'+
-                    '<div style="width:22px;height:22px;border-radius:50%;flex-shrink:0;'+
-                      'background:linear-gradient(135deg,#c9a227,#d4af37);color:#000;'+
-                      'display:flex;align-items:center;justify-content:center;'+
-                      'font-weight:800;font-size:.6rem">'+(si+1)+'</div>'+
-                    '<div style="font-size:.72rem;color:var(--sub);line-height:1.55">'+s+'</div>'+
-                  '</div>';
-                }).join('')+
-              '</div>':'')+
-            /* ── PRODUKTER ── */
-            (f.produkter&&f.produkter.length?
-              '<div style="margin-bottom:10px">'+
-                '<div style="font-size:.6rem;color:#fff;font-weight:700;letter-spacing:.5px;margin-bottom:8px">'+
-                  '🧴 PRODUKTER DU SKAL BRUGE</div>'+
-                f.produkter.map(function(p){
-                  var pn=typeof p==='string'?p:(p.navn||p);
-                  var pt=typeof p==='object'?(p.type||''):'';
-                  var pb=typeof p==='object'?(p.brug||''):'';
-                  var pp=typeof p==='object'?(p.pris||''):'';
-                  var pl=typeof p==='object'?(p.link||''):'';
-                  if(!pl)pl='https://www.google.com/search?q='+encodeURIComponent('køb '+pn+' hår');
-                  return '<div style="display:flex;gap:10px;align-items:flex-start;padding:9px;'+
-                    'background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);'+
-                    'border-radius:12px;margin-bottom:6px">'+
-                    '<div style="font-size:1.2rem;flex-shrink:0">🧴</div>'+
-                    '<div style="flex:1;min-width:0">'+
-                      '<div style="font-size:.74rem;font-weight:700;color:#fff">'+pn+
-                        (pt?'<span class="badge" style="margin-left:5px">'+pt+'</span>':'')+
-                      '</div>'+
-                      (pb?'<div style="font-size:.64rem;color:var(--sub);margin-top:2px">'+pb+'</div>':'')+
-                      (pp?'<div style="font-size:.64rem;color:var(--gold);font-weight:600;margin-top:2px">ca. '+pp+'</div>':'')+
-                    '</div>'+
-                    '<a href="'+pl+'" target="_blank" class="link-btn link-btn-gold" '+
-                      'style="flex-shrink:0;font-size:.6rem">Køb →</a>'+
-                  '</div>';
-                }).join('')+
-              '</div>':'')+
-            /* Vedligeholdelse */
-            (f.vedligeholdelse?
-              '<div style="font-size:.65rem;color:var(--sub);padding:10px 12px;'+
-                'background:rgba(255,255,255,.02);border-radius:10px;line-height:1.55">'+
-                '🔄 <strong style="color:#fff">Vedligeholdelse:</strong> '+f.vedligeholdelse+
-              '</div>':'')+
+              '</div>'+
+              '<div style="display:flex;align-items:center;gap:8px;flex-shrink:0">'+
+                '<div style="font-size:.58rem;font-weight:700;padding:3px 8px;border-radius:8px;background:'+svrColor+'1a;color:'+svrColor+';border:1px solid '+svrColor+'33">'+(f.sværhed||'medium')+'</div>'+
+                '<div class="hair-chevron" id="hairChev_'+i+'">▼</div>'+
+              '</div>'+
+            '</div>'+
+            '<div class="hair-detail" id="hairDetail_'+i+'">'+
+              '<div style="padding:14px;border:1px solid rgba(255,255,255,.06);border-top:none;border-radius:0 0 16px 16px;background:rgba(10,10,10,.9)">'+
+                '<div style="font-size:.72rem;color:var(--sub);line-height:1.65;margin-bottom:12px;padding:11px;background:rgba(255,255,255,.02);border-radius:12px;border-left:2px solid rgba(212,175,55,.4)">'+f.begrundelse+'</div>'+
+                '<div style="margin-bottom:12px">'+
+                  '<div style="font-size:.6rem;color:var(--gold);font-weight:700;letter-spacing:.5px;margin-bottom:8px">🔍 SE HVORDAN DET SER UD</div>'+
+                  '<div style="display:flex;gap:6px;flex-wrap:wrap">'+
+                    '<a href="'+gImgUrl+'" target="_blank" class="link-btn link-btn-blue">🖼 Google Billeder</a>'+
+                    '<a href="'+pinterestUrl+'" target="_blank" class="link-btn link-btn-pink">📌 Pinterest</a>'+
+                    '<a href="'+ytUrl+'" target="_blank" class="link-btn link-btn-red">▶ YouTube Tutorial</a>'+
+                  '</div>'+
+                  '<div style="font-size:.6rem;color:#444;margin-top:5px">Søg: "'+( f.imageSearchDA||f.navn)+'"</div>'+
+                '</div>'+
+                (f.frisørScript&&f.frisørScript.length?
+                  '<div style="background:rgba(212,175,55,.07);border:1px solid rgba(212,175,55,.18);border-radius:14px;padding:14px;margin-bottom:12px">'+
+                    '<div style="font-size:.6rem;color:var(--gold);font-weight:700;letter-spacing:.5px;margin-bottom:10px">✂️ HVAD DU SIGER TIL FRISØREN</div>'+
+                    f.frisørScript.map(function(s,si){return '<div style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04)"><div style="color:var(--gold);font-weight:700;font-size:.7rem;flex-shrink:0">'+(si+1)+'.</div><div style="font-size:.72rem;color:#fff;line-height:1.5;font-style:italic">"'+s+'"</div></div>'}).join('')+
+                  '</div>':'')+
+                (f.stylingTrin&&f.stylingTrin.length?
+                  '<div style="margin-bottom:12px">'+
+                    '<div style="font-size:.6rem;color:#fff;font-weight:700;letter-spacing:.5px;margin-bottom:8px">💆 TRIN-FOR-TRIN STYLING'+(f.stylingTid?' <span style="color:var(--sub);font-weight:400">(ca. '+f.stylingTid+' min)</span>':'')+'</div>'+
+                    f.stylingTrin.map(function(s,si){return '<div style="display:flex;gap:9px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04)"><div style="width:22px;height:22px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#c9a227,#d4af37);color:#000;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.6rem">'+(si+1)+'</div><div style="font-size:.72rem;color:var(--sub);line-height:1.55">'+s+'</div></div>'}).join('')+
+                  '</div>':'')+
+                (f.eksisterendeProdukter&&f.eksisterendeProdukter.length?
+                  '<div style="background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);border-radius:12px;padding:12px;margin-bottom:10px">'+
+                    '<div style="font-size:.6rem;color:#22c55e;font-weight:700;letter-spacing:.5px;margin-bottom:6px">✓ DINE PRODUKTER DU KAN BRUGE</div>'+
+                    f.eksisterendeProdukter.map(function(p){return '<div style="font-size:.71rem;color:var(--sub);padding:3px 0">• '+p+'</div>'}).join('')+
+                  '</div>':'')+
+                (f.anbefaledeProdukter&&f.anbefaledeProdukter.length?
+                  '<div style="margin-bottom:10px">'+
+                    '<div style="font-size:.6rem;color:#fff;font-weight:700;letter-spacing:.5px;margin-bottom:8px">🧴 PRODUKTER DU SKAL BRUGE</div>'+
+                    f.anbefaledeProdukter.map(function(p){
+                      var pn=typeof p==='string'?p:(p.navn||'');
+                      var pt=typeof p==='object'?(p.type||''):'';
+                      var pb=typeof p==='object'?(p.brug||''):'';
+                      var pp=typeof p==='object'?(p.pris||''):'';
+                      var pl=typeof p==='object'?(p.link||''):'';
+                      if(!pl)pl='https://www.google.com/search?q='+encodeURIComponent('køb '+pn+' hår');
+                      return '<div style="display:flex;gap:10px;align-items:flex-start;padding:9px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);border-radius:12px;margin-bottom:6px">'+
+                        '<div style="font-size:1.2rem;flex-shrink:0">🧴</div>'+
+                        '<div style="flex:1;min-width:0">'+
+                          '<div style="font-size:.74rem;font-weight:700;color:#fff">'+pn+(pt?'<span class="badge" style="margin-left:5px">'+pt+'</span>':'')+'</div>'+
+                          (pb?'<div style="font-size:.68rem;color:var(--gold);font-weight:600;margin-top:3px">'+pb+'</div>':'')+
+                          (pp?'<div style="font-size:.64rem;color:var(--sub);margin-top:2px">ca. '+pp+'</div>':'')+
+                        '</div>'+
+                        '<a href="'+pl+'" target="_blank" class="link-btn link-btn-gold" style="flex-shrink:0;font-size:.6rem">Køb →</a>'+
+                      '</div>';
+                    }).join('')+
+                  '</div>':'')+
+                (f.vedligeholdelse?'<div style="font-size:.65rem;color:var(--sub);padding:10px 12px;background:rgba(255,255,255,.02);border-radius:10px;line-height:1.55">🔄 <strong style="color:#fff">Vedligeholdelse:</strong> '+f.vedligeholdelse+'</div>':'')+
+              '</div>'+
+            '</div>'+
           '</div>';
       });
     }
-    r.innerHTML='<div style="margin-top:4px">'+html+'</div>';
+    html+='</div>';
+    r.innerHTML=html;
     toast('Frisure-råd klar! ✓');
-  }catch(e){
-    r.innerHTML='<div class="ai-card" style="border-color:var(--red)">'+e.message+'</div>';
-  }
+  }catch(e){r.innerHTML='<div class="ai-card" style="border-color:var(--red)">'+e.message+'</div>'}
 }
 
-/* ══════════════════════════════════
-   PRODUCTS  (persistent, photo/gallery/nophoto)
-══════════════════════════════════ */
+
+/* ══ PRODUCTS ══ */
 function showAddProduct(type){
   var ex=document.getElementById('addProdOverlay');if(ex)ex.remove();
   var o=document.createElement('div');o.className='obs-overlay';o.id='addProdOverlay';
   o.innerHTML=
     '<div class="glass" style="max-width:400px;width:100%;padding:26px">'+
       '<div class="sec-head" style="justify-content:center;margin-bottom:4px">Tilføj produkt</div>'+
-      '<p style="color:var(--sub);font-size:.68rem;text-align:center;margin-bottom:16px">'+
-        'Vælg hvordan du vil tilføje produktet</p>'+
+      '<p style="color:var(--sub);font-size:.68rem;text-align:center;margin-bottom:16px">Produkter gemmes automatisk</p>'+
       '<div class="prod-source-row">'+
         '<button class="psb" onclick="window._addProdCam(\''+type+'\')">📷 Tag billede nu</button>'+
         '<button class="psb" onclick="window._addProdGallery(\''+type+'\')">🖼 Kamerarulle</button>'+
@@ -1063,243 +697,103 @@ function showAddProduct(type){
   document.body.appendChild(o);
 }
 window._closeAddProd=function(){var o=document.getElementById('addProdOverlay');if(o)o.remove()};
-
-window._addProdCam=function(type){
-  window._closeAddProd();
-  var inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.capture='environment';
-  inp.onchange=async function(e){var f=e.target.files[0];if(!f)return;await doAddProduct(type,f)};
-  inp.click();
-};
-window._addProdGallery=function(type){
-  window._closeAddProd();
-  var inp=document.createElement('input');inp.type='file';inp.accept='image/*';
-  inp.onchange=async function(e){var f=e.target.files[0];if(!f)return;await doAddProduct(type,f)};
-  inp.click();
-};
+window._addProdCam=function(type){window._closeAddProd();var inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.capture='environment';inp.onchange=async function(e){var f=e.target.files[0];if(!f)return;await doAddProduct(type,f)};inp.click()};
+window._addProdGallery=function(type){window._closeAddProd();var inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.onchange=async function(e){var f=e.target.files[0];if(!f)return;await doAddProduct(type,f)};inp.click()};
 window._addProdNoPhoto=function(type){window._closeAddProd();doAddProduct(type,null)};
 window._addProduct=function(type){showAddProduct(type)};
-
 async function doAddProduct(type,file){
-  var name=prompt('Produktnavn:');if(!name)return;
-  var desc=prompt('Kort beskrivelse (ingredienser, formål — valgfri):')||'';
-  var imgUrl=null;
-  if(file){try{var img=await compressImg(file,600);imgUrl=img.url}catch(e){}}
+  var imgUrl=null;var b64=null;
+  if(file){try{var ci=await compressImg(file,700);imgUrl=ci.url;b64=ci.b64}catch(e){}}
+  if(b64){
+    toast('AI identificerer produkt...');
+    try{
+      var iP='Du ser et billede af et '+(type==='face'?'hudpleje':'hårpleje')+'-produkt. Identificer det præcist. Returner KUN gyldigt JSON: {"navn":"fuldt produktnavn","mærke":"mærke","kategori":"produkttype fx hårvoks/hårler/sea salt spray/shampoo/serum","beskrivelse":"1 sætning om hvad det gør"}';
+      var iR=await callAI(iP,b64);
+      var iD;try{var iM=iR.match(/\{[\s\S]*\}/);if(iM)iD=JSON.parse(iM[0])}catch(ie){}
+      if(iD&&iD.navn){
+        if(!S.products||typeof S.products!=='object')S.products={face:[],hair:[]};
+        if(!Array.isArray(S.products[type]))S.products[type]=[];
+        S.products[type].push({name:iD.navn,brand:iD.mærke||'',description:(iD.kategori?iD.kategori+' — ':'')+( iD.beskrivelse||''),image:imgUrl,date:new Date().toISOString()});
+        save();toast('✓ '+iD.navn+' identificeret og gemt!');render();return;
+      }
+    }catch(ie2){}
+  }
+  var name=prompt(file?'AI kunne ikke aflæse — indtast produktnavn:':'Produktnavn:');if(!name)return;
   if(!S.products||typeof S.products!=='object')S.products={face:[],hair:[]};
   if(!Array.isArray(S.products[type]))S.products[type]=[];
-  S.products[type].push({name:name,description:desc,image:imgUrl,date:new Date().toISOString()});
-  save();toast('✓ '+name+' tilføjet og gemt');render();
+  S.products[type].push({name:name,brand:'',description:'',image:imgUrl,date:new Date().toISOString()});
+  save();toast('✓ '+name+' gemt');render();
 }
 
 async function getProductAdvice(type){
   if(!S.faceAnalysis){toast('Scan ansigt først for bedre anbefalinger');return}
   var rid=type==='face'?'faceProd':'hairProd';
   var r=document.getElementById(rid);if(!r)return;
-  r.innerHTML='<div style="text-align:center;padding:30px"><div class="spinner"></div>'+
-    '<p style="color:var(--sub);margin-top:12px;font-size:.75rem">Analyserer og finder de bedste produkter...</p></div>';
+  r.innerHTML='<div style="text-align:center;padding:30px"><div class="spinner"></div><p style="color:var(--sub);margin-top:12px;font-size:.75rem">Analyserer dine produkter...</p></div>';
   r.style.display='block';
   try{
     var prods=(S.products&&S.products[type])?S.products[type]:[];
-    var plist=prods.length>0?
-      prods.map(function(p){return p.name+(p.description?': '+p.description:'')}).join(' | '):
-      'Ingen produkter tilføjet endnu';
+    var plist=prods.length>0?prods.map(function(p){return p.name+(p.description?': '+p.description:'')}).join(' | '):'Ingen tilføjet';
     var prompt;
     if(type==='face'){
-      prompt=
-        'Du er professionel hudplejekspert og dermatolog. Lav en DETALJERET hudplejeanalyse på DANSK.'+
-        '\nHudtype: '+(S.faceAnalysis.hudtype||'ukendt')+
-        '\nAnsigtsform: '+(S.faceAnalysis.ansigtsform||'ukendt')+
-        '\nBrugerens nuværende produkter: '+plist+
-        '\nHudproblemer/observationer: '+(S.extraObservations||'ikke angivet')+
-        '\nGiv SPECIFIKKE produktanbefalinger med rigtige produktnavne, reelle priser og reelle links.'+
-        '\nReturner KUN gyldigt JSON:'+
-        '{"vurdering":"konkret vurdering af nuværende produkter og hvad der mangler",'+
-        '"anbefalede":[{"navn":"specifikt rigtigt produktnavn","brand":"mærkenavn","kategori":"rengøring/toner/serum/fugtighedscreme/SPF/retinol/øjencreme/exfoliant","pris":"ca. DKK pris","hvorfor":"konkret grund baseret på hudtype og problemer","ingredienser":"aktive nøgleingredienser at kigge efter","hvornår":"morgen/aften/begge","link":"https://www.google.com/search?q=k%C3%B8b+BRANDNAVN+PRODUKTNAVN"}],'+
-        '"morgenRutine":["detaljeret trin med produkt, mængde og ventetid"],'+
-        '"aftenRutine":["detaljeret trin med produkt, mængde og ventetid"],'+
-        '"ugeRutine":["ugentlige ekstra behandlinger fx eksfoliering, maske"],'+
-        '"kost":["5 præcise kosttips med specifikke fødevarer og mængder specifik til hudtype"],'+
-        '"supplements":["3-4 specifikke kosttilskud med doser fx Zink 15mg, Omega-3 2g"],'+
-        '"advarsel":["ingredienser og produkttyper der skal UNDGÅS med denne hudtype"]}';
+      prompt='Du er hudplejekspert og dermatolog. DETALJERET hudplejeanalyse på DANSK.\nHudtype: '+(S.faceAnalysis.hudtype||'ukendt')+'\nAnsigtsform: '+(S.faceAnalysis.ansigtsform||'ukendt')+'\nNuværende produkter: '+plist+'\nHudproblemer: '+(S.extraObservations||'ingen')+'\nReturner KUN gyldigt JSON:{"vurdering":"konkret vurdering","anbefalede":[{"navn":"produktnavn","brand":"mærke","kategori":"type","pris":"DKK","hvorfor":"grund","ingredienser":"aktive stoffer","hvornår":"tidspunkt","link":"https://www.google.com/search?q=k%C3%B8b+NAVN"}],"morgenRutine":["trin"],"aftenRutine":["trin"],"ugeRutine":["ugentligt"],"kost":["kosttips"],"supplements":["kosttilskud med doser"],"advarsel":["undgå"]}';
     }else{
-      prompt=
-        'Du er professionel hårekspert og trikolog. Lav en DETALJERET hårplejeanalyse på DANSK.'+
-        '\nHårtype: '+(S.hairProfile.type||'ukendt')+
-        ', Tykkelse: '+(S.hairProfile.thickness||'ukendt')+
-        ', Tekstur: '+(S.hairProfile.texture||'ukendt')+
-        '\nNuværende produkter: '+plist+
-        '\nGiv SPECIFIKKE produktanbefalinger med rigtige produktnavne og reelle priser.'+
-        '\nReturner KUN gyldigt JSON:'+
-        '{"vurdering":"konkret vurdering af nuværende produkter",'+
-        '"anbefalede":[{"navn":"specifikt produktnavn","brand":"mærkenavn","kategori":"shampoo/conditioner/leave-in/serum/olie/stylingcreme/gel/voks/varmebeskyttelse","pris":"ca. DKK pris","hvorfor":"konkret grund til denne hårtype","link":"https://www.google.com/search?q=k%C3%B8b+BRANDNAVN+PRODUKTNAVN"}],'+
-        '"rutine":["detaljeret trin-for-trin hårrutine med produkter"],'+
-        '"vaskeFrekvens":"præcis frekvens og grund",'+
-        '"varmeTips":["5 specifikke varme-styling tips med temperaturangivelser"],'+
-        '"kost":["5 kosttips specifik til hårpleje"],'+
-        '"supplements":["3 specifikke kosttilskud til hår"]}';
+      prompt='Du er hårekspert og trikolog. DETALJERET hårplejeanalyse på DANSK.\nHårtype: '+(S.hairProfile.type||'ukendt')+', Tykkelse: '+(S.hairProfile.thickness||'ukendt')+'\nProdukter: '+plist+'\nReturner KUN gyldigt JSON:{"vurdering":"vurdering","anbefalede":[{"navn":"produktnavn","brand":"mærke","kategori":"type","pris":"DKK","hvorfor":"grund","link":"https://www.google.com/search?q=k%C3%B8b+NAVN"}],"rutine":["trin"],"vaskeFrekvens":"frekvens","varmeTips":["tips"],"kost":["kosttips"],"supplements":["kosttilskud"]}';
     }
     var res=await callAI(prompt,S.faceImage?S.faceImage.split(',')[1]:null);
     var data;
     try{var m=res.match(/\{[\s\S]*\}/);if(m)data=JSON.parse(m[0]);else throw new Error('')}
     catch(e){r.innerHTML='<div class="ai-card">'+res.replace(/\n/g,'<br>')+'</div>';return}
-    r.innerHTML=renderProductAdvice(data,type);
+    r.innerHTML=renderProdAdvice(data,type);
     toast('✓ Produktanalyse klar!');
-  }catch(e){
-    r.innerHTML='<div class="ai-card" style="border-color:var(--red)">'+e.message+'</div>';
-  }
+  }catch(e){r.innerHTML='<div class="ai-card" style="border-color:var(--red)">'+e.message+'</div>'}
 }
 
-function renderProductAdvice(data,type){
+function renderProdAdvice(data,type){
   var html='<div style="margin-top:6px">';
-  /* Vurdering */
-  if(data.vurdering){
-    html+=
-      '<div style="background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.15);'+
-        'border-radius:14px;padding:14px;margin-bottom:10px">'+
-        '<div style="font-size:.6rem;color:var(--gold);font-weight:700;letter-spacing:.5px;margin-bottom:5px">'+
-          '📊 VURDERING AF DINE NUVÆRENDE PRODUKTER</div>'+
-        '<div style="font-size:.72rem;color:var(--sub);line-height:1.6">'+data.vurdering+'</div>'+
-      '</div>';
-  }
-  /* Anbefalede produkter */
+  if(data.vurdering){html+='<div style="background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.15);border-radius:14px;padding:14px;margin-bottom:10px"><div style="font-size:.6rem;color:var(--gold);font-weight:700;letter-spacing:.5px;margin-bottom:5px">📊 VURDERING</div><div style="font-size:.72rem;color:var(--sub);line-height:1.6">'+data.vurdering+'</div></div>'}
   if(data.anbefalede&&data.anbefalede.length){
-    html+=
-      '<div class="rec-card">'+
-        '<div class="rec-card-title">🏆 Anbefalede produkter</div>'+
-        data.anbefalede.map(function(p,i){
-          return '<div class="rec-row">'+
-            '<div class="rec-rank">'+(i+1)+'</div>'+
-            '<div style="flex:1;min-width:0">'+
-              '<div style="font-weight:700;font-size:.78rem;color:#fff">'+
-                (p.brand?p.brand+' — ':'')+p.navn+
-                (p.kategori?'<span class="badge" style="margin-left:5px">'+p.kategori+'</span>':'')+
-              '</div>'+
-              '<div style="font-size:.65rem;color:var(--gold);font-weight:600;margin:3px 0">'+
-                (p.pris||'')+
-              '</div>'+
-              '<div style="font-size:.68rem;color:var(--sub);line-height:1.5;margin-bottom:4px">'+
-                p.hvorfor+
-              '</div>'+
-              (p.ingredienser?
-                '<div style="font-size:.62rem;color:#666;margin-bottom:3px">'+
-                  'Kig efter: '+p.ingredienser+'</div>':'')+
-              (p.hvornår?
-                '<div style="font-size:.62rem;color:#666;margin-bottom:5px">'+
-                  'Brug: '+p.hvornår+'</div>':'')+
-              (p.link?
-                '<a href="'+p.link+'" target="_blank" class="rec-link">Søg og køb →</a>':'')+
-            '</div>'+
-          '</div>';
-        }).join('')+
-      '</div>';
+    html+='<div class="rec-card"><div class="rec-card-title">🏆 Anbefalede produkter</div>'+
+      data.anbefalede.map(function(p,i){
+        return '<div class="rec-row"><div class="rec-rank">'+(i+1)+'</div>'+
+          '<div style="flex:1;min-width:0">'+
+            '<div style="font-weight:700;font-size:.78rem;color:#fff">'+(p.brand?p.brand+' — ':'')+p.navn+(p.kategori?'<span class="badge" style="margin-left:5px">'+p.kategori+'</span>':'')+'</div>'+
+            '<div style="font-size:.65rem;color:var(--gold);font-weight:600;margin:3px 0">'+(p.pris||'')+'</div>'+
+            '<div style="font-size:.68rem;color:var(--sub);line-height:1.5;margin-bottom:4px">'+(p.hvorfor||p.grund||'')+'</div>'+
+            (p.ingredienser?'<div style="font-size:.62rem;color:#666;margin-bottom:3px">Kig efter: '+p.ingredienser+'</div>':'')+
+            (p.hvornår?'<div style="font-size:.62rem;color:#666;margin-bottom:5px">Brug: '+p.hvornår+'</div>':'')+
+            (p.link?'<a href="'+p.link+'" target="_blank" class="rec-link">Søg og køb →</a>':'')+
+          '</div></div>';
+      }).join('')+'</div>';
   }
-  /* Type-specific */
   if(type==='face'){
-    if(data.morgenRutine&&data.morgenRutine.length){
-      html+=rutineCard('☀️ Morgenrutine',data.morgenRutine);
-    }
-    if(data.aftenRutine&&data.aftenRutine.length){
-      html+=rutineCard('🌙 Aftenrutine',data.aftenRutine);
-    }
-    if(data.ugeRutine&&data.ugeRutine.length){
-      html+=bulletCard('📅 Ugentligt',data.ugeRutine,'#60a5fa');
-    }
-    if(data.kost&&data.kost.length){
-      html+=bulletCard('🥗 Kost & hudsundhed',data.kost,'#22c55e');
-    }
-    if(data.supplements&&data.supplements.length){
-      html+=bulletCard('💊 Anbefalede kosttilskud',data.supplements,'#a78bfa');
-    }
-    if(data.advarsel&&data.advarsel.length){
-      html+=
-        '<div style="background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);'+
-          'border-radius:14px;padding:14px;margin:8px 0">'+
-          '<div style="font-size:.6rem;color:var(--red);font-weight:700;letter-spacing:.5px;margin-bottom:6px">'+
-            '⚠️ UNDGÅ DISSE INGREDIENSER & PRODUKTER</div>'+
-          data.advarsel.map(function(s){
-            return '<div style="font-size:.71rem;color:var(--sub);padding:4px 0">• '+s+'</div>';
-          }).join('')+
-        '</div>';
-    }
+    if(data.morgenRutine&&data.morgenRutine.length)html+=rutCard('☀️ Morgenrutine',data.morgenRutine);
+    if(data.aftenRutine&&data.aftenRutine.length)html+=rutCard('🌙 Aftenrutine',data.aftenRutine);
+    if(data.ugeRutine&&data.ugeRutine.length)html+=bulCard('📅 Ugentligt',data.ugeRutine,'#60a5fa');
+    if(data.kost&&data.kost.length)html+=bulCard('🥗 Kost & hud',data.kost,'#22c55e');
+    if(data.supplements&&data.supplements.length)html+=bulCard('💊 Kosttilskud',data.supplements,'#a78bfa');
+    if(data.advarsel&&data.advarsel.length)html+='<div style="background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:14px;padding:14px;margin:8px 0"><div style="font-size:.6rem;color:var(--red);font-weight:700;margin-bottom:6px">⚠️ UNDGÅ</div>'+data.advarsel.map(function(s){return '<div style="font-size:.71rem;color:var(--sub);padding:3px 0">• '+s+'</div>'}).join('')+'</div>';
   }else{
-    if(data.rutine&&data.rutine.length){
-      html+=rutineCard('🚿 Hårrutine',data.rutine);
-    }
-    if(data.vaskeFrekvens){
-      html+=
-        '<div style="background:rgba(212,175,55,.05);border:1px solid rgba(212,175,55,.12);'+
-          'border-radius:12px;padding:12px;margin:8px 0;font-size:.72rem">'+
-          '🚿 <strong style="color:#fff">Vaskefrekvens:</strong> '+
-          '<span style="color:var(--sub)">'+data.vaskeFrekvens+'</span>'+
-        '</div>';
-    }
-    if(data.varmeTips&&data.varmeTips.length){
-      html+=bulletCard('🌡️ Varme-styling tips',data.varmeTips,'#f97316');
-    }
-    if(data.kost&&data.kost.length){
-      html+=bulletCard('🥗 Kost for sundt hår',data.kost,'#22c55e');
-    }
-    if(data.supplements&&data.supplements.length){
-      html+=bulletCard('💊 Kosttilskud til hår',data.supplements,'#a78bfa');
-    }
+    if(data.rutine&&data.rutine.length)html+=rutCard('🚿 Hårrutine',data.rutine);
+    if(data.vaskeFrekvens)html+='<div style="background:rgba(212,175,55,.05);border:1px solid rgba(212,175,55,.12);border-radius:12px;padding:12px;margin:8px 0;font-size:.72rem">🚿 <strong style="color:#fff">Vaskefrekvens:</strong> <span style="color:var(--sub)">'+data.vaskeFrekvens+'</span></div>';
+    if(data.varmeTips&&data.varmeTips.length)html+=bulCard('🌡️ Varme-styling',data.varmeTips,'#f97316');
+    if(data.kost&&data.kost.length)html+=bulCard('🥗 Kost for hår',data.kost,'#22c55e');
+    if(data.supplements&&data.supplements.length)html+=bulCard('💊 Kosttilskud',data.supplements,'#a78bfa');
   }
-  html+='</div>';
-  return html;
+  return html+'</div>';
 }
+function rutCard(title,items){return '<div class="rec-card"><div class="rec-card-title">'+title+'</div>'+items.map(function(s,i){return '<div style="display:flex;gap:9px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04)"><div class="step-num">'+(i+1)+'</div><div style="font-size:.71rem;color:var(--sub);line-height:1.55">'+s+'</div></div>'}).join('')+'</div>'}
+function bulCard(title,items,color){return '<div class="rec-card"><div class="rec-card-title">'+title+'</div>'+items.map(function(s){return '<div style="display:flex;gap:7px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04)"><span style="color:'+(color||'var(--gold)')+';flex-shrink:0">•</span><div style="font-size:.71rem;color:var(--sub);line-height:1.5">'+s+'</div></div>'}).join('')+'</div>'}
 
-function rutineCard(title,items){
-  return '<div class="rec-card">'+
-    '<div class="rec-card-title">'+title+'</div>'+
-    items.map(function(s,i){
-      return '<div style="display:flex;gap:9px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04)">'+
-        '<div class="step-num">'+(i+1)+'</div>'+
-        '<div style="font-size:.71rem;color:var(--sub);line-height:1.55">'+s+'</div>'+
-      '</div>';
-    }).join('')+
-  '</div>';
-}
-function bulletCard(title,items,color){
-  color=color||'var(--gold)';
-  return '<div class="rec-card">'+
-    '<div class="rec-card-title">'+title+'</div>'+
-    items.map(function(s){
-      return '<div style="display:flex;gap:7px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04)">'+
-        '<span style="color:'+color+';flex-shrink:0">•</span>'+
-        '<div style="font-size:.71rem;color:var(--sub);line-height:1.5">'+s+'</div>'+
-      '</div>';
-    }).join('')+
-  '</div>';
-}
-
-/* ══════════════════════════════════
-   COACH
-══════════════════════════════════ */
+/* ══ COACH ══ */
 async function getCoach(){
   var r=document.getElementById('coachRes');if(!r)return;
-  r.innerHTML='<div style="text-align:center;padding:30px"><div class="spinner"></div></div>';
-  r.style.display='block';
+  r.innerHTML='<div style="text-align:center;padding:30px"><div class="spinner"></div></div>';r.style.display='block';
   try{
-    var s=S.stats||{},f=S.faceAnalysis||{};
-    var tier=getTier(S.score);
-    var prompt=
-      'Du er en elite looksmaxing-coach og personlig trainer. '+
-      'Lav en PERSONLIG, MOTIVERENDE og EKSTREMT HANDLINGSRETTET coaching-besked på DANSK.'+
-      '\nBrugerprofil: '+tier.label+' niveau, Glow Score '+S.score+'/100'+
-      '\nAnsigts-rating: '+(f.rating||'ikke scannet')+'/10'+
-      '\nHudtype: '+(f.hudtype||'ukendt')+', Ansigtsform: '+(f.ansigtsform||'ukendt')+
-      '\nDagens registreringer: Søvn '+(s.sleep||0)+' timer, Vand '+(s.water||0)+' glas, '+
-      'Træning: '+(s.workout?'Ja':'Nej')+', Hudpleje: '+(s.skincare?'Ja':'Nej')+
-      ', SPF: '+(s.sun?'Ja':'Nej')+', Mewing: '+(s.mewing?'Ja':'Nej')+
-      '\nStreak: '+(Array.isArray(S.streak)?S.streak.length:0)+' dage'+
-      '\nVær ULTRA specifik: nævn præcise tal, øvelser med sæt/reps, vitaminer med doser, kost med gram. '+
-      'Inkluder 5 konkrete handlingspunkter til NÆSTE 24 TIMER. Brug emojis. Max 400 ord.';
+    var s=S.stats||{},f=S.faceAnalysis||{};var tier=getTier(S.score);
+    var prompt='Du er elite looksmaxing-coach. PERSONLIG, MOTIVERENDE og HANDLINGSRETTET besked på DANSK.\nNiveau: '+tier.label+', Glow Score '+S.score+'/100\nAnsigt: '+(f.rating||'?')+'/10, Hudtype: '+(f.hudtype||'?')+', Ansigtsform: '+(f.ansigtsform||'?')+'\nDag: Søvn '+(s.sleep||0)+'t, Vand '+(s.water||0)+' glas, Træning: '+(s.workout?'Ja':'Nej')+', Hudpleje: '+(s.skincare?'Ja':'Nej')+', SPF: '+(s.sun?'Ja':'Nej')+'\nStreak: '+(Array.isArray(S.streak)?S.streak.length:0)+' dage\nGiv 5 PRÆCISE handlingspunkter til næste 24 timer med tal og detaljer. Emojis. Max 380 ord.';
     var res=await callAI(prompt,S.faceImage?S.faceImage.split(',')[1]:null);
-    r.innerHTML=
-      '<div class="rec-card">'+
-        '<div class="rec-card-title">🎯 Din personlige coach</div>'+
-        '<div style="font-size:.75rem;color:var(--sub);line-height:1.8">'+
-          res.replace(/\n/g,'<br>')+
-        '</div>'+
-      '</div>';
+    r.innerHTML='<div class="rec-card"><div class="rec-card-title">🎯 Din personlige coach</div><div style="font-size:.75rem;color:var(--sub);line-height:1.8">'+res.replace(/\n/g,'<br>')+'</div></div>';
   }catch(e){r.innerHTML='<div class="ai-card" style="border-color:var(--red)">'+e.message+'</div>'}
 }
 
@@ -1312,59 +806,63 @@ function aiFillTracker(){
 }
 
 async function sendChat(){
-  var q=document.getElementById('chatInput');if(!q)return;
-  var qv=q.value.trim();if(!qv)return;
+  var q=document.getElementById('chatInput');if(!q)return;var qv=q.value.trim();if(!qv)return;
   var r=document.getElementById('chatRes');if(!r)return;
-  r.innerHTML='<div style="text-align:center;padding:30px"><div class="spinner"></div></div>';
-  r.style.display='block';
+  r.innerHTML='<div style="text-align:center;padding:30px"><div class="spinner"></div></div>';r.style.display='block';
   try{
     var tier=getTier(S.score);
-    var ctx='Du er verdens bedste looksmaxing-ekspert og coach. '+
-      (S.faceAnalysis?
-        'Bruger: ansigt '+S.faceAnalysis.rating+'/10, ansigtsform: '+S.faceAnalysis.ansigtsform+
-        ', hudtype: '+S.faceAnalysis.hudtype+'. ':'Ingen scanning endnu. ')+
-      'Glow Score: '+S.score+'/100 ('+tier.label+'). '+
-      'Besvar MEGET detaljeret, præcist og handlingsrettet på DANSK: ';
+    var ctx='Du er verdens bedste looksmaxing-ekspert. '+(S.faceAnalysis?'Bruger: ansigt '+S.faceAnalysis.rating+'/10, ansigtsform: '+S.faceAnalysis.ansigtsform+', hudtype: '+S.faceAnalysis.hudtype+'. ':'Ingen scanning. ')+'Glow Score: '+S.score+'/100 ('+tier.label+'). Besvar DETALJERET og PRÆCIST på DANSK: ';
     var res=await callAI(ctx+qv,S.faceImage?S.faceImage.split(',')[1]:null);
-    r.innerHTML=
-      '<div class="rec-card">'+
-        '<div class="rec-card-title">💡 Svar</div>'+
-        '<div style="font-size:.75rem;color:var(--sub);line-height:1.8">'+res.replace(/\n/g,'<br>')+'</div>'+
-      '</div>';
+    r.innerHTML='<div class="rec-card"><div class="rec-card-title">💡 Svar</div><div style="font-size:.75rem;color:var(--sub);line-height:1.8">'+res.replace(/\n/g,'<br>')+'</div></div>';
     q.value='';toast('Besvaret ✓');
   }catch(e){r.innerHTML='<div class="ai-card" style="border-color:var(--red)">'+e.message+'</div>'}
 }
 
-/* ══════════════════════════════════
-   API SETUP
-══════════════════════════════════ */
+/* ══ RESET ══ */
+window._showReset=function(){
+  var ex=document.getElementById('resetOverlay');if(ex)ex.remove();
+  var o=document.createElement('div');o.className='obs-overlay';o.id='resetOverlay';
+  o.innerHTML=
+    '<div class="glass" style="max-width:380px;width:100%;text-align:center;padding:32px 24px">'+
+      '<div style="font-size:3rem;margin-bottom:14px">⚠️</div>'+
+      '<div style="font-family:\'Cormorant Garamond\',serif;font-size:1.2rem;color:var(--red);margin-bottom:10px">Slet alt data?</div>'+
+      '<p style="color:var(--sub);font-size:.73rem;line-height:1.6;margin-bottom:20px">Dette sletter din scanning, dine produkter, din streak, dine referencer og alle indstillinger.<br><strong style="color:#fff">Handlingen kan ikke fortrydes.</strong></p>'+
+      '<button class="btn" style="background:var(--red);color:#fff;font-weight:800;margin-bottom:8px" onclick="window._doReset()">Ja, slet alt og start forfra</button>'+
+      '<button class="btn btn-outline" onclick="window._closeReset()">Annuller — behold alt</button>'+
+    '</div>';
+  document.body.appendChild(o);
+};
+window._closeReset=function(){var o=document.getElementById('resetOverlay');if(o)o.remove()};
+window._doReset=function(){
+  try{localStorage.clear()}catch(e){}
+  S=defState();
+  var o=document.getElementById('resetOverlay');if(o)o.remove();
+  toast('Alt slettet — frisk start!');
+  setTimeout(function(){render();showAPISetup()},300);
+};
+
+/* ══ API SETUP ══ */
 function showAPISetup(){
   var ex=document.getElementById('apiModal');if(ex)return;
   var o=document.createElement('div');o.id='apiModal';
-  o.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.97);z-index:2000;'+
-    'display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(14px)';
+  o.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.97);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(14px)';
   o.innerHTML=
     '<div class="glass" style="max-width:400px;width:100%;text-align:center;padding:36px 26px">'+
       '<div style="font-size:3.5rem;margin-bottom:16px;filter:drop-shadow(0 0 20px rgba(212,175,55,.3))">🔑</div>'+
-      '<div style="font-family:\'Cormorant Garamond\',serif;color:var(--gold);font-size:1.5rem;margin-bottom:8px">'+
-        'Groq API-nøgle</div>'+
+      '<div style="font-family:\'Cormorant Garamond\',serif;color:var(--gold);font-size:1.5rem;margin-bottom:8px">Groq API-nøgle</div>'+
       '<p style="color:var(--sub);font-size:.72rem;margin-bottom:5px">Hent din gratis nøgle på</p>'+
       '<p style="color:#60a5fa;font-size:.76rem;font-weight:600;margin-bottom:20px">console.groq.com/keys</p>'+
-      '<input type="password" id="apiKeyInput" placeholder="gsk_..." autocomplete="off" '+
-        'style="text-align:center;font-size:.9rem;letter-spacing:1px">'+
-      '<button class="btn btn-gold" style="margin-top:14px" onclick="window._saveAPIKey()">'+
-        'Tilslut og brug app</button>'+
-      '<p style="color:#444;font-size:.6rem;margin-top:12px">100% gratis · ingen kreditkort · ingen abonnement</p>'+
+      '<input type="password" id="apiKeyInput" placeholder="gsk_..." autocomplete="off" style="text-align:center;font-size:.9rem;letter-spacing:1px">'+
+      '<button class="btn btn-gold" style="margin-top:14px" onclick="window._saveAPIKey()">Tilslut og brug app</button>'+
+      '<p style="color:#444;font-size:.6rem;margin-top:12px">100% gratis · ingen kreditkort</p>'+
     '</div>';
   o.addEventListener('click',function(e){if(e.target===o)o.remove()});
   document.body.appendChild(o);
   setTimeout(function(){var inp=document.getElementById('apiKeyInput');if(inp)inp.focus()},120);
 }
-
 window._saveAPIKey=function(){
   try{
-    var inp=document.getElementById('apiKeyInput');if(!inp)return;
-    var kv=inp.value.trim();
+    var inp=document.getElementById('apiKeyInput');if(!inp)return;var kv=inp.value.trim();
     if(!kv||!kv.startsWith('gsk_')){toast('Ugyldig nøgle — skal starte med gsk_');return}
     setKey(kv);S.onboarded=true;save();
     var modal=document.getElementById('apiModal');if(modal)modal.remove();
@@ -1372,126 +870,131 @@ window._saveAPIKey=function(){
   }catch(e){toast('Fejl: '+e.message)}
 };
 
-/* ══════════════════════════════════
-   RENDER
-══════════════════════════════════ */
+/* ══ DUAL RING SCORE ══ */
+function makeRing(size,score,maxScore,label,subLabel,color){
+  var r=size*0.42;var circ=2*Math.PI*r;
+  var pct=Math.min(1,Math.max(0,score/maxScore));
+  var offset=circ*(1-pct);
+  return '<div class="ring-box">'+
+    '<div class="ring-wrap" style="width:'+size+'px;height:'+size+'px">'+
+      '<svg viewBox="0 0 '+size+' '+size+'" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)">'+
+        '<circle fill="none" stroke="rgba(255,255,255,.05)" stroke-width="3" cx="'+(size/2)+'" cy="'+(size/2)+'" r="'+r+'"/>'+
+        '<circle fill="none" stroke="'+color+'" stroke-width="3" stroke-linecap="round" stroke-dasharray="'+circ+'" stroke-dashoffset="'+offset+'" cx="'+(size/2)+'" cy="'+(size/2)+'" r="'+r+'"/>'+
+      '</svg>'+
+      '<div class="ring-inner">'+
+        '<div class="ring-val" style="font-size:'+(size*0.22)+'px">'+score+'</div>'+
+        '<div class="ring-label">'+label+'</div>'+
+      '</div>'+
+    '</div>'+
+    '<div class="ring-tier">'+subLabel+'</div>'+
+  '</div>';
+}
+
+/* ══ RENDER ══ */
 function render(){
   try{
     var a=document.getElementById('app');if(!a)return;
-    var ds='';
-    try{ds=new Date().toLocaleDateString('da-DK',{weekday:'long',day:'numeric',month:'short'})}catch(e){}
+    var ds='';try{ds=new Date().toLocaleDateString('da-DK',{weekday:'long',day:'numeric',month:'short'})}catch(e){}
     var hasKey=!!getKey();
     if(!hasKey){
       a.innerHTML=
-        '<div class="topbar">'+
-          '<span><span class="dot red"></span>Afventer API</span>'+
-          '<span style="font-size:.65rem">'+ds+'</span>'+
-        '</div>'+
+        '<div class="topbar"><span><span class="dot red"></span>Afventer API</span><span style="font-size:.65rem">'+ds+'</span></div>'+
         '<div class="glass" style="text-align:center;padding:48px 24px">'+
           '<div style="font-size:4rem;margin-bottom:18px;filter:drop-shadow(0 0 20px rgba(212,175,55,.3))">💎</div>'+
-          '<div style="font-family:\'Cormorant Garamond\',serif;font-size:1.9rem;color:var(--gold);margin-bottom:10px">'+
-            'LooksMax AI</div>'+
-          '<p style="color:var(--sub);font-size:.75rem;margin:0 0 24px;line-height:1.6">'+
-            'Verdens mest avancerede looksmaxxing-assistent.<br>'+
-            'Analyser dit ansigt, optimer dit udseende.</p>'+
+          '<div style="font-family:\'Cormorant Garamond\',serif;font-size:1.9rem;color:var(--gold);margin-bottom:10px">LooksMax AI</div>'+
+          '<p style="color:var(--sub);font-size:.75rem;margin:0 0 24px;line-height:1.6">Verdens mest avancerede looksmaxxing-assistent</p>'+
           '<button class="btn btn-gold" onclick="window._showAPISetup()">Tilslut gratis API-nøgle</button>'+
           '<p style="color:#3a3a3a;font-size:.6rem;margin-top:14px">console.groq.com/keys</p>'+
         '</div>';
       return;
     }
     var sl=Array.isArray(S.streak)?S.streak.length:0;
-    var tier=getTier(S.score);
-    var offset=Math.round(440-(440*(S.score/100)));
+    var curScore=S.score;
+    var curTier=getTier(curScore);
+    /* Potential ring: based on faceAnalysis potentiale (1-10) converted to 100 scale, but boosted by habits */
+    var potScore=S.facePotential?Math.min(100,Math.round(S.facePotential*10)):null;
+    var potTier=potScore?getTier(potScore):null;
     var sEmoji=sl>=30?'👑':sl>=14?'🔥🔥':sl>=7?'🔥':sl>=3?'⚡':'';
+
+    /* Score section: dual rings if we have a scan, single ring otherwise */
+    var scoreHTML='';
+    if(potScore){
+      scoreHTML=
+        '<div class="score-wrap">'+
+          '<div class="dual-ring-row">'+
+            makeRing(130,curScore,100,'GlOW SCORE',curTier.icon+' '+curTier.label,'url(#sg)')+
+            '<div class="ring-arrow">→</div>'+
+            makeRing(130,potScore,100,'POTENTIALE',potTier.icon+' '+potTier.label,'rgba(212,175,55,.6)')+
+          '</div>'+
+          '<div style="font-size:.6rem;color:var(--sub);text-align:center;margin-top:2px">Nu <span style="color:var(--gold)">'+curScore+'</span> → Potentiale <span style="color:var(--gold2)">'+potScore+'</span></div>'+
+          (sl>0?
+            '<div class="streak-badge">🗓 '+sl+' dag'+(sl===1?'':'e')+' streak'+(sEmoji?' '+sEmoji:'')+'</div>':
+            '<div class="streak-badge" style="color:var(--sub);border-color:rgba(255,255,255,.1)">Start din streak i dag ✦</div>')+
+          '<div style="display:flex;gap:6px;justify-content:center;margin-top:8px">'+
+            '<div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:7px 12px;font-size:.62rem;color:var(--sub)">😴 '+(S.stats.sleep||0)+'t søvn</div>'+
+            '<div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:7px 12px;font-size:.62rem;color:var(--sub)">💧 '+(S.stats.water||0)+' glas</div>'+
+            '<div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:7px 12px;font-size:.62rem;color:var(--sub)">🔥 '+sl+' streak</div>'+
+          '</div>'+
+        '</div>';
+    }else{
+      var offset=Math.round(440-(440*(curScore/100)));
+      scoreHTML=
+        '<div class="score-wrap">'+
+          '<div style="position:relative;width:150px;height:150px;margin:0 auto 12px;animation:pulseRing 3.5s ease infinite">'+
+            '<svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)">'+
+              '<defs><linearGradient id="sg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#c9a227"/><stop offset="50%" style="stop-color:#f0cc5a"/><stop offset="100%" style="stop-color:#d4af37"/></linearGradient></defs>'+
+              '<circle fill="none" stroke="rgba(255,255,255,.04)" stroke-width="3" cx="75" cy="75" r="63"/>'+
+              '<circle fill="none" stroke="url(#sg)" stroke-width="3" stroke-linecap="round" stroke-dasharray="396" stroke-dashoffset="'+Math.round(396-(396*(curScore/100)))+'" cx="75" cy="75" r="63"/>'+
+            '</svg>'+
+            '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;width:100%">'+
+              '<div style="font-family:\'Cormorant Garamond\',serif;font-size:3.5rem;font-weight:700;background:linear-gradient(135deg,#c9a227,#f0cc5a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1">'+curScore+'</div>'+
+              '<div style="font-size:.6rem;font-weight:700;color:var(--gold)">'+curTier.icon+' '+curTier.label+'</div>'+
+              '<div style="font-size:.48rem;text-transform:uppercase;letter-spacing:3px;color:var(--sub);margin-top:2px">Glow Score</div>'+
+            '</div>'+
+          '</div>'+
+          '<p style="font-size:.65rem;color:var(--sub);text-align:center;margin-bottom:6px">Scan dit ansigt for at se dit potentiale</p>'+
+          (sl>0?
+            '<div class="streak-badge">🗓 '+sl+' dag'+(sl===1?'':'e')+' streak'+(sEmoji?' '+sEmoji:'')+'</div>':
+            '<div class="streak-badge" style="color:var(--sub);border-color:rgba(255,255,255,.1)">Start din streak ✦</div>')+
+        '</div>';
+    }
+
     a.innerHTML=
       '<div class="topbar">'+
         '<span><span class="dot green"></span>AI Online</span>'+
-        '<span style="font-size:.65rem">'+ds+'</span>'+
-      '</div>'+
-      /* SCORE */
-      '<div class="score-wrap">'+
-        '<div class="score-ring-wrap">'+
-          '<svg viewBox="0 0 170 170" xmlns="http://www.w3.org/2000/svg">'+
-            '<defs>'+
-              '<linearGradient id="sg" x1="0%" y1="0%" x2="100%" y2="100%">'+
-                '<stop offset="0%" style="stop-color:#c9a227"/>'+
-                '<stop offset="50%" style="stop-color:#f0cc5a"/>'+
-                '<stop offset="100%" style="stop-color:#d4af37"/>'+
-              '</linearGradient>'+
-            '</defs>'+
-            '<circle fill="none" stroke="rgba(255,255,255,.04)" stroke-width="3" cx="85" cy="85" r="70"/>'+
-            '<circle fill="none" stroke="url(#sg)" stroke-width="3" stroke-linecap="round" '+
-              'stroke-dasharray="440" stroke-dashoffset="'+offset+'" cx="85" cy="85" r="70"/>'+
-          '</svg>'+
-          '<div class="score-inner">'+
-            '<div class="score-val">'+S.score+'</div>'+
-            '<div class="score-tier">'+tier.icon+' '+tier.label+'</div>'+
-            '<div class="score-label">Glow Score</div>'+
-          '</div>'+
+        '<div style="display:flex;align-items:center;gap:10px">'+
+          '<span style="font-size:.65rem">'+ds+'</span>'+
+          '<button onclick="window._showReset()" style="background:none;border:none;color:#444;font-size:.65rem;cursor:pointer;padding:2px 6px;border-radius:6px;border:1px solid rgba(255,255,255,.06)" title="Nulstil alt">↺</button>'+
         '</div>'+
-        (sl>0?
-          '<div class="streak-badge">🗓 '+sl+' dag'+(sl===1?'':'e')+' streak'+(sEmoji?' '+sEmoji:'')+'</div>':
-          '<div class="streak-badge" style="color:var(--sub);border-color:rgba(255,255,255,.1)">'+
-            'Start din streak i dag ✦</div>')+
       '</div>'+
-      /* GRID */
+      /* Need SVG defs globally for dual rings */
+      '<svg style="position:absolute;width:0;height:0"><defs><linearGradient id="sg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#c9a227"/><stop offset="50%" style="stop-color:#f0cc5a"/><stop offset="100%" style="stop-color:#d4af37"/></linearGradient></defs></svg>'+
+      scoreHTML+
       '<div class="grid2">'+
         '<div class="item full" onclick="window._switchTab(\'scan\')">'+
-          '<span class="icon">📷</span>'+
-          '<div class="title">3D Ansigtsscanning</div>'+
-          '<div class="sub">5 vinkler · AI-rapport · Fuld analyse</div>'+
+          '<span class="icon">📷</span><div class="title">3D Ansigtsscanning</div>'+
+          '<div class="sub">5 vinkler · AI-rapport · Potentiale</div>'+
         '</div>'+
-        '<div class="item" onclick="window._switchTab(\'hair\')">'+
-          '<span class="icon">💇</span>'+
-          '<div class="title">Frisure-råd</div>'+
-          '<div class="sub">Op til 10 referencer</div>'+
-        '</div>'+
-        '<div class="item" onclick="window._switchTab(\'products\')">'+
-          '<span class="icon">🧴</span>'+
-          '<div class="title">Produkter</div>'+
-          '<div class="sub">Gemt · Anbefalinger</div>'+
-        '</div>'+
-        '<div class="item" onclick="window._switchTab(\'coach\')">'+
-          '<span class="icon">🎯</span>'+
-          '<div class="title">Coach</div>'+
-          '<div class="sub">Personlig plan</div>'+
-        '</div>'+
-        '<div class="item" onclick="window._switchTab(\'tracker\')">'+
-          '<span class="icon">✅</span>'+
-          '<div class="title">Daglig Tracker</div>'+
-          '<div class="sub">Byg din streak</div>'+
-        '</div>'+
-        '<div class="item" onclick="window._switchTab(\'progress\')">'+
-          '<span class="icon">📈</span>'+
-          '<div class="title">Progress</div>'+
-          '<div class="sub">Ugentlig galleri</div>'+
-        '</div>'+
-        '<div class="item" onclick="window._switchTab(\'chat\')">'+
-          '<span class="icon">💡</span>'+
-          '<div class="title">Spørg AI</div>'+
-          '<div class="sub">Tilpasset din profil</div>'+
-        '</div>'+
+        '<div class="item" onclick="window._switchTab(\'hair\')"><span class="icon">💇</span><div class="title">Frisure-råd</div><div class="sub">Op til 10 referencer</div></div>'+
+        '<div class="item" onclick="window._switchTab(\'products\')"><span class="icon">🧴</span><div class="title">Produkter</div><div class="sub">Gemt · Anbefalinger</div></div>'+
+        '<div class="item" onclick="window._switchTab(\'coach\')"><span class="icon">🎯</span><div class="title">Coach</div><div class="sub">Personlig plan</div></div>'+
+        '<div class="item" onclick="window._switchTab(\'tracker\')"><span class="icon">✅</span><div class="title">Daglig Tracker</div><div class="sub">Byg din streak</div></div>'+
+        '<div class="item" onclick="window._switchTab(\'progress\')"><span class="icon">📈</span><div class="title">Progress</div><div class="sub">Første vs. seneste</div></div>'+
+        '<div class="item" onclick="window._switchTab(\'chat\')"><span class="icon">💡</span><div class="title">Spørg AI</div><div class="sub">Tilpasset din profil</div></div>'+
       '</div>'+
       '<div id="tabContent"></div>';
     renderTab();
   }catch(e){
     console.error(e);
-    var a2=document.getElementById('app');
-    if(a2)a2.innerHTML='<div style="text-align:center;padding:40px"><div class="spinner"></div></div>';
+    var a2=document.getElementById('app');if(a2)a2.innerHTML='<div style="text-align:center;padding:40px"><div class="spinner"></div></div>';
     setTimeout(function(){S=defState();save();render()},700);
   }
 }
 
-window._switchTab=function(t){
-  S.tab=t;render();
-  setTimeout(function(){
-    var el=document.getElementById('tabContent');
-    if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
-  },80);
-};
+window._switchTab=function(t){S.tab=t;render();setTimeout(function(){var el=document.getElementById('tabContent');if(el)el.scrollIntoView({behavior:'smooth',block:'start'})},80)};
 window._showAPISetup=function(){showAPISetup()};
 
-/* ── RENDER TAB ── */
+/* ══ RENDER TAB ══ */
 function renderTab(){
   var c=document.getElementById('tabContent');if(!c)return;
   try{
@@ -1501,13 +1004,8 @@ function renderTab(){
       c.innerHTML=
         '<div class="glass">'+
           '<div class="sec-head">3D Scanning</div>'+
-          '<p style="color:var(--sub);font-size:.73rem;margin-bottom:14px">'+
-            '5 billeder fra alle vinkler giver AI et komplet billede af din ansigtsstruktur, symmetri og hud.</p>'+
-          (S.faceAnalysis?
-            '<div style="background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.15);'+
-              'border-radius:14px;padding:12px;margin-bottom:12px;font-size:.7rem;text-align:center;color:var(--gold)">'+
-              '✓ Seneste: '+S.faceAnalysis.rating+'/10 '+getTier((S.faceAnalysis.rating||0)*10).label+
-              ' — klik for at opdatere</div>':'')+
+          '<p style="color:var(--sub);font-size:.73rem;margin-bottom:14px">5 billeder fra alle vinkler giver AI et komplet billede af din ansigtsstruktur, symmetri og potentiale.</p>'+
+          (S.faceAnalysis?'<div style="background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.15);border-radius:14px;padding:12px;margin-bottom:12px;font-size:.7rem;text-align:center;color:var(--gold)">✓ Seneste: '+S.faceAnalysis.rating+'/10 '+getTier((S.faceAnalysis.rating||0)*10).label+' — klik for at scanne igen</div>':'')+
           '<button class="btn btn-gold" onclick="window._startScan()">▶ Start 3D scanning</button>'+
           '<div id="aiRes" style="display:none;margin-top:10px"></div>'+
           '<button class="btn btn-outline" style="margin-top:8px" onclick="window._switchTab(\'home\')">← Tilbage</button>'+
@@ -1516,67 +1014,40 @@ function renderTab(){
 
     /* HAIR */
     else if(S.tab==='hair'){
-      var hp=S.hairProfile||{};
-      var ic=S.hairInspo?S.hairInspo.length:0;
+      var hp=S.hairProfile||{};var ic=S.hairInspo?S.hairInspo.length:0;
       var inspoH='';
       if(ic>0){
-        inspoH=
-          '<div style="margin:14px 0 6px">'+
-            '<div style="font-size:.6rem;letter-spacing:1px;color:var(--gold);font-weight:700;margin-bottom:8px">'+
-              'DINE REFERENCE-BILLEDER ('+ic+'/10) — klik for at se større</div>'+
-            '<div class="inspo-grid">'+
-              S.hairInspo.map(function(img,i){
-                return '<div class="inspo-thumb">'+
-                  '<img src="'+img.url+'" onclick="window._previewInspo('+i+')">'+
-                  '<button class="rm" onclick="window._removeInspo('+i+')">✕</button>'+
-                '</div>';
-              }).join('')+
-            '</div>'+
-          '</div>';
+        inspoH='<div style="margin:14px 0 6px"><div style="font-size:.6rem;letter-spacing:1px;color:var(--gold);font-weight:700;margin-bottom:8px">REFERENCER ('+ic+'/10) — tryk for at se større</div><div class="inspo-grid">'+
+          S.hairInspo.map(function(img,i){return '<div class="inspo-thumb"><img src="'+img.url+'" onclick="window._previewInspo('+i+')"><button class="rm" onclick="window._removeInspo('+i+')">✕</button></div>'}).join('')+
+        '</div></div>';
+      }
+      /* Hair products already saved */
+      var hairProds=(S.products&&S.products.hair)||[];
+      var hairProdH='';
+      if(hairProds.length>0){
+        hairProdH='<div style="margin:12px 0 6px"><div style="font-size:.6rem;letter-spacing:1px;color:#60a5fa;font-weight:700;margin-bottom:6px">DINE HÅRPRODUKTER (bruges i anbefaling)</div>'+
+          hairProds.map(function(p){return '<div style="display:flex;align-items:center;gap:8px;padding:6px 8px;background:rgba(96,165,250,.05);border:1px solid rgba(96,165,250,.12);border-radius:10px;margin-bottom:4px">'+
+            (p.image?'<img src="'+p.image+'" style="width:30px;height:30px;border-radius:6px;object-fit:cover">':'<div style="width:30px;height:30px;border-radius:6px;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;font-size:.9rem">🧴</div>')+
+            '<div style="font-size:.7rem;font-weight:600;color:#fff">'+p.name+'</div>'+
+          '</div>'}).join('')+
+        '</div>';
+      }else{
+        hairProdH='<div style="font-size:.65rem;color:#555;margin:8px 0;padding:8px;background:rgba(255,255,255,.02);border-radius:10px;text-align:center">Tilføj hårprodukter under Produkter → AI bruger dem i anbefalingen</div>';
       }
       c.innerHTML=
         '<div class="glass">'+
           '<div class="sec-head">Frisure-råd</div>'+
-          '<p style="color:var(--sub);font-size:.72rem;margin-bottom:10px">'+
-            'Udfyld din hårprofil og upload eventuelt reference-billeder for de bedste anbefalinger.</p>'+
-          '<select onchange="window._updateHair(\'type\',this.value)">'+
-            '<option value="">Hårtype</option>'+
-            '<option value="glat" '+(hp.type==='glat'?'selected':'')+'>Glat</option>'+
-            '<option value="bølget" '+(hp.type==='bølget'?'selected':'')+'>Bølget</option>'+
-            '<option value="krøllet" '+(hp.type==='krøllet'?'selected':'')+'>Krøllet</option>'+
-          '</select>'+
-          '<select onchange="window._updateHair(\'thickness\',this.value)">'+
-            '<option value="">Tykkelse</option>'+
-            '<option value="tyndt" '+(hp.thickness==='tyndt'?'selected':'')+'>Tyndt</option>'+
-            '<option value="medium" '+(hp.thickness==='medium'?'selected':'')+'>Medium</option>'+
-            '<option value="tykt" '+(hp.thickness==='tykt'?'selected':'')+'>Tykt</option>'+
-          '</select>'+
-          '<select onchange="window._updateHair(\'texture\',this.value)">'+
-            '<option value="">Tekstur</option>'+
-            '<option value="let" '+(hp.texture==='let'?'selected':'')+'>Let</option>'+
-            '<option value="tungt" '+(hp.texture==='tungt'?'selected':'')+'>Tungt</option>'+
-            '<option value="normalt" '+(hp.texture==='normalt'?'selected':'')+'>Normalt</option>'+
-          '</select>'+
-          '<select onchange="window._updateHair(\'lengthCm\',this.value)">'+
-            '<option value="">Hårslængde nu</option>'+
-            '<option value="2-4 cm" '+(hp.lengthCm==='2-4 cm'?'selected':'')+'>2-4 cm (meget kort)</option>'+
-            '<option value="5-7 cm" '+(hp.lengthCm==='5-7 cm'?'selected':'')+'>5-7 cm (kort)</option>'+
-            '<option value="8-12 cm" '+(hp.lengthCm==='8-12 cm'?'selected':'')+'>8-12 cm (medium)</option>'+
-            '<option value="13-20 cm" '+(hp.lengthCm==='13-20 cm'?'selected':'')+'>13-20 cm (langt)</option>'+
-            '<option value="20+ cm" '+(hp.lengthCm==='20+ cm'?'selected':'')+'>20+ cm (meget langt)</option>'+
-          '</select>'+
-          '<input id="hpPref" value="'+(hp.preferences||'')+'" '+
-            'placeholder="Hvilken stil? (fx curtains, buzz cut, quiff, pompadour)" '+
-            'onchange="window._updateHair(\'preferences\',this.value)">'+
-          '<input id="hpConc" value="'+(hp.concerns||'')+'" '+
-            'placeholder="Bekymringer? (fx hårtab, fedtet, tyndt hår)" '+
-            'onchange="window._updateHair(\'concerns\',this.value)">'+
+          '<p style="color:var(--sub);font-size:.72rem;margin-bottom:10px">AI finder frisurer der passer dit ansigt bedst — og bruger dine egne produkter.</p>'+
+          '<select onchange="window._updateHair(\'type\',this.value)"><option value="">Hårtype</option><option value="glat" '+(hp.type==='glat'?'selected':'')+'>Glat</option><option value="bølget" '+(hp.type==='bølget'?'selected':'')+'>Bølget</option><option value="krøllet" '+(hp.type==='krøllet'?'selected':'')+'>Krøllet</option></select>'+
+          '<select onchange="window._updateHair(\'thickness\',this.value)"><option value="">Tykkelse</option><option value="tyndt" '+(hp.thickness==='tyndt'?'selected':'')+'>Tyndt</option><option value="medium" '+(hp.thickness==='medium'?'selected':'')+'>Medium</option><option value="tykt" '+(hp.thickness==='tykt'?'selected':'')+'>Tykt</option></select>'+
+          '<select onchange="window._updateHair(\'texture\',this.value)"><option value="">Tekstur</option><option value="let" '+(hp.texture==='let'?'selected':'')+'>Let</option><option value="tungt" '+(hp.texture==='tungt'?'selected':'')+'>Tungt</option><option value="normalt" '+(hp.texture==='normalt'?'selected':'')+'>Normalt</option></select>'+
+          '<select onchange="window._updateHair(\'lengthCm\',this.value)"><option value="">Hårslængde</option><option value="2-4 cm" '+(hp.lengthCm==='2-4 cm'?'selected':'')+'>2-4 cm</option><option value="5-7 cm" '+(hp.lengthCm==='5-7 cm'?'selected':'')+'>5-7 cm</option><option value="8-12 cm" '+(hp.lengthCm==='8-12 cm'?'selected':'')+'>8-12 cm</option><option value="13-20 cm" '+(hp.lengthCm==='13-20 cm'?'selected':'')+'>13-20 cm</option><option value="20+ cm" '+(hp.lengthCm==='20+ cm'?'selected':'')+'>20+ cm</option></select>'+
+          '<input id="hpPref" value="'+(hp.preferences||'')+'" placeholder="Foretrukken stil? (fx curtains, buzz cut, quiff)" onchange="window._updateHair(\'preferences\',this.value)">'+
+          '<input id="hpConc" value="'+(hp.concerns||'')+'" placeholder="Bekymringer? (fx hårtab, fedtet, tyndt)" onchange="window._updateHair(\'concerns\',this.value)">'+
+          hairProdH+
           inspoH+
-          '<button class="btn btn-outline" style="margin-top:10px" onclick="window._uploadHairInspo()">'+
-            '🖼 Upload reference-billeder'+(ic>0?' ('+ic+'/10)':' (op til 10)')+
-          '</button>'+
-          '<button class="btn btn-gold" style="margin-top:10px" onclick="window._getHairAdvice()">'+
-            '✨ Få frisure-råd</button>'+
+          '<button class="btn btn-outline" style="margin-top:10px" onclick="window._uploadHairInspo()">🖼 Upload referencer (op til 10)</button>'+
+          '<button class="btn btn-gold" style="margin-top:10px" onclick="window._getHairAdvice()">✨ Få frisure-råd</button>'+
           '<div id="hairRes" style="display:none;margin-top:8px"></div>'+
           '<button class="btn btn-outline" style="margin-top:8px" onclick="window._switchTab(\'home\')">← Tilbage</button>'+
         '</div>';
@@ -1587,22 +1058,14 @@ function renderTab(){
       c.innerHTML=
         '<div class="glass">'+
           '<div class="sec-head">Mine Produkter</div>'+
-          '<p style="color:var(--sub);font-size:.72rem;margin-bottom:12px">'+
-            'Tilføj dine nuværende produkter — AI analyserer dem og giver skræddersyede anbefalinger. '+
-            'Produkterne gemmes automatisk.</p>'+
-          '<div class="prod-source-row">'+
-            '<button class="psb" onclick="window._addProduct(\'face\')">+ Ansigt</button>'+
-            '<button class="psb" onclick="window._addProduct(\'hair\')">+ Hår</button>'+
-          '</div>'+
+          '<p style="color:var(--sub);font-size:.72rem;margin-bottom:12px">Tilføj dine produkter — de gemmes automatisk og bruges i frisure- og plejeanbefalinger.</p>'+
+          '<div class="prod-source-row"><button class="psb" onclick="window._addProduct(\'face\')">+ Ansigt</button><button class="psb" onclick="window._addProduct(\'hair\')">+ Hår</button></div>'+
           '<div id="prodList" style="margin-top:10px">'+renderProds()+'</div>'+
           '<div style="height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);margin:16px 0"></div>'+
-          '<p style="font-size:.65rem;color:var(--sub);text-align:center;margin-bottom:10px">'+
-            'Vælg kategori for at få AI-anbefalinger</p>'+
-          '<button class="btn btn-gold" onclick="window._getProductAdvice(\'face\')">'+
-            '🧴 Hudpleje-analyse & rutine</button>'+
+          '<p style="font-size:.65rem;color:var(--sub);text-align:center;margin-bottom:10px">Få AI-anbefalinger tilpasset dine produkter og hudtype</p>'+
+          '<button class="btn btn-gold" onclick="window._getProductAdvice(\'face\')">🧴 Hudpleje-analyse</button>'+
           '<div id="faceProd" style="display:none"></div>'+
-          '<button class="btn btn-gold" style="margin-top:8px" onclick="window._getProductAdvice(\'hair\')">'+
-            '💇 Hårpleje-analyse & rutine</button>'+
+          '<button class="btn btn-gold" style="margin-top:8px" onclick="window._getProductAdvice(\'hair\')">💇 Hårpleje-analyse</button>'+
           '<div id="hairProd" style="display:none"></div>'+
           '<button class="btn btn-outline" style="margin-top:10px" onclick="window._switchTab(\'home\')">← Tilbage</button>'+
         '</div>';
@@ -1614,16 +1077,12 @@ function renderTab(){
       c.innerHTML=
         '<div class="glass">'+
           '<div class="sec-head">Personlig Coach</div>'+
-          '<div style="background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.15);'+
-            'border-radius:14px;padding:14px;margin-bottom:14px">'+
+          '<div style="background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.15);border-radius:14px;padding:14px;margin-bottom:14px">'+
             '<div style="font-size:.6rem;color:var(--sub);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">DIT NIVEAU</div>'+
             '<div style="font-size:1.15rem;font-weight:700;color:var(--gold)">'+tier2.icon+' '+tier2.label+'</div>'+
             '<div style="font-size:.7rem;color:var(--sub);margin-top:4px">'+S.score+'/100 Glow Score</div>'+
           '</div>'+
-          '<p style="color:var(--sub);font-size:.73rem;margin-bottom:14px">'+
-            (S.faceAnalysis?'✓ Kender dit ansigt og din profil — klar til præcise råd':
-              'Scan dit ansigt for endnu bedre og mere præcis coaching')+
-          '</p>'+
+          '<p style="color:var(--sub);font-size:.73rem;margin-bottom:14px">'+(S.faceAnalysis?'✓ Kender dit ansigt og din profil':'Scan dit ansigt for bedre coaching')+'</p>'+
           '<button class="btn btn-gold" onclick="window._getCoach()">🎯 Få personlig coaching</button>'+
           '<div id="coachRes" style="display:none;margin-top:10px"></div>'+
           '<button class="btn btn-outline" style="margin-top:8px" onclick="window._switchTab(\'home\')">← Tilbage</button>'+
@@ -1636,83 +1095,87 @@ function renderTab(){
       c.innerHTML=
         '<div class="glass">'+
           '<div class="sec-head">Daglig Tracker</div>'+
-          '<button class="btn btn-outline" style="margin-bottom:14px;font-size:.7rem" '+
-            'onclick="window._aiFillTracker()">🤖 AI auto-udfyld fra scanning</button>'+
+          '<button class="btn btn-outline" style="margin-bottom:14px;font-size:.7rem" onclick="window._aiFillTracker()">🤖 AI auto-udfyld fra scanning</button>'+
           '<div class="stat-row">'+
             '<div style="font-size:.8rem;font-weight:600;margin-bottom:8px">😴 Søvn</div>'+
             '<div style="display:flex;justify-content:space-between;align-items:center">'+
-              '<div style="color:var(--sub);font-size:.72rem">Antal timer i nat</div>'+
-              '<div style="display:flex;align-items:center;gap:8px">'+
-                '<input type="number" id="sl" value="'+(s.sleep||0)+'" min="0" max="24" '+
-                  'style="width:62px;text-align:center;margin:0;padding:9px">'+
-                '<span style="color:var(--sub);font-size:.7rem">timer</span>'+
-              '</div>'+
+              '<div style="color:var(--sub);font-size:.72rem">Timer i nat</div>'+
+              '<div style="display:flex;align-items:center;gap:8px"><input type="number" id="sl" value="'+(s.sleep||0)+'" min="0" max="24" style="width:62px;text-align:center;margin:0;padding:9px"><span style="color:var(--sub);font-size:.7rem">t</span></div>'+
             '</div>'+
           '</div>'+
           '<div class="stat-row">'+
             '<div style="font-size:.8rem;font-weight:600;margin-bottom:8px">💧 Vand</div>'+
             '<div style="display:flex;justify-content:space-between;align-items:center">'+
-              '<div style="color:var(--sub);font-size:.72rem">Glas vand i dag</div>'+
-              '<div style="display:flex;align-items:center;gap:8px">'+
-                '<input type="number" id="wa" value="'+(s.water||0)+'" min="0" max="20" '+
-                  'style="width:62px;text-align:center;margin:0;padding:9px">'+
-                '<span style="color:var(--sub);font-size:.7rem">glas</span>'+
-              '</div>'+
+              '<div style="color:var(--sub);font-size:.72rem">Glas i dag</div>'+
+              '<div style="display:flex;align-items:center;gap:8px"><input type="number" id="wa" value="'+(s.water||0)+'" min="0" max="20" style="width:62px;text-align:center;margin:0;padding:9px"><span style="color:var(--sub);font-size:.7rem">glas</span></div>'+
             '</div>'+
           '</div>'+
         '</div>'+
         '<div class="glass">'+
           '<div class="sec-head">Afkrydsning</div>'+
-          [
-            ['🏋️','Træning','workout','Styrketræning, cardio eller sport i dag'],
-            ['🧴','Hudpleje','skincare','Rensning, fugtighedscreme og serum'],
-            ['😮','Mewing','mewing','Korrekt tungeposition holdt hele dagen'],
-            ['🚶','Holdning','posture','Ret ryg og skuldre tilbage hele dagen'],
-            ['☀️','SPF','sun','Solcreme SPF 30+ påført i dag']
-          ].map(function(a){
+          [['🏋️','Træning','workout','Styrketræning, cardio eller sport'],['🧴','Hudpleje','skincare','Rensning, fugtighedscreme og serum'],['😮','Mewing','mewing','Korrekt tungeposition hele dagen'],['🚶','Holdning','posture','Ret ryg og skuldre tilbage'],['☀️','SPF','sun','Solcreme SPF 30+ påført']].map(function(a){
             return '<div class="check-row" onclick="window._toggleCheck(\''+a[2]+'\')">'+
               '<div class="check-box '+(s[a[2]]?'on':'')+'">'+(s[a[2]]?'✓':'')+'</div>'+
-              '<div>'+
-                '<div style="font-size:.8rem;font-weight:600">'+a[0]+' '+a[1]+'</div>'+
-                '<div style="font-size:.62rem;color:var(--sub)">'+a[3]+'</div>'+
-              '</div>'+
+              '<div><div style="font-size:.8rem;font-weight:600">'+a[0]+' '+a[1]+'</div><div style="font-size:.62rem;color:var(--sub)">'+a[3]+'</div></div>'+
             '</div>';
           }).join('')+
-          '<button class="btn btn-gold" style="margin-top:14px" '+
-            'onclick="window._saveTracker()">Gem dag ✓</button>'+
+          '<button class="btn btn-gold" style="margin-top:14px" onclick="window._saveTracker()">Gem dag ✓</button>'+
         '</div>'+
         '<button class="btn btn-outline" onclick="window._switchTab(\'home\')">← Tilbage</button>';
     }
 
-    /* PROGRESS */
+    /* PROGRESS — first vs last scan only */
     else if(S.tab==='progress'){
-      var pg=S.progressGallery||[];
+      var first=S.firstScan;var last=S.lastScan;
+      var hasData=first&&last;
+      var improved=hasData&&last.score>first.score;
+      var diff=hasData?Math.round((last.score-first.score)*10)/10:0;
       c.innerHTML=
         '<div class="glass">'+
-          '<div class="sec-head">Progress Galleri</div>'+
-          (pg.length===0?
-            '<div style="text-align:center;padding:36px">'+
-              '<div style="font-size:3rem;margin-bottom:12px">📸</div>'+
-              '<p style="color:var(--sub);font-size:.8rem">Scan dit ansigt for at starte din rejse</p>'+
-            '</div>':
-            '<div style="font-size:.68rem;color:var(--sub);margin-bottom:12px;text-align:center">'+
-              pg.length+' ugentlige scans — din transformation over tid</div>'+
-            '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+
-              pg.slice().reverse().map(function(p){
-                var t=getTier((p.score||0)*10);
-                return '<div style="border-radius:16px;overflow:hidden;background:rgba(255,255,255,.02);'+
-                  'border:1px solid rgba(255,255,255,.05)">'+
-                  '<img src="'+p.image+'" style="width:100%;aspect-ratio:3/4;object-fit:cover">'+
-                  '<div style="padding:8px;text-align:center">'+
-                    '<div style="font-size:.58rem;color:var(--sub)">Uge '+p.week+'</div>'+
-                    '<div style="font-size:.82rem;font-weight:700;color:var(--gold)">'+p.score+'/10</div>'+
-                    '<div style="font-size:.62rem;color:'+t.color+'">'+t.icon+' '+t.label+'</div>'+
+          '<div class="sec-head">Din Transformation</div>'+
+          (!hasData?
+            '<div style="text-align:center;padding:36px"><div style="font-size:3rem;margin-bottom:12px">📸</div><p style="color:var(--sub);font-size:.8rem">Scan dit ansigt for at starte din rejse</p></div>':
+            /* Info banner */
+            '<div style="background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.15);border-radius:14px;padding:14px;margin-bottom:14px">'+
+              '<div style="display:flex;justify-content:space-between;align-items:center">'+
+                '<div>'+
+                  '<div style="font-size:.6rem;color:var(--sub);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">FREMGANG</div>'+
+                  '<div style="font-size:1.3rem;font-weight:700;color:'+(improved?'#22c55e':diff===0?'#d4af37':'#ef4444')+'">'+(improved?'+':diff===0?'':'')+(diff*10).toFixed(0)+'%</div>'+
+                '</div>'+
+                '<div style="text-align:right">'+
+                  '<div style="font-size:.6rem;color:var(--sub);margin-bottom:3px">FRA → TIL</div>'+
+                  '<div style="font-size:.9rem;font-weight:700;color:var(--gold)">'+first.score+' → '+last.score+'</div>'+
+                '</div>'+
+              '</div>'+
+              (improved?'<div style="font-size:.68rem;color:#22c55e;margin-top:8px">🚀 Du er blevet '+diff.toFixed(1)+' point bedre! Fortsæt!</div>':'<div style="font-size:.68rem;color:var(--sub);margin-top:8px">Start din looksmaxxing journey — resultater kommer!</div>')+
+            '</div>'+
+            /* Side by side */
+            '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'+
+              /* First */
+              '<div>'+
+                '<div style="font-size:.62rem;color:var(--sub);text-align:center;margin-bottom:6px;font-weight:600;letter-spacing:1px">FØR — FØRSTE SCAN</div>'+
+                '<div style="border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.08)">'+
+                  '<img src="'+first.image+'" style="width:100%;aspect-ratio:3/4;object-fit:cover;display:block">'+
+                  '<div style="padding:8px;text-align:center;background:rgba(10,10,10,.9)">'+
+                    '<div style="font-size:.82rem;font-weight:700;color:var(--sub)">'+first.score+'/10</div>'+
+                    '<div style="font-size:.58rem;color:#555">'+new Date(first.date).toLocaleDateString('da-DK',{day:'numeric',month:'short'})+'</div>'+
                   '</div>'+
-                '</div>';
-              }).join('')+
+                '</div>'+
+              '</div>'+
+              /* Last */
+              '<div>'+
+                '<div style="font-size:.62rem;color:var(--gold);text-align:center;margin-bottom:6px;font-weight:600;letter-spacing:1px">NU — SENESTE SCAN</div>'+
+                '<div style="border-radius:14px;overflow:hidden;border:1px solid rgba(212,175,55,.25)">'+
+                  '<img src="'+last.image+'" style="width:100%;aspect-ratio:3/4;object-fit:cover;display:block">'+
+                  '<div style="padding:8px;text-align:center;background:rgba(10,10,10,.9)">'+
+                    '<div style="font-size:.82rem;font-weight:700;color:var(--gold)">'+last.score+'/10</div>'+
+                    '<div style="font-size:.58rem;color:var(--sub)">'+new Date(last.date).toLocaleDateString('da-DK',{day:'numeric',month:'short'})+'</div>'+
+                  '</div>'+
+                '</div>'+
+              '</div>'+
             '</div>')+
-          '<button class="btn btn-outline" style="margin-top:12px" '+
-            'onclick="window._switchTab(\'home\')">← Tilbage</button>'+
+          '<p style="font-size:.65rem;color:#444;text-align:center;margin-top:10px">Det seneste billede opdateres automatisk ved hver scanning</p>'+
+          '<button class="btn btn-outline" style="margin-top:12px" onclick="window._switchTab(\'home\')">← Tilbage</button>'+
         '</div>';
     }
 
@@ -1721,13 +1184,9 @@ function renderTab(){
       c.innerHTML=
         '<div class="glass">'+
           '<div class="sec-head">Spørg AI</div>'+
-          '<p style="color:var(--sub);font-size:.73rem;margin-bottom:12px">'+
-            'AI svarer detaljeret og tilpasset præcis din profil, dit ansigt og din situation.</p>'+
+          '<p style="color:var(--sub);font-size:.73rem;margin-bottom:12px">AI svarer detaljeret og tilpasset din profil og dit ansigt.</p>'+
           '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px">'+
-            ['Hvad er mewing?','Kæbeøvelser med sæt?','Hvilken kostplan?',
-             'Hudpleje rutine for mænd?','Bedste kosttilskud?'].map(function(q){
-              return '<span class="tag" onclick="document.getElementById(\'chatInput\').value=\''+q+'\'">'+q+'</span>';
-            }).join('')+
+            ['Hvad er mewing?','Kæbeøvelser med sæt?','Hvilken kostplan?','Hudpleje for mænd?','Bedste kosttilskud?'].map(function(q){return '<span class="tag" onclick="document.getElementById(\'chatInput\').value=\''+q+'\'">'+q+'</span>'}).join('')+
           '</div>'+
           '<textarea id="chatInput" placeholder="Stil dit spørgsmål om looksmaxxing..." rows="3"></textarea>'+
           '<button class="btn btn-gold" style="margin-top:8px" onclick="window._sendChat()">Send →</button>'+
@@ -1741,90 +1200,39 @@ function renderTab(){
 
 function renderProds(){
   try{
-    var face=S.products&&S.products.face?S.products.face:[];
-    var hair=S.products&&S.products.hair?S.products.hair:[];
-    var all=face.map(function(p){return Object.assign({},p,{_t:'face'})})
-      .concat(hair.map(function(p){return Object.assign({},p,{_t:'hair'})}));
-    if(all.length===0){
-      return '<div style="text-align:center;padding:20px;color:#555;font-size:.72rem">'+
-        'Ingen produkter tilføjet endnu<br>'+
-        '<span style="font-size:.62rem;color:#3a3a3a">Tilføj dine produkter og få skræddersyede anbefalinger</span>'+
-      '</div>';
-    }
+    var face=S.products&&S.products.face?S.products.face:[];var hair=S.products&&S.products.hair?S.products.hair:[];
+    var all=face.map(function(p){return Object.assign({},p,{_t:'face'})}).concat(hair.map(function(p){return Object.assign({},p,{_t:'hair'})}));
+    if(all.length===0)return '<div style="text-align:center;padding:20px;color:#555;font-size:.72rem">Ingen produkter endnu<br><span style="font-size:.62rem;color:#3a3a3a">Tilføj dine produkter og få skræddersyede anbefalinger</span></div>';
     return all.map(function(p){
-      var arr=p._t==='face'?face:hair;
-      var idx=arr.findIndex(function(x){return x.name===p.name&&x.date===p.date});
+      var arr=p._t==='face'?face:hair;var idx=arr.findIndex(function(x){return x.name===p.name&&x.date===p.date});
       return '<div class="prod-card">'+
-        (p.image?
-          '<img src="'+p.image+'" style="width:54px;height:54px;border-radius:12px;'+
-            'object-fit:cover;flex-shrink:0">':
-          '<div style="width:54px;height:54px;background:rgba(255,255,255,.03);border-radius:12px;'+
-            'display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0">'+
-            (p._t==='face'?'🧴':'💆')+'</div>')+
+        (p.image?'<img src="'+p.image+'" style="width:54px;height:54px;border-radius:12px;object-fit:cover;flex-shrink:0">':'<div style="width:54px;height:54px;background:rgba(255,255,255,.03);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0">'+(p._t==='face'?'🧴':'💆')+'</div>')+
         '<div style="flex:1;min-width:0;font-size:.7rem">'+
-          '<div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap">'+
-            '<strong style="font-size:.75rem;color:var(--gold)">'+p.name+'</strong>'+
-            '<span class="badge">'+(p._t==='face'?'Ansigt':'Hår')+'</span>'+
-          '</div>'+
-          (p.description?
-            '<div style="color:var(--sub);font-size:.64rem;margin-top:2px;'+
-              'overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:155px">'+
-              p.description+'</div>':'')+
+          '<div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap"><strong style="font-size:.75rem;color:var(--gold)">'+p.name+'</strong>'+(p.brand?' <span style="font-size:.6rem;color:var(--sub)">— '+p.brand+'</span>':'')+" "+ '<span class="badge">'+(p._t==='face'?'Ansigt':'Hår')+'</span></div>'+
+          (p.description?'<div style="color:var(--sub);font-size:.64rem;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:155px">'+p.description+'</div>':'')+
         '</div>'+
-        '<button onclick="window._removeProd(\''+p._t+'\','+idx+')" '+
-          'style="background:none;border:none;color:var(--red);font-size:1rem;cursor:pointer;padding:5px">✕</button>'+
+        '<button onclick="window._removeProd(\''+p._t+'\','+idx+')" style="background:none;border:none;color:var(--red);font-size:1rem;cursor:pointer;padding:5px">✕</button>'+
       '</div>';
     }).join('');
   }catch(e){return''}
 }
 
-/* ══════════════════════════════════
-   WINDOW EXPORTS
-══════════════════════════════════ */
+/* ══ WINDOW ══ */
 window._startScan=function(){startScan()};
 window._getHairAdvice=function(){getHairAdvice()};
 window._getProductAdvice=function(t){getProductAdvice(t)};
 window._getCoach=function(){getCoach()};
 window._aiFillTracker=function(){aiFillTracker()};
 window._sendChat=function(){sendChat()};
-
-window._toggleCheck=function(k){
-  if(!S.stats)S.stats={};
-  S.stats[k]=S.stats[k]?0:1;
-  save();renderTab();
-};
-
+window._toggleCheck=function(k){if(!S.stats)S.stats={};S.stats[k]=S.stats[k]?0:1;save();renderTab()};
 window._saveTracker=function(){
-  try{
-    S.stats.sleep=parseInt(document.getElementById('sl').value)||0;
-    S.stats.water=parseInt(document.getElementById('wa').value)||0;
-    updateStreak();render();
-    toast('✓ Gemt! Glow Score: '+S.score+'/100');
-  }catch(e){toast('Fejl ved gem — prøv igen')}
+  try{S.stats.sleep=parseInt(document.getElementById('sl').value)||0;S.stats.water=parseInt(document.getElementById('wa').value)||0;updateStreak();render();toast('✓ Gemt! Glow Score: '+S.score+'/100')}catch(e){toast('Fejl ved gem')}
 };
+window._removeProd=function(type,idx){try{if(S.products&&S.products[type])S.products[type].splice(idx,1);save();toast('Fjernet');render()}catch(e){}};
+window._updateHair=function(k,v){if(!S.hairProfile)S.hairProfile={};S.hairProfile[k]=v;save()};
 
-window._removeProd=function(type,idx){
-  try{
-    if(S.products&&S.products[type])S.products[type].splice(idx,1);
-    save();toast('Fjernet');render();
-  }catch(e){}
-};
-
-window._updateHair=function(k,v){
-  if(!S.hairProfile)S.hairProfile={};
-  S.hairProfile[k]=v;save();
-};
-
-/* ══════════════════════════════════
-   BOOT
-══════════════════════════════════ */
-try{
-  load();
-  if(!getKey()){render();showAPISetup()}
-  else{S.onboarded=true;render()}
-}catch(e){
-  S=defState();localStorage.clear();render();showAPISetup();
-}
+/* BOOT */
+try{load();if(!getKey()){render();showAPISetup()}else{S.onboarded=true;render()}}catch(e){S=defState();localStorage.clear();render();showAPISetup()}
 })();
 </script>
 </body>
