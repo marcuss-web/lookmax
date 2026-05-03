@@ -15,17 +15,15 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{background:#000;color:#fff;min-height:100dvh;overflow-x:hidden;
   font-family:'DM Sans',-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
-
 body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   background:
-    radial-gradient(ellipse 55% 35% at 15% 8%,rgba(212,175,55,0.07) 0%,transparent 65%),
-    radial-gradient(ellipse 45% 25% at 85% 85%,rgba(212,175,55,0.05) 0%,transparent 65%),
+    radial-gradient(ellipse 55% 35% at 15% 8%,rgba(212,175,55,.07) 0%,transparent 65%),
+    radial-gradient(ellipse 45% 25% at 85% 85%,rgba(212,175,55,.05) 0%,transparent 65%),
     radial-gradient(ellipse 70% 50% at 50% 50%,rgba(8,8,8,1) 0%,#000 100%)}
-
 .app{position:relative;z-index:1;max-width:480px;margin:0 auto;
   padding:20px 16px 90px;opacity:0;animation:fadeIn .6s ease forwards}
 
-/* ===== KEYFRAMES ===== */
+/* KEYFRAMES */
 @keyframes fadeIn{to{opacity:1}}
 @keyframes slideUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -35,28 +33,29 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 @keyframes headBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
 @keyframes headRight{0%,100%{transform:rotate(0)}50%{transform:rotate(28deg)}}
 @keyframes headLeft{0%,100%{transform:rotate(0)}50%{transform:rotate(-28deg)}}
-@keyframes headUp{0%,100%{transform:translateY(0)}50%{transform:translateY(-13px)}}
+@keyframes headUp{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-13px) rotate(-5deg)}}
 @keyframes headDown{0%,100%{transform:translateY(0)}50%{transform:translateY(9px)}}
-@keyframes arrowPulse{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.25)}}
-@keyframes scanLine{0%{top:0%}100%{top:100%}}
+@keyframes arrowPulse{0%,100%{opacity:.4;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.3)}}
+@keyframes scanLine{0%{top:-2px}100%{top:102%}}
 @keyframes scoreIn{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
-@keyframes shimmer{0%{left:-100%}100%{left:200%}}
+@keyframes flashCapture{0%{opacity:0}20%{opacity:.7}100%{opacity:0}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 
-/* ===== TOPBAR ===== */
+/* TOPBAR */
 .topbar{display:flex;justify-content:space-between;align-items:center;
   padding:8px 0 18px;font-size:.68rem;color:var(--sub);font-weight:500;letter-spacing:.5px}
 .dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:6px}
 .dot.green{background:var(--green);animation:pulseDot 2s ease infinite}
 .dot.red{background:var(--red)}
 
-/* ===== GLASS ===== */
+/* GLASS */
 .glass{background:var(--glass);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
   border:1px solid var(--border);border-radius:24px;padding:22px;margin:10px 0;
   animation:slideUp .45s ease both;position:relative;overflow:hidden}
 .glass::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
   background:linear-gradient(90deg,transparent,rgba(255,255,255,.09),transparent)}
 
-/* ===== SCORE ===== */
+/* SCORE RING */
 .score-wrap{text-align:center;padding:22px 0 10px}
 .score-ring-wrap{position:relative;width:170px;height:170px;margin:0 auto 14px;
   animation:pulseRing 3.5s ease infinite}
@@ -72,28 +71,28 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.2);
   border-radius:20px;padding:5px 14px;font-size:.62rem;color:var(--gold);font-weight:600;margin-top:8px}
 
-/* ===== GRID ===== */
+/* GRID */
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
 .grid2 .item{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);
   border-radius:20px;padding:18px 14px;text-align:center;cursor:pointer;
   transition:all .25s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden}
 .grid2 .item::before{content:'';position:absolute;inset:0;
   background:linear-gradient(135deg,rgba(212,175,55,.06),transparent);opacity:0;transition:opacity .25s}
-.grid2 .item:hover::before{opacity:1}
-.grid2 .item:hover{border-color:rgba(212,175,55,.22);transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,.4)}
-.grid2 .item:active{transform:scale(.95);border-color:var(--gold);background:rgba(212,175,55,.06)}
+.grid2 .item:hover::before,.grid2 .item:active::before{opacity:1}
+.grid2 .item:hover{border-color:rgba(212,175,55,.22);transform:translateY(-2px)}
+.grid2 .item:active{transform:scale(.95);border-color:var(--gold)}
 .grid2 .item.full{grid-column:1/-1;background:rgba(212,175,55,.05);border-color:rgba(212,175,55,.18)}
 .grid2 .icon{font-size:1.9rem;display:block;margin-bottom:7px}
 .grid2 .title{font-size:.73rem;font-weight:700}
 .grid2 .sub{font-size:.58rem;color:var(--sub);margin-top:2px}
 
-/* ===== SECTION HEAD ===== */
+/* SECTION HEAD */
 .sec-head{font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:1.1rem;
   font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .sec-head::after{content:'';flex:1;height:1px;
   background:linear-gradient(90deg,rgba(212,175,55,.3),transparent)}
 
-/* ===== BUTTONS ===== */
+/* BUTTONS */
 .btn{width:100%;padding:15px;border-radius:16px;border:none;font-weight:700;
   font-size:.8rem;cursor:pointer;font-family:'DM Sans',inherit;
   transition:all .2s cubic-bezier(.4,0,.2,1);letter-spacing:.2px}
@@ -106,7 +105,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   color:#fff;margin-top:8px}
 .btn-outline:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14)}
 
-/* ===== INPUTS ===== */
+/* INPUTS */
 input,textarea,select{width:100%;background:rgba(255,255,255,.03);
   border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:13px 16px;
   color:#fff;font-family:'DM Sans',inherit;font-size:.8rem;margin:5px 0;
@@ -116,19 +115,18 @@ input:focus,textarea:focus,select:focus{border-color:rgba(212,175,55,.5);
 select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%239ca3af' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
   background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;cursor:pointer}
 
-/* ===== AI CARD ===== */
+/* AI CARD */
 .ai-card{background:rgba(16,16,16,.9);border:1px solid rgba(212,175,55,.15);
   border-radius:20px;padding:18px;margin:10px 0;font-size:.75rem;
-  line-height:1.75;max-height:500px;overflow-y:auto}
+  line-height:1.75;max-height:520px;overflow-y:auto}
 .ai-card::-webkit-scrollbar{width:3px}
 .ai-card::-webkit-scrollbar-thumb{background:rgba(212,175,55,.3);border-radius:2px}
-.ai-card a{color:#60a5fa;text-decoration:none;border-bottom:1px solid rgba(96,165,250,.3)}
 
-/* ===== SPINNER ===== */
+/* SPINNER */
 .spinner{width:30px;height:30px;border:2px solid rgba(255,255,255,.07);
   border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto}
 
-/* ===== TOAST ===== */
+/* TOAST */
 .toast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%);
   background:rgba(22,22,22,.97);border:1px solid rgba(212,175,55,.22);
   color:#fff;padding:12px 24px;border-radius:30px;font-weight:600;font-size:.75rem;
@@ -136,7 +134,7 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
   max-width:90%;text-align:center;
   box-shadow:0 8px 30px rgba(0,0,0,.5);backdrop-filter:blur(20px)}
 
-/* ===== CHECK ROW ===== */
+/* CHECK ROW */
 .check-row{display:flex;align-items:center;gap:12px;padding:13px 14px;
   background:rgba(255,255,255,.02);border-radius:14px;margin:5px 0;cursor:pointer;
   border:1px solid rgba(255,255,255,.04);transition:all .2s ease;user-select:none}
@@ -148,124 +146,38 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .check-box.on{background:linear-gradient(135deg,#c9a227,#d4af37);border-color:var(--gold);
   box-shadow:0 2px 12px rgba(212,175,55,.35);transform:scale(1.1)}
 
-/* ===== PROGRESS BAR ===== */
+/* PROGRESS BAR */
 .progress-bar{height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;flex:1}
 .progress-fill{height:100%;background:linear-gradient(90deg,#c9a227,#f0cc5a);
   border-radius:2px;transition:width .7s ease}
 
-/* ===== TAGS ===== */
+/* TAGS */
 .tag{display:inline-block;padding:8px 14px;border-radius:20px;font-size:.65rem;margin:2px;
   cursor:pointer;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
   transition:all .2s ease;font-weight:500}
 .tag:active{transform:scale(.93)}
-.tag.sel{background:rgba(212,175,55,.15);border-color:var(--gold);color:var(--gold);
-  box-shadow:0 2px 10px rgba(212,175,55,.15)}
+.tag.sel{background:rgba(212,175,55,.15);border-color:var(--gold);color:var(--gold)}
 
-/* ===== BADGE ===== */
+/* BADGE */
 .badge{display:inline-block;padding:3px 10px;border-radius:10px;font-size:.58rem;font-weight:700;
   background:rgba(212,175,55,.15);color:var(--gold);border:1px solid rgba(212,175,55,.2);margin-left:5px}
 
-/* ===== STEP NUM ===== */
+/* STEP NUM */
 .step-num{display:inline-flex;width:22px;height:22px;border-radius:50%;
   background:linear-gradient(135deg,#c9a227,#d4af37);color:#000;
   align-items:center;justify-content:center;font-weight:800;font-size:.6rem;
   margin-right:7px;flex-shrink:0}
 
-/* ===== PROD CARD ===== */
+/* PROD CARD */
 .prod-card{display:flex;gap:12px;align-items:center;background:rgba(255,255,255,.02);
   border-radius:14px;padding:11px;margin:5px 0;border:1px solid rgba(255,255,255,.04);
   transition:border-color .2s}
 .prod-card:hover{border-color:rgba(255,255,255,.08)}
 .prod-card img{width:52px;height:52px;border-radius:12px;object-fit:cover;
   border:1px solid rgba(255,255,255,.07)}
-.prod-info{flex:1;font-size:.7rem}
-.prod-info strong{color:var(--gold)}
 
-/* ===== HAIR CARD ===== */
-.hair-card{border-radius:18px;overflow:hidden;margin:12px 0;
-  background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05)}
-.hair-card img{width:100%;aspect-ratio:4/5;object-fit:cover}
-.hair-card .info{padding:14px}
-.hair-card h4{color:var(--gold);margin-bottom:5px;font-size:.85rem;font-family:'Cormorant Garamond',serif}
-.hair-card p{font-size:.7rem;color:var(--sub);line-height:1.6}
-
-/* ===== CAMERA ===== */
-.cam-overlay{position:fixed;inset:0;background:#000;z-index:3000;
-  display:flex;flex-direction:column;align-items:center;overflow:hidden}
-.cam-video-wrap{position:relative;width:100%;flex:1;max-height:62vh;overflow:hidden}
-.cam-video-wrap video{width:100%;height:100%;object-fit:cover;
-  transform:scaleX(-1); /* mirror for natural feel */
-  display:block}
-.scan-line{position:absolute;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,transparent,rgba(212,175,55,.8),transparent);
-  animation:scanLine 2s linear infinite;pointer-events:none}
-.cam-face-guide{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:200px;height:260px;border-radius:50%;
-  border:2px solid rgba(212,175,55,.4);pointer-events:none}
-.cam-arrow-overlay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  font-size:3rem;animation:arrowPulse .7s ease infinite;pointer-events:none;
-  text-shadow:0 0 20px rgba(212,175,55,.8)}
-.cam-controls{width:100%;padding:16px 20px 30px;
-  display:flex;flex-direction:column;align-items:center;gap:10px;background:#000}
-.cam-step-info{text-align:center}
-.cam-step-label{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;
-  color:var(--gold);margin-bottom:3px}
-.cam-step-sub{font-size:.68rem;color:var(--sub)}
-.cam-dots{display:flex;gap:6px;justify-content:center;margin:10px 0}
-.cam-dot{width:8px;height:8px;border-radius:4px;background:rgba(255,255,255,.12);
-  transition:all .3s ease}
-.cam-dot.active{background:var(--gold);width:24px;box-shadow:0 0 8px rgba(212,175,55,.5)}
-.cam-dot.done{background:rgba(212,175,55,.4)}
-.cam-btn-row{display:flex;gap:10px;width:100%;max-width:340px}
-.cam-shutter{width:64px;height:64px;border-radius:50%;border:3px solid var(--gold);
-  background:rgba(212,175,55,.1);cursor:pointer;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;font-size:1.5rem;
-  transition:all .15s ease;box-shadow:0 0 20px rgba(212,175,55,.2)}
-.cam-shutter:active{transform:scale(.9);background:rgba(212,175,55,.3)}
-.cam-main-btn{flex:1;padding:15px;border-radius:16px;border:none;
-  background:linear-gradient(135deg,#c9a227,#d4af37);color:#000;font-weight:800;
-  font-size:.85rem;cursor:pointer;font-family:'DM Sans',inherit}
-
-/* ===== SCAN GUIDE ===== */
-.guide-overlay{position:fixed;inset:0;background:#000;z-index:3000;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 24px}
-.guide-counter{font-size:.62rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);
-  margin-bottom:24px;font-weight:600;background:rgba(212,175,55,.1);
-  border:1px solid rgba(212,175,55,.2);padding:6px 16px;border-radius:20px}
-.guide-emoji{font-size:5.5rem;line-height:1;margin:8px 0;
-  filter:drop-shadow(0 0 20px rgba(212,175,55,.3))}
-.guide-emoji.anim-straight{animation:headBob 1s ease infinite}
-.guide-emoji.anim-right{animation:headRight .85s ease infinite}
-.guide-emoji.anim-left{animation:headLeft .85s ease infinite}
-.guide-emoji.anim-up{animation:headUp .85s ease infinite}
-.guide-emoji.anim-down{animation:headDown .85s ease infinite}
-.guide-arrow{font-size:2.8rem;color:var(--gold);animation:arrowPulse .7s ease infinite;margin:8px 0}
-.guide-label{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;
-  text-align:center;margin:6px 0 4px}
-.guide-sub{font-size:.72rem;color:var(--sub);text-align:center;margin-bottom:28px}
-.guide-bar{display:flex;gap:6px;margin-bottom:28px}
-.guide-dot{width:8px;height:8px;border-radius:4px;background:rgba(255,255,255,.12);transition:all .3s ease}
-.guide-dot.active{background:var(--gold);width:24px;box-shadow:0 0 8px rgba(212,175,55,.5)}
-.guide-dot.done{background:rgba(212,175,55,.4)}
-
-/* ===== PRODUCT UPLOAD CHOICES ===== */
-.prod-source-row{display:flex;gap:8px;margin:6px 0}
-.prod-source-btn{flex:1;padding:12px 6px;border-radius:14px;border:1px solid rgba(255,255,255,.08);
-  background:rgba(255,255,255,.03);color:#fff;font-size:.72rem;font-weight:600;cursor:pointer;
-  font-family:'DM Sans',inherit;transition:all .2s ease;text-align:center}
-.prod-source-btn:active{transform:scale(.96);background:rgba(212,175,55,.08);border-color:var(--gold)}
-
-/* ===== INSPO GRID ===== */
-.inspo-grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.inspo-thumb{position:relative;cursor:pointer}
-.inspo-thumb img{width:62px;height:62px;object-fit:cover;border-radius:10px;
-  border:2px solid rgba(212,175,55,.2);display:block}
-.inspo-thumb .rm{position:absolute;top:-5px;right:-5px;background:var(--red);color:#fff;
-  border-radius:50%;width:18px;height:18px;font-size:.5rem;border:none;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;font-weight:700}
-
-/* ===== RECOMMENDATION CARD ===== */
-.rec-card{background:rgba(16,16,16,.9);border:1px solid rgba(212,175,55,.15);
+/* REC CARD */
+.rec-card{background:rgba(14,14,14,.95);border:1px solid rgba(212,175,55,.15);
   border-radius:18px;padding:16px;margin:8px 0}
 .rec-card-title{font-family:'Cormorant Garamond',serif;color:var(--gold);
   font-size:.95rem;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
@@ -275,38 +187,172 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .rec-rank{width:28px;height:28px;border-radius:50%;
   background:linear-gradient(135deg,#c9a227,#d4af37);color:#000;
   display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.7rem;flex-shrink:0}
-.rec-info{flex:1;font-size:.72rem}
-.rec-info strong{color:#fff;font-size:.78rem}
-.rec-info .rec-price{color:var(--gold);font-weight:700;margin:2px 0}
-.rec-info .rec-why{color:var(--sub);line-height:1.5}
-.rec-link{display:inline-block;margin-top:4px;padding:4px 10px;border-radius:8px;
+.rec-link{display:inline-block;margin-top:5px;padding:5px 11px;border-radius:8px;
   background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.2);
   color:#60a5fa;font-size:.62rem;font-weight:600;text-decoration:none}
-.rec-link:hover{background:rgba(96,165,250,.18)}
 
-/* ===== SCORE TIER COLORS ===== */
-.tier-ultra{color:#f0cc5a}
-.tier-high{color:#d4af37}
-.tier-mid{color:#a8a8a8}
+/* CAMERA OVERLAY — fullscreen */
+.cam-overlay{position:fixed;inset:0;background:#000;z-index:3000;
+  display:flex;flex-direction:column;align-items:center;overflow:hidden}
 
-/* ===== DIVIDER ===== */
-.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);margin:14px 0}
+/* Video fills top ~60% */
+.cam-video-wrap{
+  position:relative;width:100%;
+  flex:0 0 60vh;overflow:hidden;
+}
+.cam-video-wrap video{
+  width:100%;height:100%;object-fit:cover;
+  transform:scaleX(-1); /* mirror so user feels natural */
+  display:block;
+}
 
-/* ===== STAT ROW ===== */
-.stat-input-row{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);
+/* Golden oval face guide */
+.cam-face-oval{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:55%;height:80%;
+  border-radius:50%;
+  border:2px solid rgba(212,175,55,.55);
+  box-shadow:0 0 0 4000px rgba(0,0,0,.28);
+  pointer-events:none;
+  transition:border-color .3s;
+}
+
+/* Direction arrow — LARGE, centered over face */
+.cam-dir-arrow{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  font-size:4rem;
+  filter:drop-shadow(0 0 12px rgba(212,175,55,.9));
+  animation:arrowPulse .75s ease infinite;
+  pointer-events:none;
+  line-height:1;
+}
+
+/* Step label on top of video */
+.cam-video-label{
+  position:absolute;bottom:10px;left:50%;transform:translateX(-50%);
+  background:rgba(0,0,0,.65);
+  border:1px solid rgba(212,175,55,.35);
+  border-radius:20px;padding:6px 16px;
+  font-size:.75rem;font-weight:700;color:var(--gold);
+  white-space:nowrap;backdrop-filter:blur(8px);
+}
+
+/* Scan line */
+.scan-line{position:absolute;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(212,175,55,.85),transparent);
+  animation:scanLine 2.2s linear infinite;pointer-events:none}
+
+/* Flash on capture */
+.cam-flash{position:absolute;inset:0;background:#fff;
+  opacity:0;pointer-events:none;animation:none}
+.cam-flash.on{animation:flashCapture .35s ease forwards}
+
+/* Controls panel below video */
+.cam-controls{
+  width:100%;flex:1;
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:space-between;
+  padding:12px 20px 24px;background:#000;
+}
+.cam-progress-row{display:flex;gap:5px;justify-content:center;margin-bottom:4px}
+.cam-pdot{width:8px;height:8px;border-radius:4px;background:rgba(255,255,255,.13);
+  transition:all .3s ease}
+.cam-pdot.active{background:var(--gold);width:24px;box-shadow:0 0 8px rgba(212,175,55,.5)}
+.cam-pdot.done{background:rgba(212,175,55,.45)}
+
+.cam-step-label{font-family:'Cormorant Garamond',serif;font-size:1.05rem;
+  font-weight:700;color:var(--gold);text-align:center}
+.cam-step-sub{font-size:.65rem;color:var(--sub);text-align:center;margin-top:2px}
+.cam-counter{font-size:.58rem;color:#555;text-align:center;margin-top:3px}
+
+.cam-btn-row{display:flex;gap:10px;width:100%;max-width:320px;align-items:center;margin-top:8px}
+.cam-capture-btn{
+  flex:1;padding:15px;border-radius:16px;border:none;
+  background:linear-gradient(135deg,#c9a227,#d4af37);
+  color:#000;font-weight:800;font-size:.85rem;cursor:pointer;
+  font-family:'DM Sans',inherit;
+  box-shadow:0 4px 20px rgba(212,175,55,.35);
+  transition:all .15s ease;
+}
+.cam-capture-btn:active{transform:scale(.94)}
+.cam-cancel-btn{
+  width:50px;height:50px;border-radius:50%;border:2px solid rgba(255,255,255,.18);
+  background:rgba(255,255,255,.05);color:#fff;font-size:1rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  transition:all .15s ease;
+}
+.cam-cancel-btn:active{background:rgba(239,68,68,.2);border-color:var(--red)}
+
+/* GUIDE OVERLAY */
+.guide-overlay{position:fixed;inset:0;background:#000;z-index:3001;
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:28px 24px}
+.guide-counter{font-size:.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);
+  margin-bottom:20px;font-weight:600;background:rgba(212,175,55,.1);
+  border:1px solid rgba(212,175,55,.2);padding:6px 16px;border-radius:20px}
+.guide-emoji{font-size:5.5rem;line-height:1;margin:6px 0;
+  filter:drop-shadow(0 0 20px rgba(212,175,55,.3))}
+.guide-emoji.anim-straight{animation:headBob 1s ease infinite}
+.guide-emoji.anim-right{animation:headRight .85s ease infinite}
+.guide-emoji.anim-left{animation:headLeft .85s ease infinite}
+.guide-emoji.anim-up{animation:headUp .85s ease infinite}
+.guide-emoji.anim-down{animation:headDown .85s ease infinite}
+.guide-arrow{font-size:2.8rem;color:var(--gold);
+  animation:arrowPulse .7s ease infinite;margin:6px 0;
+  transform-origin:center;
+  /* override arrowPulse translate for non-absolute context */
+  animation-name:guideArrowPulse}
+@keyframes guideArrowPulse{0%,100%{opacity:.45;transform:scale(1)}50%{opacity:1;transform:scale(1.25)}}
+.guide-label{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;
+  text-align:center;margin:5px 0 3px}
+.guide-sub{font-size:.72rem;color:var(--sub);text-align:center;margin-bottom:24px}
+.guide-bar{display:flex;gap:6px;margin-bottom:24px}
+.guide-dot{width:8px;height:8px;border-radius:4px;background:rgba(255,255,255,.13);transition:all .3s ease}
+.guide-dot.active{background:var(--gold);width:24px;box-shadow:0 0 8px rgba(212,175,55,.5)}
+.guide-dot.done{background:rgba(212,175,55,.45)}
+
+/* INSPO GRID */
+.inspo-grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.inspo-thumb{position:relative}
+.inspo-thumb img{width:64px;height:64px;object-fit:cover;border-radius:10px;
+  border:2px solid rgba(212,175,55,.22);display:block;cursor:pointer}
+.inspo-thumb .rm{position:absolute;top:-5px;right:-5px;background:var(--red);color:#fff;
+  border-radius:50%;width:19px;height:19px;font-size:.5rem;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-weight:700;z-index:1}
+
+/* PROD SOURCE BUTTONS */
+.prod-source-row{display:flex;gap:8px;margin:6px 0}
+.psb{flex:1;padding:13px 6px;border-radius:14px;border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.03);color:#fff;font-size:.72rem;font-weight:600;cursor:pointer;
+  font-family:'DM Sans',inherit;transition:all .2s ease;text-align:center}
+.psb:active{transform:scale(.96);background:rgba(212,175,55,.08);border-color:var(--gold)}
+
+/* OBS OVERLAY */
+.obs-overlay{position:fixed;inset:0;background:rgba(0,0,0,.96);z-index:3002;
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  backdrop-filter:blur(12px)}
+
+/* STAT INPUT ROW */
+.stat-row{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);
   border-radius:14px;padding:14px;margin-bottom:8px}
-.stat-label{font-size:.8rem;font-weight:600;margin-bottom:8px}
-.stat-row-inner{display:flex;justify-content:space-between;align-items:center}
 
-/* ===== OBS OVERLAY ===== */
-.obs-overlay{position:fixed;inset:0;background:rgba(0,0,0,.96);z-index:3001;
-  display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(12px)}
+/* LINK BUTTONS */
+.link-btn{display:inline-flex;align-items:center;gap:5px;padding:8px 13px;
+  border-radius:10px;font-size:.65rem;font-weight:600;text-decoration:none;
+  transition:opacity .2s;border:1px solid}
+.link-btn:hover{opacity:.8}
+.link-btn-blue{background:rgba(66,133,244,.12);border-color:rgba(66,133,244,.25);color:#60a5fa}
+.link-btn-red{background:rgba(255,0,0,.1);border-color:rgba(255,0,0,.2);color:#ff5555}
+.link-btn-pink{background:rgba(230,0,35,.1);border-color:rgba(230,0,35,.2);color:#ff4458}
+.link-btn-gold{background:rgba(212,175,55,.1);border-color:rgba(212,175,55,.25);color:var(--gold)}
 </style>
 </head>
 <body>
 <div id="app" class="app"></div>
 <div id="toasts"></div>
-
 <script>
 (function(){
 "use strict";
@@ -314,34 +360,30 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 var API_URL='https://api.groq.com/openai/v1/chat/completions';
 var MODEL='meta-llama/llama-4-scout-17b-16e-instruct';
 
-/* ===== SCORE TIERS ===== */
+/* ── TIERS ── */
 var TIERS=[
-  {min:95,label:'Guddommeligt',icon:'👑',color:'#f0cc5a'},
+  {min:96,label:'Guddommeligt',icon:'👑',color:'#f0cc5a'},
   {min:88,label:'Gigachad',icon:'⚡',color:'#f0cc5a'},
-  {min:80,label:'Høj Tiltrækning',icon:'🔥',color:'#d4af37'},
+  {min:80,label:'Meget Attraktiv',icon:'🔥',color:'#d4af37'},
   {min:70,label:'Attraktiv',icon:'✨',color:'#d4af37'},
   {min:60,label:'Over Gennemsnit',icon:'⭐',color:'#d4af37'},
   {min:50,label:'Gennemsnit',icon:'📈',color:'#9ca3af'},
   {min:40,label:'Under Gennemsnit',icon:'💪',color:'#9ca3af'},
   {min:0,label:'Looksmaxxing Starter',icon:'🌱',color:'#9ca3af'}
 ];
+function getTier(sc){for(var i=0;i<TIERS.length;i++){if(sc>=TIERS[i].min)return TIERS[i]}return TIERS[TIERS.length-1]}
 
-function getTier(score){
-  for(var i=0;i<TIERS.length;i++){if(score>=TIERS[i].min)return TIERS[i]}
-  return TIERS[TIERS.length-1];
-}
-
-/* ===== GUIDE STEPS ===== */
-var GUIDE_STEPS=[
-  {label:'Kig LIGE FREM',sub:'Hold ansigtet neutralt direkte mod kameraet',arrow:'⬆',anim:'anim-straight',camArrow:''},
-  {label:'Drej til HØJRE',sub:'Drej dit hoved langsomt mod højre',arrow:'➡',anim:'anim-right',camArrow:'➡'},
-  {label:'Drej til VENSTRE',sub:'Drej dit hoved langsomt mod venstre',arrow:'⬅',anim:'anim-left',camArrow:'⬅'},
-  {label:'Løft hagen OP',sub:'Løft hagen let og kig en smule opad',arrow:'⬆',anim:'anim-up',camArrow:'⬆'},
-  {label:'Sænk hagen NED',sub:'Sænk hagen let og kig en smule nedad',arrow:'⬇',anim:'anim-down',camArrow:'⬇'}
+/* ── GUIDE STEPS ── */
+var GUIDE=[
+  {label:'Kig LIGE FREM',sub:'Hold ansigtet neutralt og kig direkte ind i kameraet',arrow:'',anim:'anim-straight'},
+  {label:'Drej til HØJRE',sub:'Drej dit hoved langsomt mod din højre side',arrow:'➡',anim:'anim-right'},
+  {label:'Drej til VENSTRE',sub:'Drej dit hoved langsomt mod din venstre side',arrow:'⬅',anim:'anim-left'},
+  {label:'Løft hagen OP',sub:'Løft hagen let og kig en smule opad',arrow:'⬆',anim:'anim-up'},
+  {label:'Sænk hagen NED',sub:'Sænk hagen let og kig en smule nedad',arrow:'⬇',anim:'anim-down'}
 ];
 
-/* ===== DEFAULT STATE ===== */
-function getDefaultState(){
+/* ── STATE ── */
+function defState(){
   return{tab:'home',score:50,streak:[],lastDate:'',
     stats:{sleep:0,water:0,workout:0,skincare:0,mewing:0,posture:0,nutrition:0,sun:0},
     onboarded:false,apiKey:'',
@@ -350,47 +392,47 @@ function getDefaultState(){
     products:{face:[],hair:[]},
     progressGallery:[],extraObservations:'',hairInspo:[]};
 }
-
-var S=getDefaultState();
+var S=defState();
 var camStream=null,scanStep=0,scanImgs=[],guideStep=0;
 
-/* ===== STORAGE ===== */
+/* ── STORAGE ── */
 function load(){
   try{
-    var raw=localStorage.getItem('lmx_v3');
-    if(raw){var p=JSON.parse(raw);S=Object.assign(getDefaultState(),p)}
+    var raw=localStorage.getItem('lmx_v4');
+    if(raw){var p=JSON.parse(raw);S=Object.assign(defState(),p)}
     if(!Array.isArray(S.streak))S.streak=[];
     if(!S.products||typeof S.products!=='object')S.products={face:[],hair:[]};
     if(!Array.isArray(S.products.face))S.products.face=[];
     if(!Array.isArray(S.products.hair))S.products.hair=[];
     if(!Array.isArray(S.progressGallery))S.progressGallery=[];
     if(!Array.isArray(S.hairInspo))S.hairInspo=[];
-    if(!S.stats||typeof S.stats!=='object')S.stats={sleep:0,water:0,workout:0,skincare:0,mewing:0,posture:0,nutrition:0,sun:0};
-    if(!S.hairProfile||typeof S.hairProfile!=='object')S.hairProfile={type:'',thickness:'',texture:'',lengthCm:'',concerns:'',preferences:''};
-    var k=localStorage.getItem('lmx_apikey_v3');
+    if(!S.stats||typeof S.stats!=='object')
+      S.stats={sleep:0,water:0,workout:0,skincare:0,mewing:0,posture:0,nutrition:0,sun:0};
+    if(!S.hairProfile||typeof S.hairProfile!=='object')
+      S.hairProfile={type:'',thickness:'',texture:'',lengthCm:'',concerns:'',preferences:''};
+    var k=localStorage.getItem('lmx_apikey_v4');
     if(k)S.apiKey=k;
     var t=new Date().toDateString();
-    if(S.lastDate!==t){S.stats={sleep:0,water:0,workout:0,skincare:0,mewing:0,posture:0,nutrition:0,sun:0};S.lastDate=t}
-  }catch(e){S=getDefaultState();console.log('Load reset:',e)}
+    if(S.lastDate!==t){
+      S.stats={sleep:0,water:0,workout:0,skincare:0,mewing:0,posture:0,nutrition:0,sun:0};
+      S.lastDate=t;
+    }
+  }catch(e){S=defState()}
   calcScore();
 }
 
 function save(){
   try{
     S.lastDate=new Date().toDateString();
-    var ts=JSON.parse(JSON.stringify(S));
-    delete ts.apiKey;
-    localStorage.setItem('lmx_v3',JSON.stringify(ts));
-    if(S.apiKey)localStorage.setItem('lmx_apikey_v3',S.apiKey);
+    var ts=JSON.parse(JSON.stringify(S));delete ts.apiKey;
+    localStorage.setItem('lmx_v4',JSON.stringify(ts));
+    if(S.apiKey)localStorage.setItem('lmx_apikey_v4',S.apiKey);
     calcScore();
   }catch(e){}
 }
 
-function getAPIKey(){
-  try{if(!S.apiKey)S.apiKey=localStorage.getItem('lmx_apikey_v3')||''}catch(e){}
-  return S.apiKey||'';
-}
-function setAPIKey(k){S.apiKey=k;try{localStorage.setItem('lmx_apikey_v3',k)}catch(e){}}
+function getKey(){try{if(!S.apiKey)S.apiKey=localStorage.getItem('lmx_apikey_v4')||''}catch(e){}return S.apiKey||''}
+function setKey(k){S.apiKey=k;try{localStorage.setItem('lmx_apikey_v4',k)}catch(e){}}
 
 function calcScore(){
   try{
@@ -416,165 +458,189 @@ function toast(m){
   try{
     var c=document.getElementById('toasts');if(!c)return;
     var t=document.createElement('div');t.className='toast';t.textContent=m;
-    c.appendChild(t);
-    setTimeout(function(){if(t.parentNode)t.remove()},2800);
+    c.appendChild(t);setTimeout(function(){if(t.parentNode)t.remove()},2800);
   }catch(e){}
 }
 
-/* ===== AI CALL ===== */
+/* ── AI CALL ── */
 async function callAI(prompt,img){
-  var key=getAPIKey();
-  if(!key){showAPISetup();throw new Error('Indtast API-nøgle')}
+  var key=getKey();
+  if(!key){showAPISetup();throw new Error('Ingen API-nøgle — indtast din Groq-nøgle')}
   var msgs=[];
-  if(img){msgs.push({role:'user',content:[{type:'image_url',image_url:{url:'data:image/jpeg;base64,'+img,detail:'high'}},{type:'text',text:prompt}]})}
-  else{msgs.push({role:'user',content:prompt})}
+  if(img){
+    msgs.push({role:'user',content:[
+      {type:'image_url',image_url:{url:'data:image/jpeg;base64,'+img,detail:'high'}},
+      {type:'text',text:prompt}
+    ]});
+  }else{msgs.push({role:'user',content:prompt})}
   var r=await fetch(API_URL,{method:'POST',
     headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
-    body:JSON.stringify({model:MODEL,messages:msgs,max_tokens:2500,temperature:0.75})});
+    body:JSON.stringify({model:MODEL,messages:msgs,max_tokens:2800,temperature:0.75})});
   if(!r.ok){var e=await r.json();throw new Error(e.error?e.error.message:'API-fejl')}
   var d=await r.json();return d.choices[0].message.content;
 }
 
 function compressImg(file,maxW){
   maxW=maxW||900;
-  return new Promise(function(resolve){
+  return new Promise(function(resolve,reject){
     var reader=new FileReader();
+    reader.onerror=reject;
     reader.onload=function(e){
       var img=new Image();
+      img.onerror=reject;
       img.onload=function(){
-        var c=document.createElement('canvas');var w=img.width,h=img.height;
-        if(w>maxW){h=(maxW/w)*h;w=maxW}
-        c.width=w;c.height=h;var ctx=c.getContext('2d');ctx.drawImage(img,0,0,w,h);
-        resolve({b64:c.toDataURL('image/jpeg',.88).split(',')[1],url:c.toDataURL('image/jpeg',.88)});
-      };img.src=e.target.result;
-    };reader.readAsDataURL(file);
+        var c=document.createElement('canvas');
+        var w=img.width,h=img.height;
+        if(w>maxW){h=Math.round((maxW/w)*h);w=maxW}
+        c.width=w;c.height=h;
+        c.getContext('2d').drawImage(img,0,0,w,h);
+        var url=c.toDataURL('image/jpeg',.88);
+        resolve({b64:url.split(',')[1],url:url});
+      };
+      img.src=e.target.result;
+    };
+    reader.readAsDataURL(file);
   });
 }
 
-/* ===== CAMERA ===== */
-function startScan(){guideStep=0;showScanGuide()}
+/* ══════════════════════════════════
+   CAMERA / SCAN
+══════════════════════════════════ */
+function startScan(){guideStep=0;showGuide()}
 
-function showScanGuide(){
+function showGuide(){
   var ex=document.getElementById('scanGuideUI');if(ex)ex.remove();
-  var step=GUIDE_STEPS[guideStep];
-  var dotsHtml='';
-  for(var i=0;i<GUIDE_STEPS.length;i++){
+  var g=GUIDE[guideStep];
+  var dotsH='';
+  for(var i=0;i<GUIDE.length;i++){
     var cls='guide-dot';
     if(i===guideStep)cls+=' active';else if(i<guideStep)cls+=' done';
-    dotsHtml+='<div class="'+cls+'"></div>';
+    dotsH+='<div class="'+cls+'"></div>';
   }
-  var o=document.createElement('div');
-  o.className='guide-overlay';o.id='scanGuideUI';
+  var o=document.createElement('div');o.className='guide-overlay';o.id='scanGuideUI';
   o.innerHTML=
-    '<div class="guide-counter">'+(guideStep+1)+' / '+GUIDE_STEPS.length+'</div>'+
-    '<div class="guide-bar">'+dotsHtml+'</div>'+
-    '<div class="guide-emoji '+step.anim+'">🧑</div>'+
-    '<div class="guide-arrow">'+step.arrow+'</div>'+
-    '<div class="guide-label">'+step.label+'</div>'+
-    '<div class="guide-sub">'+step.sub+'</div>'+
-    '<button class="btn btn-gold" style="width:80%;max-width:300px" id="guideNextBtn">'+
-      (guideStep===0?'▶ Start guide':(guideStep===GUIDE_STEPS.length-1?'✓ Åbn kamera':'Næste →'))+
+    '<div class="guide-counter">'+(guideStep+1)+' / '+GUIDE.length+'</div>'+
+    '<div class="guide-bar">'+dotsH+'</div>'+
+    '<div class="guide-emoji '+g.anim+'">🧑</div>'+
+    (g.arrow?'<div class="guide-arrow">'+g.arrow+'</div>':
+      '<div style="font-size:2rem;margin:8px 0;opacity:.5">📷</div>')+
+    '<div class="guide-label">'+g.label+'</div>'+
+    '<div class="guide-sub">'+g.sub+'</div>'+
+    '<button class="btn btn-gold" style="width:82%;max-width:300px" id="guideNextBtn">'+
+      (guideStep===0?'▶ Se guide':(guideStep===GUIDE.length-1?'✓ Åbn kamera':'Næste →'))+
     '</button>'+
-    '<button class="btn btn-outline" style="width:80%;max-width:300px;margin-top:6px" onclick="window._cancelGuide()">Annuller</button>';
+    '<button class="btn btn-outline" style="width:82%;max-width:300px;margin-top:6px" '+
+      'onclick="window._cancelGuide()">Annuller</button>';
   document.body.appendChild(o);
   document.getElementById('guideNextBtn').onclick=function(){
     guideStep++;
-    if(guideStep>=GUIDE_STEPS.length){
-      var g=document.getElementById('scanGuideUI');if(g)g.remove();
-      startCameraAfterGuide();
-    }else{showScanGuide()}
+    if(guideStep>=GUIDE.length){
+      var g2=document.getElementById('scanGuideUI');if(g2)g2.remove();
+      openCamera();
+    }else{showGuide()}
   };
 }
 
 window._cancelGuide=function(){var g=document.getElementById('scanGuideUI');if(g)g.remove()};
 
-async function startCameraAfterGuide(){
+async function openCamera(){
   try{
     camStream=await navigator.mediaDevices.getUserMedia(
-      {video:{facingMode:'user',width:{ideal:900},height:{ideal:900}}});
-    scanStep=0;scanImgs=[];showCamUI();
-  }catch(e){toast('Kamera ikke tilgængeligt — check tilladelser')}
+      {video:{facingMode:'user',width:{ideal:1080},height:{ideal:1080}}});
+    scanStep=0;scanImgs=[];
+    buildCamUI();
+  }catch(e){toast('Kamera ikke tilgængeligt — tjek tilladelser i indstillinger')}
 }
 
-function showCamUI(){
-  try{
-    var step=GUIDE_STEPS[scanStep];
-    var dotsH='';
-    for(var i=0;i<GUIDE_STEPS.length;i++){
-      var cls='cam-dot';
-      if(i===scanStep)cls+=' active';else if(i<scanStep)cls+=' done';
-      dotsH+='<div class="'+cls+'"></div>';
-    }
-    var o=document.createElement('div');
-    o.className='cam-overlay';o.id='camUI';
-    o.innerHTML=
-      '<div class="cam-video-wrap">'+
-        '<video id="camVid" autoplay playsinline muted></video>'+
-        '<div class="scan-line"></div>'+
-        '<div class="cam-face-guide"></div>'+
-        (step.camArrow?'<div class="cam-arrow-overlay">'+step.camArrow+'</div>':'')+
+function buildCamUI(){
+  var g=GUIDE[scanStep];
+  var dotsH='';
+  for(var i=0;i<GUIDE.length;i++){
+    var cls='cam-pdot';
+    if(i===scanStep)cls+=' active';else if(i<scanStep)cls+=' done';
+    dotsH+='<div class="'+cls+'"></div>';
+  }
+  var o=document.createElement('div');o.className='cam-overlay';o.id='camUI';
+  o.innerHTML=
+    '<div class="cam-video-wrap">'+
+      '<video id="camVid" autoplay playsinline muted></video>'+
+      '<div class="scan-line"></div>'+
+      '<div class="cam-face-oval" id="camOval"></div>'+
+      /* Direction arrow centred over the face guide */
+      (g.arrow?'<div class="cam-dir-arrow" id="camArrow">'+g.arrow+'</div>':
+        '<div class="cam-dir-arrow" id="camArrow" style="opacity:0">·</div>')+
+      '<div class="cam-video-label" id="camVidLabel">'+g.label+'</div>'+
+      '<div class="cam-flash" id="camFlash"></div>'+
+    '</div>'+
+    '<div class="cam-controls">'+
+      '<div>'+
+        '<div class="cam-progress-row" id="camDots">'+dotsH+'</div>'+
+        '<div class="cam-step-label" id="camLabel">'+g.label+'</div>'+
+        '<div class="cam-step-sub" id="camSub">'+g.sub+'</div>'+
+        '<div class="cam-counter" id="camCnt">Billede '+(scanStep+1)+' af '+GUIDE.length+'</div>'+
       '</div>'+
-      '<div class="cam-controls">'+
-        '<div class="cam-step-info">'+
-          '<div class="cam-step-label" id="camLabel">'+step.label+'</div>'+
-          '<div class="cam-step-sub" id="camSub">'+step.sub+'</div>'+
-        '</div>'+
-        '<div class="cam-dots" id="camDots">'+dotsH+'</div>'+
-        '<div style="font-size:.62rem;color:var(--sub);margin-bottom:6px">Billede '+(scanStep+1)+' af 5</div>'+
-        '<div class="cam-btn-row">'+
-          '<button class="cam-main-btn" id="camCapBtn" onclick="window._captureScan()">📷 Tag billede</button>'+
-          '<button class="cam-shutter" onclick="window._stopCam()" title="Annuller">✕</button>'+
-        '</div>'+
-      '</div>';
-    document.body.appendChild(o);
-    document.getElementById('camVid').srcObject=camStream;
-  }catch(e){stopCam()}
+      '<div class="cam-btn-row">'+
+        '<button class="cam-capture-btn" id="camCapBtn" onclick="window._capture()">'+
+          '📷 Tag billede (1/'+GUIDE.length+')'+
+        '</button>'+
+        '<button class="cam-cancel-btn" onclick="window._stopCam()" title="Annuller">✕</button>'+
+      '</div>'+
+    '</div>';
+  document.body.appendChild(o);
+  var vid=document.getElementById('camVid');
+  if(vid)vid.srcObject=camStream;
 }
 
-function updateCamUI(){
-  var step=GUIDE_STEPS[scanStep];
+function refreshCamUI(){
+  var g=GUIDE[scanStep];
   var lbl=document.getElementById('camLabel');
   var sub=document.getElementById('camSub');
+  var cnt=document.getElementById('camCnt');
   var btn=document.getElementById('camCapBtn');
+  var arrow=document.getElementById('camArrow');
+  var vidLbl=document.getElementById('camVidLabel');
   var dots=document.getElementById('camDots');
-  var cntEl=document.querySelector('#camUI .cam-controls div[style]');
-  if(lbl)lbl.textContent=step.label;
-  if(sub)sub.textContent=step.sub;
-  if(btn)btn.textContent='📷 Tag billede';
-  if(cntEl)cntEl.textContent='Billede '+(scanStep+1)+' af 5';
-  // Update arrow overlay
-  var arrowEl=document.querySelector('.cam-arrow-overlay');
-  if(step.camArrow){
-    if(!arrowEl){
-      var vw=document.querySelector('.cam-video-wrap');
-      if(vw){var d=document.createElement('div');d.className='cam-arrow-overlay';d.textContent=step.camArrow;vw.appendChild(d)}
-    }else{arrowEl.textContent=step.camArrow}
-  }else{if(arrowEl)arrowEl.remove()}
-  // Update dots
+  if(lbl)lbl.textContent=g.label;
+  if(sub)sub.textContent=g.sub;
+  if(cnt)cnt.textContent='Billede '+(scanStep+1)+' af '+GUIDE.length;
+  if(btn)btn.textContent='📷 Tag billede ('+(scanStep+1)+'/'+GUIDE.length+')';
+  if(vidLbl)vidLbl.textContent=g.label;
+  /* Update arrow */
+  if(arrow){
+    arrow.textContent=g.arrow||'';
+    arrow.style.opacity=g.arrow?'1':'0';
+  }
+  /* Update dots */
   if(dots){
-    var dotsH='';
-    for(var i=0;i<GUIDE_STEPS.length;i++){
-      var cls='cam-dot';
+    var dH='';
+    for(var i=0;i<GUIDE.length;i++){
+      var cls='cam-pdot';
       if(i===scanStep)cls+=' active';else if(i<scanStep)cls+=' done';
-      dotsH+='<div class="'+cls+'"></div>';
+      dH+='<div class="'+cls+'"></div>';
     }
-    dots.innerHTML=dotsH;
+    dots.innerHTML=dH;
   }
 }
 
-window._captureScan=function(){
+window._capture=function(){
   try{
     var v=document.getElementById('camVid');if(!v)return;
+    /* Flash effect */
+    var fl=document.getElementById('camFlash');
+    if(fl){fl.classList.remove('on');void fl.offsetWidth;fl.classList.add('on')}
+    /* Draw unmirrored (camera native) */
     var c=document.createElement('canvas');
     c.width=v.videoWidth;c.height=v.videoHeight;
-    var ctx=c.getContext('2d');
-    // Save unmirrored (as camera sees it)
-    ctx.drawImage(v,0,0,c.width,c.height);
-    scanImgs.push(c.toDataURL('image/jpeg',.9));
+    c.getContext('2d').drawImage(v,0,0,c.width,c.height);
+    scanImgs.push(c.toDataURL('image/jpeg',.92));
     scanStep++;
-    if(scanStep<5){updateCamUI()}
-    else{stopCam();showExtraObs()}
-  }catch(e){stopCam()}
+    if(scanStep<GUIDE.length){
+      refreshCamUI();
+    }else{
+      stopCam();
+      showExtraObs();
+    }
+  }catch(e){console.error(e);stopCam()}
 };
 
 window._stopCam=function(){stopCam()};
@@ -584,173 +650,205 @@ function stopCam(){
   var u=document.getElementById('camUI');if(u)u.remove();
 }
 
-/* ===== EXTRA OBSERVATIONS ===== */
+/* ── EXTRA OBSERVATIONS ── */
 function showExtraObs(){
-  try{
-    var o=document.createElement('div');
-    o.className='obs-overlay';o.id='obsOverlay';
-    o.innerHTML=
-      '<div class="glass" style="max-width:420px;width:100%;padding:28px">'+
-        '<div class="sec-head" style="justify-content:center;margin-bottom:8px">Noget AI skal vide?</div>'+
-        '<p style="color:var(--sub);font-size:.68rem;text-align:center;margin-bottom:14px">Vælg hvad der gælder for dig — giver mere præcis analyse</p>'+
-        '<div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-bottom:12px">'+
-          ['Akne','Bumser','Hudorme','Ar','Rynker','Mørke rande','Skæg','Skel','Tør hud','Fedtet hud','Rødme','Pigmentplet'].map(function(t){
-            return '<span class="tag" onclick="this.classList.toggle(\'sel\')">'+t+'</span>';
-          }).join('')+
-        '</div>'+
-        '<input id="extraObs" placeholder="Eller skriv selv...">'+
-        '<button class="btn btn-gold" style="margin-top:12px" onclick="window._finishObs()">🔍 Start AI-analyse</button>'+
-        '<button class="btn btn-outline" style="margin-top:6px" onclick="window._skipObs()">Spring over</button>'+
-      '</div>';
-    o.id='obsOverlay';document.body.appendChild(o);
-  }catch(e){processScan()}
+  var o=document.createElement('div');o.className='obs-overlay';o.id='obsOverlay';
+  o.innerHTML=
+    '<div class="glass" style="max-width:430px;width:100%;padding:26px">'+
+      '<div class="sec-head" style="justify-content:center;margin-bottom:6px">Fortæl AI mere</div>'+
+      '<p style="color:var(--sub);font-size:.68rem;text-align:center;margin-bottom:14px">'+
+        'Vælg hvad der gælder — giver en langt bedre analyse</p>'+
+      '<div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-bottom:12px">'+
+        ['Akne','Bumser','Hudorme','Ar','Rynker','Mørke rande','Skæg','Skel',
+         'Tør hud','Fedtet hud','Rødme','Pigmentpletter'].map(function(t){
+          return '<span class="tag" onclick="this.classList.toggle(\'sel\')">'+t+'</span>';
+        }).join('')+
+      '</div>'+
+      '<input id="extraObs" placeholder="Skriv selv... (fx: rynker omkring øjnene)">'+
+      '<button class="btn btn-gold" style="margin-top:12px" onclick="window._finishObs()">'+
+        '🔍 Start AI-analyse</button>'+
+      '<button class="btn btn-outline" style="margin-top:6px" onclick="window._skipObs()">'+
+        'Spring over</button>'+
+    '</div>';
+  document.body.appendChild(o);
 }
-
 window._finishObs=function(){
-  try{
-    var tags=[];
-    document.querySelectorAll('#obsOverlay .tag.sel').forEach(function(t){tags.push(t.textContent)});
-    var extra=document.getElementById('extraObs');
-    S.extraObservations=tags.concat([extra?extra.value:'']).filter(Boolean).join(', ');
-  }catch(e){S.extraObservations=''}
+  var tags=[];
+  try{document.querySelectorAll('#obsOverlay .tag.sel').forEach(function(t){tags.push(t.textContent)})}catch(e){}
+  var ex=document.getElementById('extraObs');
+  S.extraObservations=tags.concat([ex?ex.value.trim():'']).filter(Boolean).join(', ');
   var o=document.getElementById('obsOverlay');if(o)o.remove();
   processScan();
 };
-window._skipObs=function(){S.extraObservations='';var o=document.getElementById('obsOverlay');if(o)o.remove();processScan()};
+window._skipObs=function(){
+  S.extraObservations='';
+  var o=document.getElementById('obsOverlay');if(o)o.remove();
+  processScan();
+};
 
-/* ===== PROCESS SCAN ===== */
+/* ── PROCESS SCAN ── */
 async function processScan(){
   S.faceImage=scanImgs[0];
   var r=document.getElementById('aiRes');if(!r)return;
   r.innerHTML=
     '<div style="text-align:center;padding:32px">'+
       '<div class="spinner"></div>'+
-      '<p style="color:var(--sub);margin-top:14px;font-size:.75rem">AI analyserer alle 5 vinkler...<br><span style="font-size:.65rem;opacity:.6">Dette tager 10-20 sekunder</span></p>'+
+      '<p style="color:var(--sub);margin-top:14px;font-size:.75rem">'+
+        'AI analyserer alle '+GUIDE.length+' vinkler...<br>'+
+        '<span style="font-size:.65rem;opacity:.55">Dette tager 15–25 sekunder</span></p>'+
     '</div>';
   r.style.display='block';
   try{
-    var frontB64=scanImgs[0].split(',')[1];
+    var b64=scanImgs[0].split(',')[1];
     var extra=S.extraObservations?'\nBRUGER HAR NÆVNT: '+S.extraObservations:'';
     var prompt=
-      'Du er verdens bedste ansigtsanalytiker. Analyser dette ansigt GRUNDIGT og DETALJERET på DANSK. '+extra+
-      '\nReturner KUN JSON uden forklaring:'+
-      '{"rating":1-10,"symmetri":1-10,"hud":1-10,"kæbelinje":1-10,"øjne":1-10,"hår":1-10,"harmoni":1-10,'+
-      '"styrker":["mindst 5 specifikke styrker med detaljer"],'+
-      '"forbedringer":["mindst 5 konkrete forbedringer med WHY og HOW"],'+
-      '"tips":["mindst 8 meget specifikke tips — inkl. søvn timer, vandglas antal, specifikke øvelser, vitaminer, mineraler, hudplejetyper, mewing teknik, zygomaticus øvelser, jaw exercises, specifik kost, solbeskyttelse SPF-niveau, specifikke produkttyper, frisure retning, stil råd, holdnings øvelser"],'+
-      '"potentiale":1-10,'+
-      '"summary":"2-3 sætninger",'+
-      '"optimalSøvn":"tal som tekst fx 8",'+
-      '"optimalVand":"tal som tekst fx 10",'+
+      'Du er verdens absolut bedste ansigtsanalytiker og looksmaxxing-ekspert.'+
+      ' Analyser dette ansigt ULTRA grundigt og DETALJERET på DANSK.'+extra+
+      '\nReturner KUN gyldigt JSON (ingen forklaring udenfor JSON):'+
+      '{"rating":tal 1-10,"symmetri":tal,"hud":tal,"kæbelinje":tal,"øjne":tal,"hår":tal,"harmoni":tal,'+
+      '"styrker":["mindst 6 meget specifikke styrker med anatomiske detaljer"],'+
+      '"forbedringer":["mindst 6 konkrete forbedringsområder med PRÆCIS forklaring på WHY og konkret HOW"],'+
+      '"tips":["mindst 12 meget specifikke og actionable tips — inkl. PRÆCISE søvntimer, PRÆCISE vandglas antal per dag, specifikke kæbeøvelser med sæt og gentagelser, specifikke vitaminer og doser fx Zink 15mg, Biotin 5000mcg, Magnesium 400mg, specifikke hudplejeprodukter og typer, mewing teknik forklaret, zygomaticus øvelser, specifikke kostråd fx øg proteinindtag til 2g per kg kropsvægt, SPF-niveau fx SPF 50+ daglig, frisure retning baseret på ansigtsform, specifikke stilråd for tøj og farver der komplementerer, holdningsøvelser som chin tucks 3x15"],'+
+      '"potentiale":tal 1-10,'+
+      '"summary":"2-3 præcise sætninger om overordnet vurdering",'+
+      '"optimalSøvn":"antal timer som tal-string fx 8",'+
+      '"optimalVand":"antal glas som tal-string fx 10",'+
       '"hudtype":"normal/tør/fedtet/kombineret/sensitiv",'+
       '"ansigtsform":"oval/rund/firkantet/hjerteformet/diamant/aflangt",'+
-      '"prognose":"specifik beskrivelse af potentiale om 3-6 måneder med reel looksmaxxing",'+
-      '"dagligRoutine":["5-7 konkrete daglige handlinger nummereret og detaljerede"]}';
-    var res=await callAI(prompt,frontB64);
-    var analysis;
-    try{var m=res.match(/\{[\s\S]*\}/);if(m)analysis=JSON.parse(m[0]);else throw new Error('')}
+      '"prognose":"detaljeret og specifik beskrivelse af realistisk potentiale om 3-6 måneder med konsekvent looksmaxxing",'+
+      '"dagligRoutine":["6-8 meget konkrete daglige handlinger nummereret og ekstremt detaljerede med tidspunkt og varighed"]}';
+    var res=await callAI(prompt,b64);
+    var an;
+    try{var m=res.match(/\{[\s\S]*\}/);if(m)an=JSON.parse(m[0]);else throw new Error('')}
     catch(e){r.innerHTML='<div class="ai-card">'+res.replace(/\n/g,'<br>')+'</div>';return}
-    S.faceAnalysis=analysis;
+    S.faceAnalysis=an;
+    /* Save to gallery */
     var tw=getWeek();
     if(!Array.isArray(S.progressGallery))S.progressGallery=[];
     if(!S.progressGallery.find(function(p){return p.week===tw})){
-      S.progressGallery.push({week:tw,date:new Date().toISOString(),image:S.faceImage,score:analysis.rating});
+      S.progressGallery.push({week:tw,date:new Date().toISOString(),image:S.faceImage,score:an.rating});
       if(S.progressGallery.length>52)S.progressGallery.shift();
     }
     save();
-    var tier=getTier(analysis.rating*10);
-    r.innerHTML=
-      '<div class="ai-card">'+
-        '<div style="text-align:center;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.06)">'+
-          '<div style="font-family:\'Cormorant Garamond\',serif;font-size:3.2rem;font-weight:700;'+
-            'background:linear-gradient(135deg,#c9a227,#f0cc5a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">'+
-            analysis.rating+'/10</div>'+
-          '<div style="font-size:.8rem;font-weight:700;color:'+tier.color+';margin-top:4px">'+tier.icon+' '+tier.label+'</div>'+
-          '<div style="font-size:.65rem;color:var(--sub);margin-top:6px">'+analysis.summary+'</div>'+
-        '</div>'+
-        '<div style="margin-bottom:14px">'+
-          ['symmetri','hud','kæbelinje','øjne','hår','harmoni'].map(function(k){
-            var key=k==='kæbelinje'?'kæbelinje':(k==='øjne'?'øjne':k);
-            var val=analysis[k]||analysis['kabelinje']||analysis['ojne']||0;
-            return '<div style="display:flex;align-items:center;gap:8px;margin:5px 0;font-size:.65rem">'+
-              '<span style="min-width:65px;color:var(--sub);text-transform:capitalize">'+k.charAt(0).toUpperCase()+k.slice(1)+'</span>'+
-              '<div class="progress-bar"><div class="progress-fill" style="width:'+(val*10)+'%"></div></div>'+
-              '<span style="font-weight:700;min-width:35px;text-align:right">'+val+'/10</span>'+
-            '</div>';
-          }).join('')+
-        '</div>'+
-        '<div style="font-size:.72rem;font-weight:700;color:#22c55e;margin-bottom:6px">✓ STYRKER</div>'+
-        '<div style="margin-bottom:14px">'+
-          ((analysis.styrker||[]).map(function(s){
-            return '<div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04);color:var(--sub);line-height:1.5">• '+s+'</div>';
-          }).join(''))+
-        '</div>'+
-        '<div style="font-size:.72rem;font-weight:700;color:#ef4444;margin-bottom:6px">↑ FORBEDRINGSOMRÅDER</div>'+
-        '<div style="margin-bottom:14px">'+
-          ((analysis.forbedringer||[]).map(function(x){
-            return '<div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04);color:var(--sub);line-height:1.5">• '+x+'</div>';
-          }).join(''))+
-        '</div>'+
-        '<div style="font-size:.72rem;font-weight:700;color:var(--gold);margin-bottom:6px">💡 PRÆCISE TIPS</div>'+
-        '<div style="margin-bottom:14px">'+
-          ((analysis.tips||[]).map(function(t,i){
-            return '<div style="display:flex;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04)">'+
-              '<div style="width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,#c9a227,#d4af37);color:#000;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.58rem;flex-shrink:0">'+(i+1)+'</div>'+
-              '<div style="color:var(--sub);font-size:.7rem;line-height:1.5">'+t+'</div>'+
-            '</div>';
-          }).join(''))+
-        '</div>'+
-        (analysis.dagligRoutine&&analysis.dagligRoutine.length?
-          '<div style="font-size:.72rem;font-weight:700;color:#60a5fa;margin-bottom:6px">📋 DIN DAGLIGE RUTINE</div>'+
-          '<div style="margin-bottom:14px">'+
-            ((analysis.dagligRoutine||[]).map(function(x,i){
-              return '<div style="display:flex;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04)">'+
-                '<div class="step-num">'+(i+1)+'</div>'+
-                '<div style="color:var(--sub);font-size:.7rem;line-height:1.5">'+x+'</div>'+
-              '</div>';
-            }).join(''))+
-          '</div>':'')+
-        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px">'+
-          '<div style="background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);border-radius:12px;padding:12px;text-align:center">'+
-            '<div style="font-size:.6rem;color:var(--sub);margin-bottom:4px">POTENTIALE</div>'+
-            '<div style="font-size:1.3rem;font-weight:700;color:var(--gold)">'+analysis.potentiale+'/10</div>'+
-          '</div>'+
-          '<div style="background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);border-radius:12px;padding:12px;text-align:center">'+
-            '<div style="font-size:.6rem;color:var(--sub);margin-bottom:4px">HUDTYPE</div>'+
-            '<div style="font-size:.85rem;font-weight:700;color:#fff">'+(analysis.hudtype||'-')+'</div>'+
-          '</div>'+
-        '</div>'+
-        '<div style="background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.15);border-radius:14px;padding:14px;margin-top:12px">'+
-          '<div style="font-size:.62rem;color:var(--gold);font-weight:700;margin-bottom:5px">🚀 PROGNOSE OM 3-6 MDR.</div>'+
-          '<div style="font-size:.72rem;color:var(--sub);line-height:1.6">'+(analysis.prognose||'-')+'</div>'+
-        '</div>'+
-        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">'+
-          '<div style="background:rgba(255,255,255,.02);border-radius:12px;padding:10px;text-align:center">'+
-            '<div style="font-size:1.1rem">😴</div>'+
-            '<div style="font-size:.58rem;color:var(--sub)">Optimal søvn</div>'+
-            '<div style="font-size:.85rem;font-weight:700">'+analysis.optimalSøvn+'t</div>'+
-          '</div>'+
-          '<div style="background:rgba(255,255,255,.02);border-radius:12px;padding:10px;text-align:center">'+
-            '<div style="font-size:1.1rem">💧</div>'+
-            '<div style="font-size:.58rem;color:var(--sub)">Optimal vand</div>'+
-            '<div style="font-size:.85rem;font-weight:700">'+analysis.optimalVand+' glas</div>'+
-          '</div>'+
-        '</div>'+
-      '</div>';
+    var tier=getTier(an.rating*10);
+    /* Render result */
+    r.innerHTML=renderScanResult(an,tier);
     toast('✓ Analyse færdig!');
   }catch(e){
-    r.innerHTML='<div class="ai-card" style="border-color:#ef4444"><p style="color:#ef4444">'+e.message+'</p></div>';
+    r.innerHTML='<div class="ai-card" style="border-color:var(--red)"><p style="color:var(--red)">'+e.message+'</p></div>';
   }
 }
 
-function getWeek(){
-  try{var d=new Date();d=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));
-    d.setUTCDate(d.getUTCDate()+4-(d.getUTCDay()||7));
-    var y=new Date(Date.UTC(d.getUTCFullYear(),0,1));return Math.ceil((((d-y)/86400000)+1)/7)}catch(e){return 1}
+function renderScanResult(an,tier){
+  var metrics=['symmetri','hud','kæbelinje','øjne','hår','harmoni'];
+  return '<div class="ai-card" style="max-height:none">'+
+    /* Big score */
+    '<div style="text-align:center;padding-bottom:16px;margin-bottom:16px;border-bottom:1px solid rgba(255,255,255,.06)">'+
+      '<div style="font-family:\'Cormorant Garamond\',serif;font-size:3.4rem;font-weight:700;'+
+        'background:linear-gradient(135deg,#c9a227,#f0cc5a);-webkit-background-clip:text;'+
+        '-webkit-text-fill-color:transparent;background-clip:text;line-height:1">'+
+        an.rating+'/10</div>'+
+      '<div style="font-size:.85rem;font-weight:700;color:'+tier.color+';margin:5px 0">'+tier.icon+' '+tier.label+'</div>'+
+      '<div style="font-size:.68rem;color:var(--sub);line-height:1.55;max-width:320px;margin:0 auto">'+an.summary+'</div>'+
+    '</div>'+
+    /* Metrics */
+    '<div style="margin-bottom:16px">'+
+      metrics.map(function(k){
+        var val=an[k]||0;
+        var label=k.charAt(0).toUpperCase()+k.slice(1);
+        return '<div style="display:flex;align-items:center;gap:8px;margin:6px 0;font-size:.65rem">'+
+          '<span style="min-width:68px;color:var(--sub)">'+label+'</span>'+
+          '<div class="progress-bar"><div class="progress-fill" style="width:'+(val*10)+'%"></div></div>'+
+          '<span style="font-weight:700;min-width:34px;text-align:right;color:'+(val>=8?'#22c55e':val>=5?'#d4af37':'#9ca3af')+'">'+val+'/10</span>'+
+        '</div>';
+      }).join('')+
+    '</div>'+
+    /* Strengths */
+    '<div style="font-size:.68rem;font-weight:700;color:#22c55e;letter-spacing:.5px;margin-bottom:7px">✓ STYRKER</div>'+
+    '<div style="margin-bottom:16px">'+
+      ((an.styrker||[]).map(function(s){
+        return '<div style="display:flex;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04)">'+
+          '<span style="color:#22c55e;flex-shrink:0;font-size:.8rem">✓</span>'+
+          '<div style="font-size:.71rem;color:var(--sub);line-height:1.55">'+s+'</div>'+
+        '</div>';
+      }).join(''))+
+    '</div>'+
+    /* Improvements */
+    '<div style="font-size:.68rem;font-weight:700;color:var(--red);letter-spacing:.5px;margin-bottom:7px">↑ FORBEDRINGSOMRÅDER</div>'+
+    '<div style="margin-bottom:16px">'+
+      ((an.forbedringer||[]).map(function(x){
+        return '<div style="display:flex;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04)">'+
+          '<span style="color:var(--red);flex-shrink:0;font-size:.8rem">↑</span>'+
+          '<div style="font-size:.71rem;color:var(--sub);line-height:1.55">'+x+'</div>'+
+        '</div>';
+      }).join(''))+
+    '</div>'+
+    /* Tips */
+    '<div style="font-size:.68rem;font-weight:700;color:var(--gold);letter-spacing:.5px;margin-bottom:7px">💡 PRÆCISE TIPS</div>'+
+    '<div style="margin-bottom:16px">'+
+      ((an.tips||[]).map(function(t,i){
+        return '<div style="display:flex;gap:9px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04)">'+
+          '<div style="width:21px;height:21px;border-radius:50%;flex-shrink:0;'+
+            'background:linear-gradient(135deg,#c9a227,#d4af37);color:#000;'+
+            'display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.58rem">'+(i+1)+'</div>'+
+          '<div style="font-size:.71rem;color:var(--sub);line-height:1.55">'+t+'</div>'+
+        '</div>';
+      }).join(''))+
+    '</div>'+
+    /* Daily routine */
+    (an.dagligRoutine&&an.dagligRoutine.length?
+      '<div style="font-size:.68rem;font-weight:700;color:#60a5fa;letter-spacing:.5px;margin-bottom:7px">📋 DIN DAGLIGE RUTINE</div>'+
+      '<div style="margin-bottom:16px">'+
+        an.dagligRoutine.map(function(x,i){
+          return '<div style="display:flex;gap:9px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04)">'+
+            '<div class="step-num">'+(i+1)+'</div>'+
+            '<div style="font-size:.71rem;color:var(--sub);line-height:1.55">'+x+'</div>'+
+          '</div>';
+        }).join('')+
+      '</div>':'')+ 
+    /* Stats grid */
+    '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:6px;margin-bottom:12px">'+
+      statBox('POTENTIALE',(an.potentiale||0)+'/10','🏆')+
+      statBox('HUDTYPE',an.hudtype||'-','🧴')+
+      statBox('ANSIGTSFORM',an.ansigtsform||'-','🔍')+
+    '</div>'+
+    /* Sleep/Water */
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">'+
+      statBox('OPTIMAL SØVN',(an.optimalSøvn||'-')+' timer','😴')+
+      statBox('OPTIMAL VAND',(an.optimalVand||'-')+' glas','💧')+
+    '</div>'+
+    /* Prognosis */
+    '<div style="background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.15);'+
+      'border-radius:14px;padding:14px">'+
+      '<div style="font-size:.62rem;color:var(--gold);font-weight:700;margin-bottom:5px">'+
+        '🚀 PROGNOSE OM 3-6 MÅN.</div>'+
+      '<div style="font-size:.72rem;color:var(--sub);line-height:1.6">'+(an.prognose||'-')+'</div>'+
+    '</div>'+
+  '</div>';
 }
 
-/* ===== HAIR ===== */
-// Multiple selection from camera roll (up to 10)
+function statBox(label,val,icon){
+  return '<div style="background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);'+
+    'border-radius:12px;padding:10px;text-align:center">'+
+    '<div style="font-size:1.1rem">'+icon+'</div>'+
+    '<div style="font-size:.52rem;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin:3px 0">'+label+'</div>'+
+    '<div style="font-size:.8rem;font-weight:700;color:#fff">'+val+'</div>'+
+  '</div>';
+}
+
+function getWeek(){
+  try{
+    var d=new Date();
+    d=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));
+    d.setUTCDate(d.getUTCDate()+4-(d.getUTCDay()||7));
+    var y=new Date(Date.UTC(d.getUTCFullYear(),0,1));
+    return Math.ceil((((d-y)/86400000)+1)/7);
+  }catch(e){return 1}
+}
+
+/* ══════════════════════════════════
+   HAIR
+══════════════════════════════════ */
 window._uploadHairInspo=function(){
   var inp=document.createElement('input');
   inp.type='file';inp.accept='image/*';inp.multiple=true;
@@ -759,13 +857,15 @@ window._uploadHairInspo=function(){
     if(!files.length)return;
     if(!Array.isArray(S.hairInspo))S.hairInspo=[];
     var remaining=10-S.hairInspo.length;
-    if(remaining<=0){toast('Maks 10 billeder nået');return}
+    if(remaining<=0){toast('Du har nået maks 10 billeder');return}
     var toAdd=files.slice(0,remaining);
     toast('Uploader '+toAdd.length+' billede(r)...');
     for(var i=0;i<toAdd.length;i++){
-      try{var img=await compressImg(toAdd[i]);S.hairInspo.push({url:img.url,date:new Date().toISOString()})}catch(err){}
+      try{var img=await compressImg(toAdd[i],600);
+        S.hairInspo.push({url:img.url,date:new Date().toISOString()})
+      }catch(er){}
     }
-    save();toast('✓ '+toAdd.length+' billede(r) tilføjet');render();
+    save();toast('✓ '+toAdd.length+' billede(r) tilføjet ('+(S.hairInspo.length)+'/10)');renderTab();
   };
   inp.click();
 };
@@ -775,35 +875,48 @@ window._removeInspo=function(idx){
   S.hairInspo.splice(idx,1);save();renderTab();
 };
 
+window._previewInspo=function(idx){
+  if(!S.hairInspo||!S.hairInspo[idx])return;
+  var o=document.createElement('div');
+  o.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:4000;'+
+    'display:flex;align-items:center;justify-content:center;cursor:pointer;padding:20px';
+  o.innerHTML='<img src="'+S.hairInspo[idx].url+'" style="max-width:100%;max-height:90vh;border-radius:16px;object-fit:contain">';
+  o.onclick=function(){o.remove()};
+  document.body.appendChild(o);
+};
+
 async function getHairAdvice(){
-  if(!S.faceAnalysis){toast('Scan ansigt først');return}
+  if(!S.faceAnalysis){toast('Scan dit ansigt først');return}
   var r=document.getElementById('hairRes');if(!r)return;
-  r.innerHTML='<div style="text-align:center;padding:30px"><div class="spinner"></div><p style="color:var(--sub);margin-top:12px;font-size:.75rem">Finder din ideelle frisure...</p></div>';
+  r.innerHTML='<div style="text-align:center;padding:32px"><div class="spinner"></div>'+
+    '<p style="color:var(--sub);margin-top:14px;font-size:.75rem">Finder din ideelle frisure...</p></div>';
   r.style.display='block';
   try{
     var hp=S.hairProfile||{};
-    var inspoNote=S.hairInspo&&S.hairInspo.length>0?' Bruger har uploadet '+S.hairInspo.length+' reference-billeder som inspiration.':'';
+    var inspoNote=S.hairInspo&&S.hairInspo.length>0?
+      ' Brugeren har uploadet '+S.hairInspo.length+' reference-billeder som inspiration.':'';
     var prefText=hp.preferences?'\nBRUGER ØNSKER: '+hp.preferences+'.':'';
     var prompt=
-      'Du er topfrisør, stilekspert og hårcoach. Anbefal 3 PERFEKTE frisurer på DANSK til denne person.'+
+      'Du er Danmarks bedste frisør, stilekspert og hårcoach. '+
+      'Anbefal 3 PERFEKTE frisurer til denne person baseret på alle data. '+
+      'Svar KUN på DANSK. Vær ekstremt specifik og detaljeret — som en professionel topfrisør.'+
       '\nAnsigtsform: '+S.faceAnalysis.ansigtsform+
       '\nHårtype: '+(hp.type||'ukendt')+', Tykkelse: '+(hp.thickness||'ukendt')+
-      ', Tekstur: '+(hp.texture||'ukendt')+', Længde nu: '+(hp.lengthCm||'ukendt')+'.'+
+      ', Tekstur: '+(hp.texture||'ukendt')+', Nuværende længde: '+(hp.lengthCm||'ukendt')+'.'+
       inspoNote+prefText+
-      '\nVær ULTRA specifik. Giv alle detaljer en professionel frisør ville give.'+
-      '\nReturner KUN JSON uden forklaring:{"frisurer":[{'+
-        '"navn":"frisurens præcise navn på dansk og engelsk",'+
-        '"type":"Din stil/Bedste overall/Nemmest hverdag",'+
-        '"begrundelse":"2-3 sætninger om HVORFOR denne frisure passer præcist til ansigtsformen og hårtypen",'+
-        '"imageSearchDA":"dansk søgefrase til Pinterest/Google Billeder fx curtain hair mænd",'+
-        '"imageSearchEN":"engelsk søgefrase til Google Images fx mens curtain hair oval face",'+
-        '"youtubeSearch":"youtube tutorial søgefrase på engelsk",'+
-        '"frisørScript":["sætning 1 man siger til frisøren","sætning 2 med præcise mål fx 3cm på toppen","sætning 3 om teknik","sætning 4 om finish"],'+
-        '"stylingTrin":["trin 1 med præcist produkt og mængde","trin 2","trin 3","trin 4","trin 5"],'+
-        '"stylingTid":"X minutter",'+
-        '"produkter":[{"navn":"præcist produktnavn","type":"kategori","brug":"hvordan og hvornår","pris":"ca. pris DKK","søgeord":"google søgeord til produktet"}],'+
-        '"vedligeholdelse":"klip hver X uger, hvad kræver det hjemme",'+
-        '"svært":"nem/medium/svær at style selv"'+
+      '\nReturner KUN gyldigt JSON:{"frisurer":[{'+
+        '"navn":"dansk og engelsk navn på frisuren",'+
+        '"type":"Din stil-match / Bedste overall / Nemmest hverdag",'+
+        '"sværhed":"nem/medium/svær",'+
+        '"begrundelse":"3 sætninger om PRÆCIS HVORFOR denne frisure passer til netop denne ansigtsform og hårtype",'+
+        '"imageSearchDA":"dansk søgeterm til Google Billeder fx curtain hair mænd",'+
+        '"imageSearchEN":"engelsk søgeterm fx mens curtain hair oval face 2024",'+
+        '"youtubeEN":"youtube tutorial søgeord engelsk fx curtain hair tutorial mens",'+
+        '"frisørScript":["præcis sætning 1 til frisøren","sætning 2 med mål fx 3 cm på toppen","sætning 3 om teknik fx scissor over comb","sætning 4 om finish"],'+
+        '"stylingTrin":["trin 1 med præcist produkt og mængde","trin 2","trin 3","trin 4","trin 5 finish"],'+
+        '"stylingTid":"antal minutter",'+
+        '"produkter":[{"navn":"præcist produktnavn","type":"produktkategori","brug":"hvornår og hvordan","pris":"ca. DKK","link":"https://www.google.com/search?q=k%C3%B8b+PRODUKTNAVN+h%C3%A5r"}],'+
+        '"vedligeholdelse":"klip hver X uger, daglig vedligeholdelse"'+
       '}]}';
     var res=await callAI(prompt,S.faceImage?S.faceImage.split(',')[1]:null);
     var data;
@@ -812,329 +925,354 @@ async function getHairAdvice(){
     var html='';
     if(data.frisurer&&Array.isArray(data.frisurer)){
       data.frisurer.forEach(function(f,i){
-        // Build image search links
-        var gImgUrl='https://www.google.com/search?q='+encodeURIComponent((f.imageSearchEN||f.navn)+' haircut')+
-          '&tbm=isch&hl=da';
-        var pinterestUrl='https://www.pinterest.com/search/pins/?q='+
-          encodeURIComponent(f.imageSearchEN||f.navn);
-        var ytUrl='https://www.youtube.com/results?search_query='+
-          encodeURIComponent(f.youtubeSearch||((f.imageSearchEN||f.navn)+' tutorial how to style'));
-
-        // Difficulty color
-        var svrColor=f.svært==='nem'?'#22c55e':f.svært==='svær'?'#ef4444':'#f0cc5a';
-
+        var qEN=encodeURIComponent((f.imageSearchEN||f.navn)+' haircut');
+        var qDA=encodeURIComponent(f.imageSearchDA||f.navn);
+        var qYT=encodeURIComponent(f.youtubeEN||(f.imageSearchEN||f.navn)+' how to style tutorial');
+        var gImgUrl='https://www.google.com/search?q='+qEN+'&tbm=isch&hl=da';
+        var pinterestUrl='https://www.pinterest.dk/search/pins/?q='+qEN;
+        var ytUrl='https://www.youtube.com/results?search_query='+qYT;
+        var svrColor=f.sværhed==='nem'?'#22c55e':f.sværhed==='svær'?'#ef4444':'#f0cc5a';
         html+=
-          '<div class="rec-card" style="margin-bottom:14px">'+
-
-            // Header
-            '<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">'+
-              '<div class="rec-rank" style="width:32px;height:32px;font-size:.8rem">'+(i+1)+'</div>'+
-              '<div style="flex:1">'+
-                '<div style="font-family:\'Cormorant Garamond\',serif;font-size:1rem;font-weight:700">'+f.navn+'</div>'+
-                (f.type?'<div style="font-size:.6rem;color:var(--gold);font-weight:600;letter-spacing:.5px;margin-top:2px">'+f.type.toUpperCase()+'</div>':'')+
+          '<div class="rec-card" style="margin-bottom:12px">'+
+            /* Header */
+            '<div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:12px">'+
+              '<div class="rec-rank" style="width:32px;height:32px;font-size:.8rem;flex-shrink:0">'+(i+1)+'</div>'+
+              '<div style="flex:1;min-width:0">'+
+                '<div style="font-family:\'Cormorant Garamond\',serif;font-size:1rem;font-weight:700;'+
+                  'line-height:1.2">'+f.navn+'</div>'+
+                (f.type?'<div style="font-size:.6rem;color:var(--gold);font-weight:600;'+
+                  'letter-spacing:.5px;margin-top:3px">'+f.type.toUpperCase()+'</div>':'')+
               '</div>'+
-              '<div style="font-size:.62rem;font-weight:700;padding:4px 10px;border-radius:10px;'+
-                'background:rgba('+( f.svært==='nem'?'34,197,94':'f.svært==="svær"?"239,68,68":"240,204,90"')+
-                ',.12);color:'+svrColor+';border:1px solid '+svrColor+'33">'+
-                (f.svært||'medium')+
-              '</div>'+
+              '<div style="flex-shrink:0;font-size:.6rem;font-weight:700;padding:4px 10px;'+
+                'border-radius:10px;background:'+svrColor+'1a;color:'+svrColor+';'+
+                'border:1px solid '+svrColor+'44">'+(f.sværhed||'medium')+'</div>'+
             '</div>'+
-
-            // Why this cut
-            '<div style="font-size:.73rem;color:var(--sub);line-height:1.65;margin-bottom:14px;padding:12px;'+
-              'background:rgba(255,255,255,.02);border-radius:12px;border-left:2px solid rgba(212,175,55,.4)">'+
-              f.begrundelse+
-            '</div>'+
-
-            // Image links row
+            /* Reason */
+            '<div style="font-size:.72rem;color:var(--sub);line-height:1.65;margin-bottom:12px;'+
+              'padding:11px;background:rgba(255,255,255,.02);border-radius:12px;'+
+              'border-left:2px solid rgba(212,175,55,.4)">'+f.begrundelse+'</div>'+
+            /* ── SE HVORDAN DET SER UD ── */
             '<div style="margin-bottom:14px">'+
-              '<div style="font-size:.62rem;color:var(--gold);font-weight:700;letter-spacing:.5px;margin-bottom:8px">🔍 SE HVORDAN DET SER UD</div>'+
+              '<div style="font-size:.6rem;color:var(--gold);font-weight:700;letter-spacing:.5px;'+
+                'margin-bottom:8px">🔍 SE HVORDAN DET SER UD</div>'+
               '<div style="display:flex;gap:6px;flex-wrap:wrap">'+
-                '<a href="'+gImgUrl+'" target="_blank" style="display:flex;align-items:center;gap:5px;padding:8px 12px;'+
-                  'background:rgba(66,133,244,.12);border:1px solid rgba(66,133,244,.25);border-radius:10px;'+
-                  'color:#60a5fa;font-size:.65rem;font-weight:600;text-decoration:none">'+
+                '<a href="'+gImgUrl+'" target="_blank" class="link-btn link-btn-blue">'+
                   '🖼 Google Billeder</a>'+
-                '<a href="'+pinterestUrl+'" target="_blank" style="display:flex;align-items:center;gap:5px;padding:8px 12px;'+
-                  'background:rgba(230,0,35,.1);border:1px solid rgba(230,0,35,.2);border-radius:10px;'+
-                  'color:#ff4458;font-size:.65rem;font-weight:600;text-decoration:none">'+
+                '<a href="'+pinterestUrl+'" target="_blank" class="link-btn link-btn-pink">'+
                   '📌 Pinterest</a>'+
-                '<a href="'+ytUrl+'" target="_blank" style="display:flex;align-items:center;gap:5px;padding:8px 12px;'+
-                  'background:rgba(255,0,0,.1);border:1px solid rgba(255,0,0,.2);border-radius:10px;'+
-                  'color:#ff4444;font-size:.65rem;font-weight:600;text-decoration:none">'+
+                '<a href="'+ytUrl+'" target="_blank" class="link-btn link-btn-red">'+
                   '▶ YouTube Tutorial</a>'+
               '</div>'+
-              '<div style="font-size:.6rem;color:#555;margin-top:6px">Søg: "'+( f.imageSearchDA||f.navn)+'"</div>'+
+              '<div style="font-size:.6rem;color:#444;margin-top:5px">'+
+                'Søg: "'+( f.imageSearchDA||f.navn)+'"</div>'+
             '</div>'+
-
-            // Barber script
+            /* ── FRISØRSCRIPT ── */
             (f.frisørScript&&f.frisørScript.length?
-              '<div style="background:linear-gradient(135deg,rgba(212,175,55,.07),rgba(212,175,55,.03));'+
-                'border:1px solid rgba(212,175,55,.18);border-radius:14px;padding:14px;margin-bottom:14px">'+
-                '<div style="font-size:.62rem;color:var(--gold);font-weight:700;letter-spacing:.5px;margin-bottom:10px">'+
-                  '✂️ PRÆCIS HVAD DU SIGER TIL FRISØREN'+
-                '</div>'+
-                (f.frisørScript.map(function(s,si){
-                  return '<div style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04)">'+
+              '<div style="background:linear-gradient(135deg,rgba(212,175,55,.08),rgba(212,175,55,.03));'+
+                'border:1px solid rgba(212,175,55,.2);border-radius:14px;padding:14px;margin-bottom:12px">'+
+                '<div style="font-size:.6rem;color:var(--gold);font-weight:700;letter-spacing:.5px;'+
+                  'margin-bottom:10px">✂️ HVAD DU SIGER TIL FRISØREN</div>'+
+                f.frisørScript.map(function(s,si){
+                  return '<div style="display:flex;gap:8px;padding:6px 0;'+
+                    'border-bottom:1px solid rgba(255,255,255,.04)">'+
                     '<div style="color:var(--gold);font-weight:700;font-size:.7rem;flex-shrink:0">'+(si+1)+'.</div>'+
                     '<div style="font-size:.72rem;color:#fff;line-height:1.5;font-style:italic">"'+s+'"</div>'+
                   '</div>';
-                }).join(''))+
-              '</div>':'')+ 
-
-            // Styling steps
+                }).join('')+
+              '</div>':'')+
+            /* ── STYLING TRIN ── */
             (f.stylingTrin&&f.stylingTrin.length?
-              '<div style="margin-bottom:14px">'+
-                '<div style="font-size:.62rem;color:#fff;font-weight:700;letter-spacing:.5px;margin-bottom:8px">'+
+              '<div style="margin-bottom:12px">'+
+                '<div style="font-size:.6rem;color:#fff;font-weight:700;letter-spacing:.5px;margin-bottom:8px">'+
                   '💆 TRIN-FOR-TRIN STYLING'+
-                  (f.stylingTid?' <span style="color:var(--sub);font-weight:400;font-size:.58rem">(ca. '+f.stylingTid+')</span>':'')+
+                  (f.stylingTid?' <span style="color:var(--sub);font-weight:400">(ca. '+f.stylingTid+' min)</span>':'')+
                 '</div>'+
-                (f.stylingTrin.map(function(s,si){
-                  return '<div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04)">'+
+                f.stylingTrin.map(function(s,si){
+                  return '<div style="display:flex;gap:9px;padding:8px 0;'+
+                    'border-bottom:1px solid rgba(255,255,255,.04)">'+
                     '<div style="width:22px;height:22px;border-radius:50%;flex-shrink:0;'+
                       'background:linear-gradient(135deg,#c9a227,#d4af37);color:#000;'+
-                      'display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.6rem">'+(si+1)+'</div>'+
+                      'display:flex;align-items:center;justify-content:center;'+
+                      'font-weight:800;font-size:.6rem">'+(si+1)+'</div>'+
                     '<div style="font-size:.72rem;color:var(--sub);line-height:1.55">'+s+'</div>'+
                   '</div>';
-                }).join(''))+
-              '</div>':'')+ 
-
-            // Products
+                }).join('')+
+              '</div>':'')+
+            /* ── PRODUKTER ── */
             (f.produkter&&f.produkter.length?
               '<div style="margin-bottom:10px">'+
-                '<div style="font-size:.62rem;color:#fff;font-weight:700;letter-spacing:.5px;margin-bottom:8px">🧴 PRODUKTER DU SKAL BRUGE</div>'+
-                (f.produkter.map(function(p){
-                  var prodName=typeof p==='string'?p:p.navn;
-                  var prodType=typeof p==='object'&&p.type?p.type:'';
-                  var prodBrug=typeof p==='object'&&p.brug?p.brug:'';
-                  var prodPris=typeof p==='object'&&p.pris?p.pris:'';
-                  var prodSoeg=typeof p==='object'&&p.søgeord?p.søgeord:prodName;
-                  var prodLink='https://www.google.com/search?q='+encodeURIComponent('køb '+prodSoeg+' hår');
+                '<div style="font-size:.6rem;color:#fff;font-weight:700;letter-spacing:.5px;margin-bottom:8px">'+
+                  '🧴 PRODUKTER DU SKAL BRUGE</div>'+
+                f.produkter.map(function(p){
+                  var pn=typeof p==='string'?p:(p.navn||p);
+                  var pt=typeof p==='object'?(p.type||''):'';
+                  var pb=typeof p==='object'?(p.brug||''):'';
+                  var pp=typeof p==='object'?(p.pris||''):'';
+                  var pl=typeof p==='object'?(p.link||''):'';
+                  if(!pl)pl='https://www.google.com/search?q='+encodeURIComponent('køb '+pn+' hår');
                   return '<div style="display:flex;gap:10px;align-items:flex-start;padding:9px;'+
                     'background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);'+
                     'border-radius:12px;margin-bottom:6px">'+
                     '<div style="font-size:1.2rem;flex-shrink:0">🧴</div>'+
                     '<div style="flex:1;min-width:0">'+
-                      '<div style="font-size:.73rem;font-weight:700;color:#fff">'+prodName+
-                        (prodType?'<span class="badge" style="margin-left:5px">'+prodType+'</span>':'')+
+                      '<div style="font-size:.74rem;font-weight:700;color:#fff">'+pn+
+                        (pt?'<span class="badge" style="margin-left:5px">'+pt+'</span>':'')+
                       '</div>'+
-                      (prodBrug?'<div style="font-size:.65rem;color:var(--sub);margin-top:2px">'+prodBrug+'</div>':'')+
-                      (prodPris?'<div style="font-size:.65rem;color:var(--gold);font-weight:600;margin-top:2px">ca. '+prodPris+'</div>':'')+
+                      (pb?'<div style="font-size:.64rem;color:var(--sub);margin-top:2px">'+pb+'</div>':'')+
+                      (pp?'<div style="font-size:.64rem;color:var(--gold);font-weight:600;margin-top:2px">ca. '+pp+'</div>':'')+
                     '</div>'+
-                    '<a href="'+prodLink+'" target="_blank" style="flex-shrink:0;padding:5px 9px;'+
-                      'background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.2);'+
-                      'border-radius:8px;color:var(--gold);font-size:.6rem;font-weight:700;text-decoration:none">'+
-                      'Køb →</a>'+
+                    '<a href="'+pl+'" target="_blank" class="link-btn link-btn-gold" '+
+                      'style="flex-shrink:0;font-size:.6rem">Køb →</a>'+
                   '</div>';
-                }).join(''))+
-              '</div>':'')+ 
-
-            // Maintenance
+                }).join('')+
+              '</div>':'')+
+            /* Vedligeholdelse */
             (f.vedligeholdelse?
-              '<div style="font-size:.65rem;color:var(--sub);padding:10px;'+
-                'background:rgba(255,255,255,.02);border-radius:10px;line-height:1.5">'+
+              '<div style="font-size:.65rem;color:var(--sub);padding:10px 12px;'+
+                'background:rgba(255,255,255,.02);border-radius:10px;line-height:1.55">'+
                 '🔄 <strong style="color:#fff">Vedligeholdelse:</strong> '+f.vedligeholdelse+
-              '</div>':'')+ 
-
+              '</div>':'')+
           '</div>';
       });
     }
     r.innerHTML='<div style="margin-top:4px">'+html+'</div>';
     toast('Frisure-råd klar! ✓');
-  }catch(e){r.innerHTML='<div class="ai-card" style="border-color:#ef4444">'+e.message+'</div>'}
+  }catch(e){
+    r.innerHTML='<div class="ai-card" style="border-color:var(--red)">'+e.message+'</div>';
+  }
 }
 
-/* ===== PRODUCTS ===== */
-// Show choice: camera or gallery (both = file input), or take photo, or add without photo
+/* ══════════════════════════════════
+   PRODUCTS  (persistent, photo/gallery/nophoto)
+══════════════════════════════════ */
 function showAddProduct(type){
-  var o=document.createElement('div');
-  o.className='obs-overlay';o.id='addProdOverlay';
+  var ex=document.getElementById('addProdOverlay');if(ex)ex.remove();
+  var o=document.createElement('div');o.className='obs-overlay';o.id='addProdOverlay';
   o.innerHTML=
     '<div class="glass" style="max-width:400px;width:100%;padding:26px">'+
       '<div class="sec-head" style="justify-content:center;margin-bottom:4px">Tilføj produkt</div>'+
-      '<p style="color:var(--sub);font-size:.68rem;text-align:center;margin-bottom:16px">Vælg hvordan du vil tilføje</p>'+
+      '<p style="color:var(--sub);font-size:.68rem;text-align:center;margin-bottom:16px">'+
+        'Vælg hvordan du vil tilføje produktet</p>'+
       '<div class="prod-source-row">'+
-        '<button class="prod-source-btn" onclick="window._addProdPhoto(\''+type+'\')">📷 Tag billede</button>'+
-        '<button class="prod-source-btn" onclick="window._addProdGallery(\''+type+'\')">🖼 Kamerarulle</button>'+
+        '<button class="psb" onclick="window._addProdCam(\''+type+'\')">📷 Tag billede nu</button>'+
+        '<button class="psb" onclick="window._addProdGallery(\''+type+'\')">🖼 Kamerarulle</button>'+
       '</div>'+
-      '<button class="prod-source-btn" style="width:100%;margin-top:8px" onclick="window._addProdNoPhoto(\''+type+'\')">✏️ Uden billede</button>'+
-      '<button class="btn btn-outline" style="margin-top:8px" onclick="window._closeProdOverlay()">Annuller</button>'+
+      '<button class="psb" style="width:100%;margin-top:8px" onclick="window._addProdNoPhoto(\''+type+'\')">✏️ Uden billede</button>'+
+      '<button class="btn btn-outline" style="margin-top:8px" onclick="window._closeAddProd()">Annuller</button>'+
     '</div>';
   document.body.appendChild(o);
 }
+window._closeAddProd=function(){var o=document.getElementById('addProdOverlay');if(o)o.remove()};
 
-window._closeProdOverlay=function(){var o=document.getElementById('addProdOverlay');if(o)o.remove()};
-
-window._addProdPhoto=function(type){
-  window._closeProdOverlay();
+window._addProdCam=function(type){
+  window._closeAddProd();
   var inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.capture='environment';
-  inp.onchange=async function(e){var f=e.target.files[0];if(!f)return;await addProductFromFile(type,f)};
+  inp.onchange=async function(e){var f=e.target.files[0];if(!f)return;await doAddProduct(type,f)};
   inp.click();
 };
-
 window._addProdGallery=function(type){
-  window._closeProdOverlay();
+  window._closeAddProd();
   var inp=document.createElement('input');inp.type='file';inp.accept='image/*';
-  inp.onchange=async function(e){var f=e.target.files[0];if(!f)return;await addProductFromFile(type,f)};
+  inp.onchange=async function(e){var f=e.target.files[0];if(!f)return;await doAddProduct(type,f)};
   inp.click();
 };
-
-window._addProdNoPhoto=function(type){
-  window._closeProdOverlay();
-  addProductFromFile(type,null);
-};
-
-async function addProductFromFile(type,file){
-  var name=prompt('Produktnavn:');if(!name)return;
-  var desc=prompt('Kort beskrivelse (ingredienser, formål):')||'';
-  var imgData=null;
-  if(file){try{var img=await compressImg(file);imgData=img.url}catch(e){}}
-  if(!S.products||typeof S.products!=='object')S.products={face:[],hair:[]};
-  if(!Array.isArray(S.products[type]))S.products[type]=[];
-  S.products[type].push({name:name,description:desc,image:imgData,date:new Date().toISOString()});
-  save();toast('✓ '+name+' tilføjet');render();
-}
-
+window._addProdNoPhoto=function(type){window._closeAddProd();doAddProduct(type,null)};
 window._addProduct=function(type){showAddProduct(type)};
 
+async function doAddProduct(type,file){
+  var name=prompt('Produktnavn:');if(!name)return;
+  var desc=prompt('Kort beskrivelse (ingredienser, formål — valgfri):')||'';
+  var imgUrl=null;
+  if(file){try{var img=await compressImg(file,600);imgUrl=img.url}catch(e){}}
+  if(!S.products||typeof S.products!=='object')S.products={face:[],hair:[]};
+  if(!Array.isArray(S.products[type]))S.products[type]=[];
+  S.products[type].push({name:name,description:desc,image:imgUrl,date:new Date().toISOString()});
+  save();toast('✓ '+name+' tilføjet og gemt');render();
+}
+
 async function getProductAdvice(type){
-  if(!S.faceAnalysis){toast('Scan ansigt først');return}
+  if(!S.faceAnalysis){toast('Scan ansigt først for bedre anbefalinger');return}
   var rid=type==='face'?'faceProd':'hairProd';
   var r=document.getElementById(rid);if(!r)return;
-  r.innerHTML='<div style="text-align:center;padding:30px"><div class="spinner"></div><p style="color:var(--sub);margin-top:12px;font-size:.75rem">Analyserer dine produkter...</p></div>';
+  r.innerHTML='<div style="text-align:center;padding:30px"><div class="spinner"></div>'+
+    '<p style="color:var(--sub);margin-top:12px;font-size:.75rem">Analyserer og finder de bedste produkter...</p></div>';
   r.style.display='block';
   try{
     var prods=(S.products&&S.products[type])?S.products[type]:[];
     var plist=prods.length>0?
       prods.map(function(p){return p.name+(p.description?': '+p.description:'')}).join(' | '):
-      'Ingen produkter endnu';
+      'Ingen produkter tilføjet endnu';
     var prompt;
     if(type==='face'){
       prompt=
-        'Du er hudplejekspert og dermatolog. Lav en PROFESSIONEL hudplejeanalyse på DANSK.'+
-        '\nHudtype: '+S.faceAnalysis.hudtype+
+        'Du er professionel hudplejekspert og dermatolog. Lav en DETALJERET hudplejeanalyse på DANSK.'+
+        '\nHudtype: '+(S.faceAnalysis.hudtype||'ukendt')+
+        '\nAnsigtsform: '+(S.faceAnalysis.ansigtsform||'ukendt')+
         '\nBrugerens nuværende produkter: '+plist+
-        '\nBrugerens hudproblemer: '+(S.extraObservations||'ikke angivet')+
-        '\nReturner KUN JSON:'+
-        '{"vurdering":"vurdering af nuværende produkter og hvad mangler",'+
-        '"anbefalede":[{"navn":"specifikt produktnavn","kategori":"rengøring/serum/fugtighedscreme/SPF/øjencreme/exfoliant","pris":"ca. dansk pris","hvorfor":"konkret grund baseret på hudtype","ingredienser":"nøgleingredienser at kigge efter","hvornår":"morgen/aften/begge","link":"https://www.google.com/search?q=k%C3%B8b+PRODUKTNAVN"}],'+
-        '"morgenRutine":["trin med produkt og tid"],'+
-        '"aftenRutine":["trin med produkt og tid"],'+
-        '"ugeRutine":["ugentlige extras som eksfoliering"],'+
-        '"kost":["3-5 kosttips specifik til hudtype"],'+
-        '"advarsel":["produkter eller ingredienser at undgå med denne hudtype"]}';
+        '\nHudproblemer/observationer: '+(S.extraObservations||'ikke angivet')+
+        '\nGiv SPECIFIKKE produktanbefalinger med rigtige produktnavne, reelle priser og reelle links.'+
+        '\nReturner KUN gyldigt JSON:'+
+        '{"vurdering":"konkret vurdering af nuværende produkter og hvad der mangler",'+
+        '"anbefalede":[{"navn":"specifikt rigtigt produktnavn","brand":"mærkenavn","kategori":"rengøring/toner/serum/fugtighedscreme/SPF/retinol/øjencreme/exfoliant","pris":"ca. DKK pris","hvorfor":"konkret grund baseret på hudtype og problemer","ingredienser":"aktive nøgleingredienser at kigge efter","hvornår":"morgen/aften/begge","link":"https://www.google.com/search?q=k%C3%B8b+BRANDNAVN+PRODUKTNAVN"}],'+
+        '"morgenRutine":["detaljeret trin med produkt, mængde og ventetid"],'+
+        '"aftenRutine":["detaljeret trin med produkt, mængde og ventetid"],'+
+        '"ugeRutine":["ugentlige ekstra behandlinger fx eksfoliering, maske"],'+
+        '"kost":["5 præcise kosttips med specifikke fødevarer og mængder specifik til hudtype"],'+
+        '"supplements":["3-4 specifikke kosttilskud med doser fx Zink 15mg, Omega-3 2g"],'+
+        '"advarsel":["ingredienser og produkttyper der skal UNDGÅS med denne hudtype"]}';
     }else{
       prompt=
-        'Du er professionel hårekspert og trikolog. Lav en PRÆCIS hårplejeanalyse på DANSK.'+
-        '\nHårtype: '+(S.hairProfile.type||'ukendt')+', Tykkelse: '+(S.hairProfile.thickness||'ukendt')+
+        'Du er professionel hårekspert og trikolog. Lav en DETALJERET hårplejeanalyse på DANSK.'+
+        '\nHårtype: '+(S.hairProfile.type||'ukendt')+
+        ', Tykkelse: '+(S.hairProfile.thickness||'ukendt')+
         ', Tekstur: '+(S.hairProfile.texture||'ukendt')+
         '\nNuværende produkter: '+plist+
-        '\nReturner KUN JSON:'+
-        '{"vurdering":"vurdering af nuværende produkter",'+
-        '"anbefalede":[{"navn":"specifikt produktnavn","kategori":"shampoo/conditioner/serum/stylingcreme/olie/varmebeskyttelse","pris":"ca. dansk pris","hvorfor":"konkret grund","link":"https://www.google.com/search?q=k%C3%B8b+PRODUKTNAVN"}],'+
-        '"rutine":["morgen/aften rutine trin"],'+
-        '"vaskeFrekvens":"hvor tit skal håret vaskes",'+
-        '"varmeTips":["tips om varmestyling"],'+
-        '"kost":["kosttips til hårpleje"]}';
+        '\nGiv SPECIFIKKE produktanbefalinger med rigtige produktnavne og reelle priser.'+
+        '\nReturner KUN gyldigt JSON:'+
+        '{"vurdering":"konkret vurdering af nuværende produkter",'+
+        '"anbefalede":[{"navn":"specifikt produktnavn","brand":"mærkenavn","kategori":"shampoo/conditioner/leave-in/serum/olie/stylingcreme/gel/voks/varmebeskyttelse","pris":"ca. DKK pris","hvorfor":"konkret grund til denne hårtype","link":"https://www.google.com/search?q=k%C3%B8b+BRANDNAVN+PRODUKTNAVN"}],'+
+        '"rutine":["detaljeret trin-for-trin hårrutine med produkter"],'+
+        '"vaskeFrekvens":"præcis frekvens og grund",'+
+        '"varmeTips":["5 specifikke varme-styling tips med temperaturangivelser"],'+
+        '"kost":["5 kosttips specifik til hårpleje"],'+
+        '"supplements":["3 specifikke kosttilskud til hår"]}';
     }
     var res=await callAI(prompt,S.faceImage?S.faceImage.split(',')[1]:null);
     var data;
     try{var m=res.match(/\{[\s\S]*\}/);if(m)data=JSON.parse(m[0]);else throw new Error('')}
     catch(e){r.innerHTML='<div class="ai-card">'+res.replace(/\n/g,'<br>')+'</div>';return}
-
-    var html=
-      '<div style="margin-top:4px">'+
-        (data.vurdering?
-          '<div style="background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.15);border-radius:14px;padding:14px;margin-bottom:10px">'+
-            '<div style="font-size:.62rem;color:var(--gold);font-weight:700;margin-bottom:5px">📊 VURDERING AF DINE PRODUKTER</div>'+
-            '<div style="font-size:.72rem;color:var(--sub);line-height:1.6">'+data.vurdering+'</div>'+
-          '</div>':'')+
-        '<div class="rec-card">'+
-          '<div class="rec-card-title">🏆 Anbefalede produkter</div>'+
-          ((data.anbefalede||[]).map(function(p,i){
-            return '<div class="rec-row">'+
-              '<div class="rec-rank">'+(i+1)+'</div>'+
-              '<div class="rec-info">'+
-                '<strong>'+p.navn+'</strong>'+
-                (p.kategori?'<span class="badge">'+p.kategori+'</span>':'')+
-                '<div class="rec-price">'+p.pris+'</div>'+
-                '<div class="rec-why">'+p.hvorfor+'</div>'+
-                (p.ingredienser?'<div style="color:#888;font-size:.65rem;margin-top:2px">Kig efter: '+p.ingredienser+'</div>':'')+
-                (p.hvornår?'<div style="color:#888;font-size:.65rem">Brug: '+p.hvornår+'</div>':'')+
-                (p.link?'<a href="'+p.link+'" target="_blank" class="rec-link">Søg og køb →</a>':'')+
-              '</div>'+
-            '</div>';
-          }).join(''))+
-        '</div>';
-
-    if(type==='face'){
-      if(data.morgenRutine&&data.morgenRutine.length){
-        html+=
-          '<div class="rec-card">'+
-            '<div class="rec-card-title">☀️ Morgenrutine</div>'+
-            (data.morgenRutine.map(function(s,i){
-              return '<div style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04)">'+
-                '<div class="step-num">'+(i+1)+'</div>'+
-                '<div style="font-size:.7rem;color:var(--sub);line-height:1.5">'+s+'</div>'+
-              '</div>';
-            }).join(''))+
-          '</div>';
-      }
-      if(data.aftenRutine&&data.aftenRutine.length){
-        html+=
-          '<div class="rec-card">'+
-            '<div class="rec-card-title">🌙 Aftenrutine</div>'+
-            (data.aftenRutine.map(function(s,i){
-              return '<div style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04)">'+
-                '<div class="step-num">'+(i+1)+'</div>'+
-                '<div style="font-size:.7rem;color:var(--sub);line-height:1.5">'+s+'</div>'+
-              '</div>';
-            }).join(''))+
-          '</div>';
-      }
-      if(data.ugeRutine&&data.ugeRutine.length){
-        html+='<div class="rec-card"><div class="rec-card-title">📅 Ugentligt</div>'+
-          (data.ugeRutine.map(function(s){return '<div style="font-size:.7rem;color:var(--sub);padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04)">• '+s+'</div>'}).join(''))+
-          '</div>';
-      }
-      if(data.kost&&data.kost.length){
-        html+='<div class="rec-card"><div class="rec-card-title">🥗 Kost & hudsundhed</div>'+
-          (data.kost.map(function(s){return '<div style="font-size:.7rem;color:var(--sub);padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04)">• '+s+'</div>'}).join(''))+
-          '</div>';
-      }
-      if(data.advarsel&&data.advarsel.length){
-        html+=
-          '<div style="background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:14px;padding:14px;margin:8px 0">'+
-            '<div style="font-size:.62rem;color:#ef4444;font-weight:700;margin-bottom:5px">⚠️ UNDGÅ</div>'+
-            (data.advarsel.map(function(s){return '<div style="font-size:.7rem;color:var(--sub);padding:3px 0">• '+s+'</div>'}).join(''))+
-          '</div>';
-      }
-    }else{
-      if(data.rutine&&data.rutine.length){
-        html+=
-          '<div class="rec-card">'+
-            '<div class="rec-card-title">🚿 Hårrutine</div>'+
-            (data.rutine.map(function(s,i){
-              return '<div style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04)">'+
-                '<div class="step-num">'+(i+1)+'</div>'+
-                '<div style="font-size:.7rem;color:var(--sub);line-height:1.5">'+s+'</div>'+
-              '</div>';
-            }).join(''))+
-            (data.vaskeFrekvens?'<div style="margin-top:8px;font-size:.7rem;color:var(--gold)">Vask: '+data.vaskeFrekvens+'</div>':'')+
-          '</div>';
-      }
-      if(data.varmeTips&&data.varmeTips.length){
-        html+='<div class="rec-card"><div class="rec-card-title">🌡️ Varme-tips</div>'+
-          (data.varmeTips.map(function(s){return '<div style="font-size:.7rem;color:var(--sub);padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04)">• '+s+'</div>'}).join(''))+
-          '</div>';
-      }
-    }
-    html+='</div>';
-    r.innerHTML=html;
+    r.innerHTML=renderProductAdvice(data,type);
     toast('✓ Produktanalyse klar!');
-  }catch(e){r.innerHTML='<div class="ai-card" style="border-color:#ef4444">'+e.message+'</div>'}
+  }catch(e){
+    r.innerHTML='<div class="ai-card" style="border-color:var(--red)">'+e.message+'</div>';
+  }
 }
 
-/* ===== COACH ===== */
+function renderProductAdvice(data,type){
+  var html='<div style="margin-top:6px">';
+  /* Vurdering */
+  if(data.vurdering){
+    html+=
+      '<div style="background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.15);'+
+        'border-radius:14px;padding:14px;margin-bottom:10px">'+
+        '<div style="font-size:.6rem;color:var(--gold);font-weight:700;letter-spacing:.5px;margin-bottom:5px">'+
+          '📊 VURDERING AF DINE NUVÆRENDE PRODUKTER</div>'+
+        '<div style="font-size:.72rem;color:var(--sub);line-height:1.6">'+data.vurdering+'</div>'+
+      '</div>';
+  }
+  /* Anbefalede produkter */
+  if(data.anbefalede&&data.anbefalede.length){
+    html+=
+      '<div class="rec-card">'+
+        '<div class="rec-card-title">🏆 Anbefalede produkter</div>'+
+        data.anbefalede.map(function(p,i){
+          return '<div class="rec-row">'+
+            '<div class="rec-rank">'+(i+1)+'</div>'+
+            '<div style="flex:1;min-width:0">'+
+              '<div style="font-weight:700;font-size:.78rem;color:#fff">'+
+                (p.brand?p.brand+' — ':'')+p.navn+
+                (p.kategori?'<span class="badge" style="margin-left:5px">'+p.kategori+'</span>':'')+
+              '</div>'+
+              '<div style="font-size:.65rem;color:var(--gold);font-weight:600;margin:3px 0">'+
+                (p.pris||'')+
+              '</div>'+
+              '<div style="font-size:.68rem;color:var(--sub);line-height:1.5;margin-bottom:4px">'+
+                p.hvorfor+
+              '</div>'+
+              (p.ingredienser?
+                '<div style="font-size:.62rem;color:#666;margin-bottom:3px">'+
+                  'Kig efter: '+p.ingredienser+'</div>':'')+
+              (p.hvornår?
+                '<div style="font-size:.62rem;color:#666;margin-bottom:5px">'+
+                  'Brug: '+p.hvornår+'</div>':'')+
+              (p.link?
+                '<a href="'+p.link+'" target="_blank" class="rec-link">Søg og køb →</a>':'')+
+            '</div>'+
+          '</div>';
+        }).join('')+
+      '</div>';
+  }
+  /* Type-specific */
+  if(type==='face'){
+    if(data.morgenRutine&&data.morgenRutine.length){
+      html+=rutineCard('☀️ Morgenrutine',data.morgenRutine);
+    }
+    if(data.aftenRutine&&data.aftenRutine.length){
+      html+=rutineCard('🌙 Aftenrutine',data.aftenRutine);
+    }
+    if(data.ugeRutine&&data.ugeRutine.length){
+      html+=bulletCard('📅 Ugentligt',data.ugeRutine,'#60a5fa');
+    }
+    if(data.kost&&data.kost.length){
+      html+=bulletCard('🥗 Kost & hudsundhed',data.kost,'#22c55e');
+    }
+    if(data.supplements&&data.supplements.length){
+      html+=bulletCard('💊 Anbefalede kosttilskud',data.supplements,'#a78bfa');
+    }
+    if(data.advarsel&&data.advarsel.length){
+      html+=
+        '<div style="background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);'+
+          'border-radius:14px;padding:14px;margin:8px 0">'+
+          '<div style="font-size:.6rem;color:var(--red);font-weight:700;letter-spacing:.5px;margin-bottom:6px">'+
+            '⚠️ UNDGÅ DISSE INGREDIENSER & PRODUKTER</div>'+
+          data.advarsel.map(function(s){
+            return '<div style="font-size:.71rem;color:var(--sub);padding:4px 0">• '+s+'</div>';
+          }).join('')+
+        '</div>';
+    }
+  }else{
+    if(data.rutine&&data.rutine.length){
+      html+=rutineCard('🚿 Hårrutine',data.rutine);
+    }
+    if(data.vaskeFrekvens){
+      html+=
+        '<div style="background:rgba(212,175,55,.05);border:1px solid rgba(212,175,55,.12);'+
+          'border-radius:12px;padding:12px;margin:8px 0;font-size:.72rem">'+
+          '🚿 <strong style="color:#fff">Vaskefrekvens:</strong> '+
+          '<span style="color:var(--sub)">'+data.vaskeFrekvens+'</span>'+
+        '</div>';
+    }
+    if(data.varmeTips&&data.varmeTips.length){
+      html+=bulletCard('🌡️ Varme-styling tips',data.varmeTips,'#f97316');
+    }
+    if(data.kost&&data.kost.length){
+      html+=bulletCard('🥗 Kost for sundt hår',data.kost,'#22c55e');
+    }
+    if(data.supplements&&data.supplements.length){
+      html+=bulletCard('💊 Kosttilskud til hår',data.supplements,'#a78bfa');
+    }
+  }
+  html+='</div>';
+  return html;
+}
+
+function rutineCard(title,items){
+  return '<div class="rec-card">'+
+    '<div class="rec-card-title">'+title+'</div>'+
+    items.map(function(s,i){
+      return '<div style="display:flex;gap:9px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04)">'+
+        '<div class="step-num">'+(i+1)+'</div>'+
+        '<div style="font-size:.71rem;color:var(--sub);line-height:1.55">'+s+'</div>'+
+      '</div>';
+    }).join('')+
+  '</div>';
+}
+function bulletCard(title,items,color){
+  color=color||'var(--gold)';
+  return '<div class="rec-card">'+
+    '<div class="rec-card-title">'+title+'</div>'+
+    items.map(function(s){
+      return '<div style="display:flex;gap:7px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04)">'+
+        '<span style="color:'+color+';flex-shrink:0">•</span>'+
+        '<div style="font-size:.71rem;color:var(--sub);line-height:1.5">'+s+'</div>'+
+      '</div>';
+    }).join('')+
+  '</div>';
+}
+
+/* ══════════════════════════════════
+   COACH
+══════════════════════════════════ */
 async function getCoach(){
   var r=document.getElementById('coachRes');if(!r)return;
   r.innerHTML='<div style="text-align:center;padding:30px"><div class="spinner"></div></div>';
@@ -1143,25 +1281,30 @@ async function getCoach(){
     var s=S.stats||{},f=S.faceAnalysis||{};
     var tier=getTier(S.score);
     var prompt=
-      'Du er en elite looksmaxing coach. Lav en PERSONLIG, MOTIVERENDE og HANDLINGSRETTET coaching-besked på DANSK.'+
-      '\nBruger: '+tier.label+' niveau ('+S.score+'/100 Glow Score)'+
-      '\nAnsigts-rating: '+(f.rating||'ukendt')+'/10'+
-      '\nDagens data: Søvn '+(s.sleep||0)+'t, Vand '+(s.water||0)+' glas, Træning: '+(s.workout?'Ja':'Nej')+
-      ', Hudpleje: '+(s.skincare?'Ja':'Nej')+', SPF: '+(s.sun?'Ja':'Nej')+
-      ', Streak: '+(Array.isArray(S.streak)?S.streak.length:0)+' dage'+
-      '\nVær SPECIFIK. Nævn præcise tal, øvelser, vitaminer. Brug emojis. Max 300 ord.';
+      'Du er en elite looksmaxing-coach og personlig trainer. '+
+      'Lav en PERSONLIG, MOTIVERENDE og EKSTREMT HANDLINGSRETTET coaching-besked på DANSK.'+
+      '\nBrugerprofil: '+tier.label+' niveau, Glow Score '+S.score+'/100'+
+      '\nAnsigts-rating: '+(f.rating||'ikke scannet')+'/10'+
+      '\nHudtype: '+(f.hudtype||'ukendt')+', Ansigtsform: '+(f.ansigtsform||'ukendt')+
+      '\nDagens registreringer: Søvn '+(s.sleep||0)+' timer, Vand '+(s.water||0)+' glas, '+
+      'Træning: '+(s.workout?'Ja':'Nej')+', Hudpleje: '+(s.skincare?'Ja':'Nej')+
+      ', SPF: '+(s.sun?'Ja':'Nej')+', Mewing: '+(s.mewing?'Ja':'Nej')+
+      '\nStreak: '+(Array.isArray(S.streak)?S.streak.length:0)+' dage'+
+      '\nVær ULTRA specifik: nævn præcise tal, øvelser med sæt/reps, vitaminer med doser, kost med gram. '+
+      'Inkluder 5 konkrete handlingspunkter til NÆSTE 24 TIMER. Brug emojis. Max 400 ord.';
     var res=await callAI(prompt,S.faceImage?S.faceImage.split(',')[1]:null);
-    r.style.display='block';
     r.innerHTML=
       '<div class="rec-card">'+
-        '<div class="rec-card-title">🎯 Din Coach</div>'+
-        '<div style="font-size:.75rem;color:var(--sub);line-height:1.75">'+res.replace(/\n/g,'<br>')+'</div>'+
+        '<div class="rec-card-title">🎯 Din personlige coach</div>'+
+        '<div style="font-size:.75rem;color:var(--sub);line-height:1.8">'+
+          res.replace(/\n/g,'<br>')+
+        '</div>'+
       '</div>';
-  }catch(e){r.innerHTML='<div class="ai-card" style="border-color:#ef4444">'+e.message+'</div>'}
+  }catch(e){r.innerHTML='<div class="ai-card" style="border-color:var(--red)">'+e.message+'</div>'}
 }
 
 function aiFillTracker(){
-  if(!S.faceAnalysis){toast('Scan først');return}
+  if(!S.faceAnalysis){toast('Scan ansigt først');return}
   S.stats.sleep=parseInt(S.faceAnalysis.optimalSøvn)||8;
   S.stats.water=parseInt(S.faceAnalysis.optimalVand)||10;
   S.stats.nutrition=4;S.stats.workout=1;S.stats.skincare=1;S.stats.mewing=1;S.stats.posture=1;S.stats.sun=1;
@@ -1176,84 +1319,98 @@ async function sendChat(){
   r.style.display='block';
   try{
     var tier=getTier(S.score);
-    var ctx='Du er looksmaxing ekspert. '+
-      (S.faceAnalysis?'Brugers ansigt: Score '+S.faceAnalysis.rating+'/10, ansigtsform: '+S.faceAnalysis.ansigtsform+', hudtype: '+S.faceAnalysis.hudtype+'. ':'Ingen scanning endnu. ')+
-      'Glow Score: '+S.score+'/100 ('+tier.label+'). Besvar DETALJERET og PRÆCIST på DANSK: ';
+    var ctx='Du er verdens bedste looksmaxing-ekspert og coach. '+
+      (S.faceAnalysis?
+        'Bruger: ansigt '+S.faceAnalysis.rating+'/10, ansigtsform: '+S.faceAnalysis.ansigtsform+
+        ', hudtype: '+S.faceAnalysis.hudtype+'. ':'Ingen scanning endnu. ')+
+      'Glow Score: '+S.score+'/100 ('+tier.label+'). '+
+      'Besvar MEGET detaljeret, præcist og handlingsrettet på DANSK: ';
     var res=await callAI(ctx+qv,S.faceImage?S.faceImage.split(',')[1]:null);
     r.innerHTML=
       '<div class="rec-card">'+
         '<div class="rec-card-title">💡 Svar</div>'+
-        '<div style="font-size:.75rem;color:var(--sub);line-height:1.75">'+res.replace(/\n/g,'<br>')+'</div>'+
+        '<div style="font-size:.75rem;color:var(--sub);line-height:1.8">'+res.replace(/\n/g,'<br>')+'</div>'+
       '</div>';
     q.value='';toast('Besvaret ✓');
-  }catch(e){r.innerHTML='<div class="ai-card" style="border-color:#ef4444">'+e.message+'</div>'}
+  }catch(e){r.innerHTML='<div class="ai-card" style="border-color:var(--red)">'+e.message+'</div>'}
 }
 
-/* ===== API SETUP ===== */
+/* ══════════════════════════════════
+   API SETUP
+══════════════════════════════════ */
 function showAPISetup(){
-  var existing=document.getElementById('apiModal');if(existing)return;
-  var o=document.createElement('div');
-  o.id='apiModal';
-  o.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.97);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(14px)';
+  var ex=document.getElementById('apiModal');if(ex)return;
+  var o=document.createElement('div');o.id='apiModal';
+  o.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.97);z-index:2000;'+
+    'display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(14px)';
   o.innerHTML=
-    '<div class="glass" style="max-width:400px;width:100%;text-align:center;padding:34px 26px">'+
-      '<div style="font-size:3.5rem;margin-bottom:16px">🔑</div>'+
-      '<div style="font-family:\'Cormorant Garamond\',serif;color:var(--gold);font-size:1.5rem;margin-bottom:8px">API-nøgle</div>'+
-      '<p style="color:var(--sub);font-size:.72rem;margin-bottom:6px">Hent din gratis nøgle på</p>'+
-      '<p style="color:#60a5fa;font-size:.75rem;font-weight:600;margin-bottom:20px">console.groq.com/keys</p>'+
-      '<input type="password" id="apiKeyInput" placeholder="gsk_..." autocomplete="off" style="text-align:center;font-size:.9rem;letter-spacing:1px">'+
-      '<button class="btn btn-gold" style="margin-top:14px" onclick="window._saveAPIKey()">Tilslut og brug app</button>'+
-      '<p style="color:#444;font-size:.6rem;margin-top:12px">100% gratis — ingen kreditkort</p>'+
+    '<div class="glass" style="max-width:400px;width:100%;text-align:center;padding:36px 26px">'+
+      '<div style="font-size:3.5rem;margin-bottom:16px;filter:drop-shadow(0 0 20px rgba(212,175,55,.3))">🔑</div>'+
+      '<div style="font-family:\'Cormorant Garamond\',serif;color:var(--gold);font-size:1.5rem;margin-bottom:8px">'+
+        'Groq API-nøgle</div>'+
+      '<p style="color:var(--sub);font-size:.72rem;margin-bottom:5px">Hent din gratis nøgle på</p>'+
+      '<p style="color:#60a5fa;font-size:.76rem;font-weight:600;margin-bottom:20px">console.groq.com/keys</p>'+
+      '<input type="password" id="apiKeyInput" placeholder="gsk_..." autocomplete="off" '+
+        'style="text-align:center;font-size:.9rem;letter-spacing:1px">'+
+      '<button class="btn btn-gold" style="margin-top:14px" onclick="window._saveAPIKey()">'+
+        'Tilslut og brug app</button>'+
+      '<p style="color:#444;font-size:.6rem;margin-top:12px">100% gratis · ingen kreditkort · ingen abonnement</p>'+
     '</div>';
   o.addEventListener('click',function(e){if(e.target===o)o.remove()});
   document.body.appendChild(o);
-  setTimeout(function(){var inp=document.getElementById('apiKeyInput');if(inp)inp.focus()},100);
+  setTimeout(function(){var inp=document.getElementById('apiKeyInput');if(inp)inp.focus()},120);
 }
 
 window._saveAPIKey=function(){
   try{
-    var k=document.getElementById('apiKeyInput');if(!k)return;
-    var kv=k.value.trim();
+    var inp=document.getElementById('apiKeyInput');if(!inp)return;
+    var kv=inp.value.trim();
     if(!kv||!kv.startsWith('gsk_')){toast('Ugyldig nøgle — skal starte med gsk_');return}
-    setAPIKey(kv);S.onboarded=true;save();
+    setKey(kv);S.onboarded=true;save();
     var modal=document.getElementById('apiModal');if(modal)modal.remove();
-    toast('✓ Nøgle gemt! Klar til brug');render();
+    toast('✓ Nøgle gemt! App klar');render();
   }catch(e){toast('Fejl: '+e.message)}
 };
 
-/* ===== RENDER ===== */
+/* ══════════════════════════════════
+   RENDER
+══════════════════════════════════ */
 function render(){
   try{
     var a=document.getElementById('app');if(!a)return;
     var ds='';
-    try{ds=new Date().toLocaleDateString('da-DK',{weekday:'long',day:'numeric',month:'short'})}catch(e){ds=''}
-    var hasKey=!!getAPIKey();
+    try{ds=new Date().toLocaleDateString('da-DK',{weekday:'long',day:'numeric',month:'short'})}catch(e){}
+    var hasKey=!!getKey();
     if(!hasKey){
       a.innerHTML=
         '<div class="topbar">'+
           '<span><span class="dot red"></span>Afventer API</span>'+
           '<span style="font-size:.65rem">'+ds+'</span>'+
         '</div>'+
-        '<div class="glass" style="text-align:center;padding:46px 24px">'+
-          '<div style="font-size:4rem;margin-bottom:18px">💎</div>'+
-          '<div style="font-family:\'Cormorant Garamond\',serif;font-size:1.8rem;color:var(--gold);margin-bottom:8px">LooksMax AI</div>'+
-          '<p style="color:var(--sub);font-size:.75rem;margin:10px 0 24px">Verdens mest avancerede looksmaxing-assistent</p>'+
+        '<div class="glass" style="text-align:center;padding:48px 24px">'+
+          '<div style="font-size:4rem;margin-bottom:18px;filter:drop-shadow(0 0 20px rgba(212,175,55,.3))">💎</div>'+
+          '<div style="font-family:\'Cormorant Garamond\',serif;font-size:1.9rem;color:var(--gold);margin-bottom:10px">'+
+            'LooksMax AI</div>'+
+          '<p style="color:var(--sub);font-size:.75rem;margin:0 0 24px;line-height:1.6">'+
+            'Verdens mest avancerede looksmaxxing-assistent.<br>'+
+            'Analyser dit ansigt, optimer dit udseende.</p>'+
           '<button class="btn btn-gold" onclick="window._showAPISetup()">Tilslut gratis API-nøgle</button>'+
-          '<p style="color:#444;font-size:.6rem;margin-top:14px">console.groq.com/keys</p>'+
+          '<p style="color:#3a3a3a;font-size:.6rem;margin-top:14px">console.groq.com/keys</p>'+
         '</div>';
       return;
     }
     var sl=Array.isArray(S.streak)?S.streak.length:0;
     var tier=getTier(S.score);
     var offset=Math.round(440-(440*(S.score/100)));
-    var streakEmoji=sl>=30?'👑':sl>=14?'🔥🔥':sl>=7?'🔥':sl>=3?'⚡':'';
+    var sEmoji=sl>=30?'👑':sl>=14?'🔥🔥':sl>=7?'🔥':sl>=3?'⚡':'';
     a.innerHTML=
       '<div class="topbar">'+
         '<span><span class="dot green"></span>AI Online</span>'+
         '<span style="font-size:.65rem">'+ds+'</span>'+
       '</div>'+
+      /* SCORE */
       '<div class="score-wrap">'+
-        '<div class="score-ring-wrap" style="--offset:'+offset+'">'+
+        '<div class="score-ring-wrap">'+
           '<svg viewBox="0 0 170 170" xmlns="http://www.w3.org/2000/svg">'+
             '<defs>'+
               '<linearGradient id="sg" x1="0%" y1="0%" x2="100%" y2="100%">'+
@@ -1264,8 +1421,7 @@ function render(){
             '</defs>'+
             '<circle fill="none" stroke="rgba(255,255,255,.04)" stroke-width="3" cx="85" cy="85" r="70"/>'+
             '<circle fill="none" stroke="url(#sg)" stroke-width="3" stroke-linecap="round" '+
-              'stroke-dasharray="440" stroke-dashoffset="'+offset+'" cx="85" cy="85" r="70" '+
-              'style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)"/>'+
+              'stroke-dasharray="440" stroke-dashoffset="'+offset+'" cx="85" cy="85" r="70"/>'+
           '</svg>'+
           '<div class="score-inner">'+
             '<div class="score-val">'+S.score+'</div>'+
@@ -1274,14 +1430,16 @@ function render(){
           '</div>'+
         '</div>'+
         (sl>0?
-          '<div class="streak-badge">🗓 '+sl+' dag'+(sl===1?'':'e')+' streak '+(streakEmoji?' '+streakEmoji:'')+'</div>':
-          '<div class="streak-badge" style="color:var(--sub);border-color:rgba(255,255,255,.1)">Start din streak i dag</div>')+
+          '<div class="streak-badge">🗓 '+sl+' dag'+(sl===1?'':'e')+' streak'+(sEmoji?' '+sEmoji:'')+'</div>':
+          '<div class="streak-badge" style="color:var(--sub);border-color:rgba(255,255,255,.1)">'+
+            'Start din streak i dag ✦</div>')+
       '</div>'+
+      /* GRID */
       '<div class="grid2">'+
         '<div class="item full" onclick="window._switchTab(\'scan\')">'+
           '<span class="icon">📷</span>'+
           '<div class="title">3D Ansigtsscanning</div>'+
-          '<div class="sub">5 vinkler • AI-analyse • Fuld rapport</div>'+
+          '<div class="sub">5 vinkler · AI-rapport · Fuld analyse</div>'+
         '</div>'+
         '<div class="item" onclick="window._switchTab(\'hair\')">'+
           '<span class="icon">💇</span>'+
@@ -1291,7 +1449,7 @@ function render(){
         '<div class="item" onclick="window._switchTab(\'products\')">'+
           '<span class="icon">🧴</span>'+
           '<div class="title">Produkter</div>'+
-          '<div class="sub">Gem & få anbefalinger</div>'+
+          '<div class="sub">Gemt · Anbefalinger</div>'+
         '</div>'+
         '<div class="item" onclick="window._switchTab(\'coach\')">'+
           '<span class="icon">🎯</span>'+
@@ -1311,56 +1469,61 @@ function render(){
         '<div class="item" onclick="window._switchTab(\'chat\')">'+
           '<span class="icon">💡</span>'+
           '<div class="title">Spørg AI</div>'+
-          '<div class="sub">Tilpasset dig</div>'+
+          '<div class="sub">Tilpasset din profil</div>'+
         '</div>'+
       '</div>'+
       '<div id="tabContent"></div>';
     renderTab();
   }catch(e){
-    console.log('Render error:',e);
+    console.error(e);
     var a2=document.getElementById('app');
     if(a2)a2.innerHTML='<div style="text-align:center;padding:40px"><div class="spinner"></div></div>';
-    setTimeout(function(){S=getDefaultState();save();render()},600);
+    setTimeout(function(){S=defState();save();render()},700);
   }
 }
 
 window._switchTab=function(t){
   S.tab=t;render();
-  setTimeout(function(){var el=document.getElementById('tabContent');if(el)el.scrollIntoView({behavior:'smooth',block:'start'})},80);
+  setTimeout(function(){
+    var el=document.getElementById('tabContent');
+    if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+  },80);
 };
 window._showAPISetup=function(){showAPISetup()};
 
+/* ── RENDER TAB ── */
 function renderTab(){
   var c=document.getElementById('tabContent');if(!c)return;
   try{
 
-    /* ---- SCAN ---- */
+    /* SCAN */
     if(S.tab==='scan'){
       c.innerHTML=
         '<div class="glass">'+
           '<div class="sec-head">3D Scanning</div>'+
-          '<p style="color:var(--sub);font-size:.73rem;margin-bottom:16px">5 vinkler giver AI et komplet billede af din ansigtsstruktur, hud og symmetri.</p>'+
+          '<p style="color:var(--sub);font-size:.73rem;margin-bottom:14px">'+
+            '5 billeder fra alle vinkler giver AI et komplet billede af din ansigtsstruktur, symmetri og hud.</p>'+
           (S.faceAnalysis?
-            '<div style="background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.15);border-radius:14px;padding:12px;margin-bottom:12px;font-size:.7rem;text-align:center">'+
-              '✓ Seneste analyse: '+S.faceAnalysis.rating+'/10 — Klik for at opdatere'+
-            '</div>':'')+
+            '<div style="background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.15);'+
+              'border-radius:14px;padding:12px;margin-bottom:12px;font-size:.7rem;text-align:center;color:var(--gold)">'+
+              '✓ Seneste: '+S.faceAnalysis.rating+'/10 '+getTier((S.faceAnalysis.rating||0)*10).label+
+              ' — klik for at opdatere</div>':'')+
           '<button class="btn btn-gold" onclick="window._startScan()">▶ Start 3D scanning</button>'+
           '<div id="aiRes" style="display:none;margin-top:10px"></div>'+
           '<button class="btn btn-outline" style="margin-top:8px" onclick="window._switchTab(\'home\')">← Tilbage</button>'+
         '</div>';
     }
 
-    /* ---- HAIR ---- */
+    /* HAIR */
     else if(S.tab==='hair'){
       var hp=S.hairProfile||{};
-      var inspoCount=S.hairInspo?S.hairInspo.length:0;
-      var inspoHtml='';
-      if(inspoCount>0){
-        inspoHtml=
+      var ic=S.hairInspo?S.hairInspo.length:0;
+      var inspoH='';
+      if(ic>0){
+        inspoH=
           '<div style="margin:14px 0 6px">'+
-            '<div style="font-size:.62rem;letter-spacing:1px;color:var(--gold);font-weight:700;margin-bottom:8px">'+
-              'REFERENCE-BILLEDER ('+inspoCount+'/10)'+
-            '</div>'+
+            '<div style="font-size:.6rem;letter-spacing:1px;color:var(--gold);font-weight:700;margin-bottom:8px">'+
+              'DINE REFERENCE-BILLEDER ('+ic+'/10) — klik for at se større</div>'+
             '<div class="inspo-grid">'+
               S.hairInspo.map(function(img,i){
                 return '<div class="inspo-thumb">'+
@@ -1374,7 +1537,8 @@ function renderTab(){
       c.innerHTML=
         '<div class="glass">'+
           '<div class="sec-head">Frisure-råd</div>'+
-          '<p style="color:var(--sub);font-size:.72rem;margin-bottom:12px">Udfyld din hårprofil for de bedste anbefalinger.</p>'+
+          '<p style="color:var(--sub);font-size:.72rem;margin-bottom:10px">'+
+            'Udfyld din hårprofil og upload eventuelt reference-billeder for de bedste anbefalinger.</p>'+
           '<select onchange="window._updateHair(\'type\',this.value)">'+
             '<option value="">Hårtype</option>'+
             '<option value="glat" '+(hp.type==='glat'?'selected':'')+'>Glat</option>'+
@@ -1394,61 +1558,71 @@ function renderTab(){
             '<option value="normalt" '+(hp.texture==='normalt'?'selected':'')+'>Normalt</option>'+
           '</select>'+
           '<select onchange="window._updateHair(\'lengthCm\',this.value)">'+
-            '<option value="">Hårslængde</option>'+
-            '<option value="2-4 cm" '+(hp.lengthCm==='2-4 cm'?'selected':'')+'>2-4 cm</option>'+
-            '<option value="5-7 cm" '+(hp.lengthCm==='5-7 cm'?'selected':'')+'>5-7 cm</option>'+
-            '<option value="8-12 cm" '+(hp.lengthCm==='8-12 cm'?'selected':'')+'>8-12 cm</option>'+
-            '<option value="13-20 cm" '+(hp.lengthCm==='13-20 cm'?'selected':'')+'>13-20 cm</option>'+
-            '<option value="20+ cm" '+(hp.lengthCm==='20+ cm'?'selected':'')+'>20+ cm</option>'+
+            '<option value="">Hårslængde nu</option>'+
+            '<option value="2-4 cm" '+(hp.lengthCm==='2-4 cm'?'selected':'')+'>2-4 cm (meget kort)</option>'+
+            '<option value="5-7 cm" '+(hp.lengthCm==='5-7 cm'?'selected':'')+'>5-7 cm (kort)</option>'+
+            '<option value="8-12 cm" '+(hp.lengthCm==='8-12 cm'?'selected':'')+'>8-12 cm (medium)</option>'+
+            '<option value="13-20 cm" '+(hp.lengthCm==='13-20 cm'?'selected':'')+'>13-20 cm (langt)</option>'+
+            '<option value="20+ cm" '+(hp.lengthCm==='20+ cm'?'selected':'')+'>20+ cm (meget langt)</option>'+
           '</select>'+
-          '<input id="hpPref" value="'+(hp.preferences||'')+'" placeholder="Hvilken stil kan du lide? (f.eks. curtains, buzz cut, quiff)" onchange="window._updateHair(\'preferences\',this.value)">'+
-          '<input id="hpConc" value="'+(hp.concerns||'')+'" placeholder="Bekymringer? (f.eks. hårtab, fedtet, tyndt)" onchange="window._updateHair(\'concerns\',this.value)">'+
-          inspoHtml+
-          '<div style="display:flex;gap:8px;margin-top:10px">'+
-            '<button class="btn btn-outline" style="margin:0;flex:1" onclick="window._uploadHairInspo()">'+
-              '🖼 Tilføj referencer'+(inspoCount>0?' ('+inspoCount+'/10)':'')+
-            '</button>'+
-          '</div>'+
-          '<button class="btn btn-gold" style="margin-top:10px" onclick="window._getHairAdvice()">✨ Få frisure-råd</button>'+
+          '<input id="hpPref" value="'+(hp.preferences||'')+'" '+
+            'placeholder="Hvilken stil? (fx curtains, buzz cut, quiff, pompadour)" '+
+            'onchange="window._updateHair(\'preferences\',this.value)">'+
+          '<input id="hpConc" value="'+(hp.concerns||'')+'" '+
+            'placeholder="Bekymringer? (fx hårtab, fedtet, tyndt hår)" '+
+            'onchange="window._updateHair(\'concerns\',this.value)">'+
+          inspoH+
+          '<button class="btn btn-outline" style="margin-top:10px" onclick="window._uploadHairInspo()">'+
+            '🖼 Upload reference-billeder'+(ic>0?' ('+ic+'/10)':' (op til 10)')+
+          '</button>'+
+          '<button class="btn btn-gold" style="margin-top:10px" onclick="window._getHairAdvice()">'+
+            '✨ Få frisure-råd</button>'+
           '<div id="hairRes" style="display:none;margin-top:8px"></div>'+
           '<button class="btn btn-outline" style="margin-top:8px" onclick="window._switchTab(\'home\')">← Tilbage</button>'+
         '</div>';
     }
 
-    /* ---- PRODUCTS ---- */
+    /* PRODUCTS */
     else if(S.tab==='products'){
       c.innerHTML=
         '<div class="glass">'+
           '<div class="sec-head">Mine Produkter</div>'+
-          '<p style="color:var(--sub);font-size:.72rem;margin-bottom:12px">Tilføj dine nuværende produkter — AI analyserer dem og giver bedre anbefalinger.</p>'+
+          '<p style="color:var(--sub);font-size:.72rem;margin-bottom:12px">'+
+            'Tilføj dine nuværende produkter — AI analyserer dem og giver skræddersyede anbefalinger. '+
+            'Produkterne gemmes automatisk.</p>'+
           '<div class="prod-source-row">'+
-            '<button class="prod-source-btn" onclick="window._addProduct(\'face\')">+ Ansigt</button>'+
-            '<button class="prod-source-btn" onclick="window._addProduct(\'hair\')">+ Hår</button>'+
+            '<button class="psb" onclick="window._addProduct(\'face\')">+ Ansigt</button>'+
+            '<button class="psb" onclick="window._addProduct(\'hair\')">+ Hår</button>'+
           '</div>'+
           '<div id="prodList" style="margin-top:10px">'+renderProds()+'</div>'+
           '<div style="height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);margin:16px 0"></div>'+
-          '<div style="font-size:.65rem;color:var(--sub);margin-bottom:10px;text-align:center">Vælg kategori for AI-anbefalinger</div>'+
-          '<button class="btn btn-gold" onclick="window._getProductAdvice(\'face\')">🧴 Hudpleje-analyse</button>'+
+          '<p style="font-size:.65rem;color:var(--sub);text-align:center;margin-bottom:10px">'+
+            'Vælg kategori for at få AI-anbefalinger</p>'+
+          '<button class="btn btn-gold" onclick="window._getProductAdvice(\'face\')">'+
+            '🧴 Hudpleje-analyse & rutine</button>'+
           '<div id="faceProd" style="display:none"></div>'+
-          '<button class="btn btn-gold" style="margin-top:8px" onclick="window._getProductAdvice(\'hair\')">💇 Hårpleje-analyse</button>'+
+          '<button class="btn btn-gold" style="margin-top:8px" onclick="window._getProductAdvice(\'hair\')">'+
+            '💇 Hårpleje-analyse & rutine</button>'+
           '<div id="hairProd" style="display:none"></div>'+
           '<button class="btn btn-outline" style="margin-top:10px" onclick="window._switchTab(\'home\')">← Tilbage</button>'+
         '</div>';
     }
 
-    /* ---- COACH ---- */
+    /* COACH */
     else if(S.tab==='coach'){
       var tier2=getTier(S.score);
       c.innerHTML=
         '<div class="glass">'+
-          '<div class="sec-head">Coach</div>'+
-          '<div style="background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.15);border-radius:14px;padding:14px;margin-bottom:14px">'+
-            '<div style="font-size:.62rem;color:var(--sub);margin-bottom:4px">DIT NIVEAU</div>'+
-            '<div style="font-size:1.1rem;font-weight:700;color:var(--gold)">'+tier2.icon+' '+tier2.label+'</div>'+
+          '<div class="sec-head">Personlig Coach</div>'+
+          '<div style="background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.15);'+
+            'border-radius:14px;padding:14px;margin-bottom:14px">'+
+            '<div style="font-size:.6rem;color:var(--sub);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">DIT NIVEAU</div>'+
+            '<div style="font-size:1.15rem;font-weight:700;color:var(--gold)">'+tier2.icon+' '+tier2.label+'</div>'+
             '<div style="font-size:.7rem;color:var(--sub);margin-top:4px">'+S.score+'/100 Glow Score</div>'+
           '</div>'+
           '<p style="color:var(--sub);font-size:.73rem;margin-bottom:14px">'+
-            (S.faceAnalysis?'✓ Kender dit ansigt — klar til præcise råd':'Scan ansigt for endnu bedre coaching')+
+            (S.faceAnalysis?'✓ Kender dit ansigt og din profil — klar til præcise råd':
+              'Scan dit ansigt for endnu bedre og mere præcis coaching')+
           '</p>'+
           '<button class="btn btn-gold" onclick="window._getCoach()">🎯 Få personlig coaching</button>'+
           '<div id="coachRes" style="display:none;margin-top:10px"></div>'+
@@ -1456,29 +1630,32 @@ function renderTab(){
         '</div>';
     }
 
-    /* ---- TRACKER ---- */
+    /* TRACKER */
     else if(S.tab==='tracker'){
       var s=S.stats||{};
       c.innerHTML=
         '<div class="glass">'+
           '<div class="sec-head">Daglig Tracker</div>'+
-          '<button class="btn btn-outline" style="margin-bottom:14px;font-size:.7rem" onclick="window._aiFillTracker()">🤖 AI auto-udfyld fra scan</button>'+
-          '<div class="stat-input-row">'+
-            '<div class="stat-label">😴 Søvn</div>'+
-            '<div class="stat-row-inner">'+
+          '<button class="btn btn-outline" style="margin-bottom:14px;font-size:.7rem" '+
+            'onclick="window._aiFillTracker()">🤖 AI auto-udfyld fra scanning</button>'+
+          '<div class="stat-row">'+
+            '<div style="font-size:.8rem;font-weight:600;margin-bottom:8px">😴 Søvn</div>'+
+            '<div style="display:flex;justify-content:space-between;align-items:center">'+
               '<div style="color:var(--sub);font-size:.72rem">Antal timer i nat</div>'+
               '<div style="display:flex;align-items:center;gap:8px">'+
-                '<input type="number" id="sl" value="'+(s.sleep||0)+'" min="0" max="24" style="width:62px;text-align:center;margin:0;padding:9px">'+
+                '<input type="number" id="sl" value="'+(s.sleep||0)+'" min="0" max="24" '+
+                  'style="width:62px;text-align:center;margin:0;padding:9px">'+
                 '<span style="color:var(--sub);font-size:.7rem">timer</span>'+
               '</div>'+
             '</div>'+
           '</div>'+
-          '<div class="stat-input-row">'+
-            '<div class="stat-label">💧 Vand</div>'+
-            '<div class="stat-row-inner">'+
+          '<div class="stat-row">'+
+            '<div style="font-size:.8rem;font-weight:600;margin-bottom:8px">💧 Vand</div>'+
+            '<div style="display:flex;justify-content:space-between;align-items:center">'+
               '<div style="color:var(--sub);font-size:.72rem">Glas vand i dag</div>'+
               '<div style="display:flex;align-items:center;gap:8px">'+
-                '<input type="number" id="wa" value="'+(s.water||0)+'" min="0" max="20" style="width:62px;text-align:center;margin:0;padding:9px">'+
+                '<input type="number" id="wa" value="'+(s.water||0)+'" min="0" max="20" '+
+                  'style="width:62px;text-align:center;margin:0;padding:9px">'+
                 '<span style="color:var(--sub);font-size:.7rem">glas</span>'+
               '</div>'+
             '</div>'+
@@ -1487,11 +1664,11 @@ function renderTab(){
         '<div class="glass">'+
           '<div class="sec-head">Afkrydsning</div>'+
           [
-            ['🏋️','Træning','workout','Styrketræning, cardio eller sport'],
-            ['🧴','Hudpleje','skincare','Rensning, fugtighedscreme, serum'],
-            ['😮','Mewing','mewing','Korrekt tungepositionering hele dagen'],
-            ['🚶','Holdning','posture','Ret ryg, skuldre tilbage'],
-            ['☀️','SPF','sun','Solcreme SPF 30+ påført']
+            ['🏋️','Træning','workout','Styrketræning, cardio eller sport i dag'],
+            ['🧴','Hudpleje','skincare','Rensning, fugtighedscreme og serum'],
+            ['😮','Mewing','mewing','Korrekt tungeposition holdt hele dagen'],
+            ['🚶','Holdning','posture','Ret ryg og skuldre tilbage hele dagen'],
+            ['☀️','SPF','sun','Solcreme SPF 30+ påført i dag']
           ].map(function(a){
             return '<div class="check-row" onclick="window._toggleCheck(\''+a[2]+'\')">'+
               '<div class="check-box '+(s[a[2]]?'on':'')+'">'+(s[a[2]]?'✓':'')+'</div>'+
@@ -1501,12 +1678,13 @@ function renderTab(){
               '</div>'+
             '</div>';
           }).join('')+
-          '<button class="btn btn-gold" style="margin-top:14px" onclick="window._saveTracker()">Gem dag ✓</button>'+
+          '<button class="btn btn-gold" style="margin-top:14px" '+
+            'onclick="window._saveTracker()">Gem dag ✓</button>'+
         '</div>'+
         '<button class="btn btn-outline" onclick="window._switchTab(\'home\')">← Tilbage</button>';
     }
 
-    /* ---- PROGRESS ---- */
+    /* PROGRESS */
     else if(S.tab==='progress'){
       var pg=S.progressGallery||[];
       c.innerHTML=
@@ -1517,43 +1695,48 @@ function renderTab(){
               '<div style="font-size:3rem;margin-bottom:12px">📸</div>'+
               '<p style="color:var(--sub);font-size:.8rem">Scan dit ansigt for at starte din rejse</p>'+
             '</div>':
-            '<div style="font-size:.68rem;color:var(--sub);margin-bottom:12px;text-align:center">'+pg.length+' ugentlige scans — din transformation over tid</div>'+
+            '<div style="font-size:.68rem;color:var(--sub);margin-bottom:12px;text-align:center">'+
+              pg.length+' ugentlige scans — din transformation over tid</div>'+
             '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+
               pg.slice().reverse().map(function(p){
-                var t=getTier(p.score*10);
-                return '<div style="border-radius:16px;overflow:hidden;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05)">'+
+                var t=getTier((p.score||0)*10);
+                return '<div style="border-radius:16px;overflow:hidden;background:rgba(255,255,255,.02);'+
+                  'border:1px solid rgba(255,255,255,.05)">'+
                   '<img src="'+p.image+'" style="width:100%;aspect-ratio:3/4;object-fit:cover">'+
                   '<div style="padding:8px;text-align:center">'+
-                    '<div style="font-size:.6rem;color:var(--sub)">Uge '+p.week+'</div>'+
-                    '<div style="font-size:.78rem;font-weight:700;color:var(--gold)">'+p.score+'/10</div>'+
-                    '<div style="font-size:.58rem;color:'+t.color+'">'+t.icon+'</div>'+
+                    '<div style="font-size:.58rem;color:var(--sub)">Uge '+p.week+'</div>'+
+                    '<div style="font-size:.82rem;font-weight:700;color:var(--gold)">'+p.score+'/10</div>'+
+                    '<div style="font-size:.62rem;color:'+t.color+'">'+t.icon+' '+t.label+'</div>'+
                   '</div>'+
                 '</div>';
               }).join('')+
             '</div>')+
-          '<button class="btn btn-outline" style="margin-top:12px" onclick="window._switchTab(\'home\')">← Tilbage</button>'+
+          '<button class="btn btn-outline" style="margin-top:12px" '+
+            'onclick="window._switchTab(\'home\')">← Tilbage</button>'+
         '</div>';
     }
 
-    /* ---- CHAT ---- */
+    /* CHAT */
     else if(S.tab==='chat'){
       c.innerHTML=
         '<div class="glass">'+
           '<div class="sec-head">Spørg AI</div>'+
-          '<p style="color:var(--sub);font-size:.73rem;margin-bottom:12px">AI svarer præcist og tilpasset din profil og dit ansigt.</p>'+
+          '<p style="color:var(--sub);font-size:.73rem;margin-bottom:12px">'+
+            'AI svarer detaljeret og tilpasset præcis din profil, dit ansigt og din situation.</p>'+
           '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px">'+
-            ['Hvad er mewing?','Bedste øvelser for kæbe?','Hvilken kostplan?','Hudpleje for mænd?','Bedste supplements?'].map(function(q){
+            ['Hvad er mewing?','Kæbeøvelser med sæt?','Hvilken kostplan?',
+             'Hudpleje rutine for mænd?','Bedste kosttilskud?'].map(function(q){
               return '<span class="tag" onclick="document.getElementById(\'chatInput\').value=\''+q+'\'">'+q+'</span>';
             }).join('')+
           '</div>'+
-          '<textarea id="chatInput" placeholder="Stil dit spørgsmål om looksmaxing..." rows="3"></textarea>'+
-          '<button class="btn btn-gold" style="margin-top:8px" onclick="window._sendChat()">Send spørgsmål →</button>'+
+          '<textarea id="chatInput" placeholder="Stil dit spørgsmål om looksmaxxing..." rows="3"></textarea>'+
+          '<button class="btn btn-gold" style="margin-top:8px" onclick="window._sendChat()">Send →</button>'+
           '<div id="chatRes" style="margin-top:10px"></div>'+
           '<button class="btn btn-outline" style="margin-top:8px" onclick="window._switchTab(\'home\')">← Tilbage</button>'+
         '</div>';
     }
 
-  }catch(e){console.log('renderTab error:',e)}
+  }catch(e){console.error('renderTab:',e)}
 }
 
 function renderProds(){
@@ -1563,44 +1746,47 @@ function renderProds(){
     var all=face.map(function(p){return Object.assign({},p,{_t:'face'})})
       .concat(hair.map(function(p){return Object.assign({},p,{_t:'hair'})}));
     if(all.length===0){
-      return '<div style="text-align:center;padding:20px;color:#555;font-size:.72rem">Ingen produkter tilføjet endnu<br><span style="font-size:.62rem">Tilføj dine produkter og få skræddersyede anbefalinger</span></div>';
+      return '<div style="text-align:center;padding:20px;color:#555;font-size:.72rem">'+
+        'Ingen produkter tilføjet endnu<br>'+
+        '<span style="font-size:.62rem;color:#3a3a3a">Tilføj dine produkter og få skræddersyede anbefalinger</span>'+
+      '</div>';
     }
     return all.map(function(p){
       var arr=p._t==='face'?face:hair;
       var idx=arr.findIndex(function(x){return x.name===p.name&&x.date===p.date});
       return '<div class="prod-card">'+
         (p.image?
-          '<img src="'+p.image+'" style="width:52px;height:52px;border-radius:12px;object-fit:cover;border:1px solid rgba(255,255,255,.07)">':
-          '<div style="width:52px;height:52px;background:rgba(255,255,255,.03);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0">'+(p._t==='face'?'🧴':'💆')+'</div>')+
-        '<div class="prod-info" style="min-width:0">'+
+          '<img src="'+p.image+'" style="width:54px;height:54px;border-radius:12px;'+
+            'object-fit:cover;flex-shrink:0">':
+          '<div style="width:54px;height:54px;background:rgba(255,255,255,.03);border-radius:12px;'+
+            'display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0">'+
+            (p._t==='face'?'🧴':'💆')+'</div>')+
+        '<div style="flex:1;min-width:0;font-size:.7rem">'+
           '<div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap">'+
-            '<strong style="font-size:.75rem">'+p.name+'</strong>'+
+            '<strong style="font-size:.75rem;color:var(--gold)">'+p.name+'</strong>'+
             '<span class="badge">'+(p._t==='face'?'Ansigt':'Hår')+'</span>'+
           '</div>'+
-          (p.description?'<div style="color:var(--sub);font-size:.65rem;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:160px">'+p.description+'</div>':'')+
+          (p.description?
+            '<div style="color:var(--sub);font-size:.64rem;margin-top:2px;'+
+              'overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:155px">'+
+              p.description+'</div>':'')+
         '</div>'+
-        '<button onclick="window._removeProd(\''+p._t+'\','+idx+')" style="background:none;border:none;color:#ef4444;font-size:1.1rem;cursor:pointer;padding:4px 6px;flex-shrink:0">✕</button>'+
+        '<button onclick="window._removeProd(\''+p._t+'\','+idx+')" '+
+          'style="background:none;border:none;color:var(--red);font-size:1rem;cursor:pointer;padding:5px">✕</button>'+
       '</div>';
     }).join('');
   }catch(e){return''}
 }
 
-/* ===== WINDOW FUNCTIONS ===== */
+/* ══════════════════════════════════
+   WINDOW EXPORTS
+══════════════════════════════════ */
 window._startScan=function(){startScan()};
 window._getHairAdvice=function(){getHairAdvice()};
 window._getProductAdvice=function(t){getProductAdvice(t)};
 window._getCoach=function(){getCoach()};
 window._aiFillTracker=function(){aiFillTracker()};
 window._sendChat=function(){sendChat()};
-
-window._previewInspo=function(idx){
-  if(!S.hairInspo||!S.hairInspo[idx])return;
-  var o=document.createElement('div');
-  o.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:4000;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:20px';
-  o.innerHTML='<img src="'+S.hairInspo[idx].url+'" style="max-width:100%;max-height:90vh;border-radius:16px;object-fit:contain">';
-  o.onclick=function(){o.remove()};
-  document.body.appendChild(o);
-};
 
 window._toggleCheck=function(k){
   if(!S.stats)S.stats={};
@@ -1614,22 +1800,30 @@ window._saveTracker=function(){
     S.stats.water=parseInt(document.getElementById('wa').value)||0;
     updateStreak();render();
     toast('✓ Gemt! Glow Score: '+S.score+'/100');
-  }catch(e){toast('Fejl ved gem')}
+  }catch(e){toast('Fejl ved gem — prøv igen')}
 };
 
 window._removeProd=function(type,idx){
-  try{if(S.products&&S.products[type])S.products[type].splice(idx,1);save();toast('Fjernet');render()}catch(e){}
+  try{
+    if(S.products&&S.products[type])S.products[type].splice(idx,1);
+    save();toast('Fjernet');render();
+  }catch(e){}
 };
 
-window._updateHair=function(k,v){if(!S.hairProfile)S.hairProfile={};S.hairProfile[k]=v;save()};
+window._updateHair=function(k,v){
+  if(!S.hairProfile)S.hairProfile={};
+  S.hairProfile[k]=v;save();
+};
 
-/* ===== START ===== */
+/* ══════════════════════════════════
+   BOOT
+══════════════════════════════════ */
 try{
   load();
-  if(!getAPIKey()){render();showAPISetup()}
+  if(!getKey()){render();showAPISetup()}
   else{S.onboarded=true;render()}
 }catch(e){
-  S=getDefaultState();localStorage.clear();render();showAPISetup();
+  S=defState();localStorage.clear();render();showAPISetup();
 }
 })();
 </script>
