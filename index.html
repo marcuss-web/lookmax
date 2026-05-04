@@ -591,8 +591,8 @@ async function getHairAdvice(){
       '\nVIGTIGT: Anbefal frisurer der passer ANSIGTSFORMEN BEDST — mindst 1 der er objektivt bedst for ansigtsformen.'+
       '\nSTYLING TRIN REGLER: Brug ALTID konkrete mål: "en ært hårvoks", "en 10-krones størrelse hårler", "2-3 sprøjt sea salt spray", "en knappenålshoved finish spray". ALDRIG "lidt" eller "en smule". Brug rigtige produktnavne som hårvoks, hårler, sea salt spray, finish spray, tørshampoo — ALDRIG bare "hårcreme".'+
       '\nReturner KUN gyldigt JSON:{"frisurer":[{'+
-        '"navn":"dansk og engelsk navn",'+
-        '"type":"Bedst for din ansigtsform / Din stil-match / Nemmest hverdag",'+
+        '"navn":"KUN selve frisurenavnet fx Curtain Hair / French Crop / Buzz Cut — ALDRIG tilføj ansigtsform eller stil-beskrivelse til navnet",'+
+        '"type":"EN af: Bedst for dit ansigt / Matcher din stil / Nemmest hverdag",'+
         '"sværhed":"nem/medium/svær",'+
         '"passerAnsigt":true/false,'+
         '"begrundelse":"3 sætninger PRÆCIS HVORFOR passer til ansigtsform og hårtype",'+
@@ -606,7 +606,28 @@ async function getHairAdvice(){
         '"anbefaledeProdukter":[{"navn":"specifikt produktnavn fx American Crew Fiber","type":"hårvoks/hårler/sea salt spray/tørshampoo/finish spray","brug":"præcis mål og hvornår fx en ært i tørt hår","pris":"DKK ca.","link":"https://www.google.com/search?q=k%C3%B8b+NAVN+h%C3%A5r"}],'+
         '"vedligeholdelse":"klip hver X uger, daglig rutine"'+
       '}]}';
-    var res=await callAI(prompt,S.faceImage?S.faceImage.split(',')[1]:null);
+    /* Send face image + up to 3 inspo images so AI can actually see the references */
+    var hairImgB64=S.faceImage?S.faceImage.split(',')[1]:null;
+    var res;
+    if(hairImgB64&&S.hairInspo&&S.hairInspo.length>0){
+      /* Build multi-image message manually */
+      var key2=getKey();
+      var msgContent=[{type:'image_url',image_url:{url:'data:image/jpeg;base64,'+hairImgB64,detail:'high'}},{type:'text',text:'Dette er brugerens ansigt.'}];
+      var inspoToSend=S.hairInspo.slice(0,3);
+      inspoToSend.forEach(function(ins,ii){
+        var insB64=ins.url.split(',')[1];
+        msgContent.push({type:'image_url',image_url:{url:'data:image/jpeg;base64,'+insB64,detail:'low'}});
+        msgContent.push({type:'text',text:'Reference-billede '+(ii+1)+' som brugeren kan lide.'});
+      });
+      msgContent.push({type:'text',text:prompt});
+      var hairR=await fetch(API_URL,{method:'POST',
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+key2},
+        body:JSON.stringify({model:VISION_MODEL,messages:[{role:'user',content:msgContent}],max_tokens:2800,temperature:0.75})});
+      if(hairR.ok){var hairD=await hairR.json();res=hairD.choices[0].message.content}
+      else{res=await callAI(prompt,hairImgB64)}
+    }else{
+      res=await callAI(prompt,hairImgB64);
+    }
     var data;
     try{var m=res.match(/\{[\s\S]*\}/);if(m)data=JSON.parse(m[0]);else throw new Error('')}
     catch(e){r.innerHTML='<div class="ai-card">'+res.replace(/\n/g,'<br>')+'</div>';return}
@@ -945,7 +966,7 @@ function render(){
             '<div class="ring-arrow">→</div>'+
             makeRing(130,potScore,100,'POTENTIALE',potTier.icon+' '+potTier.label,'rgba(212,175,55,.6)')+
           '</div>'+
-          '<div style="font-size:.6rem;color:var(--sub);text-align:center;margin-top:2px">Nu <span style="color:var(--gold)">'+curScore+'</span> → Potentiale <span style="color:var(--gold2)">'+potScore+'</span></div>'+
+          '<div style="font-size:.6rem;color:var(--sub);text-align:center;margin-top:2px">Nu <span style="color:var(--gold)">'+Math.round(curScore/10)+'/10</span> → Potentiale <span style="color:var(--gold2)">'+Math.round(potScore/10)+'/10</span></div>'+
           (sl>0?
             '<div class="streak-badge">🗓 '+sl+' dag'+(sl===1?'':'e')+' streak'+(sEmoji?' '+sEmoji:'')+'</div>':
             '<div class="streak-badge" style="color:var(--sub);border-color:rgba(255,255,255,.1)">Start din streak i dag ✦</div>')+
