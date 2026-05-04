@@ -309,32 +309,55 @@ function toast(m){
 }
 
 /* ── AI ── */
-var VISION_MODEL='llama-3.2-90b-vision-preview';
+/* models defined in callAI */
+
+/* Models to try for vision (in order) */
+var VISION_MODELS=['llama-3.2-11b-vision-preview','llama-3.2-90b-vision-preview','meta-llama/llama-4-scout-17b-16e-instruct'];
 var TEXT_MODEL='llama-3.3-70b-versatile';
 
 async function callAI(prompt,img){
   var key=getKey();
   if(!key){showAPISetup();throw new Error('Ingen API-nøgle — indtast din Groq-nøgle')}
-  var model=img?VISION_MODEL:TEXT_MODEL;
-  var msgs=[];
-  if(img){msgs.push({role:'user',content:[{type:'image_url',image_url:{url:'data:image/jpeg;base64,'+img,detail:'high'}},{type:'text',text:prompt}]})}
-  else{msgs.push({role:'user',content:prompt})}
-  var r=await fetch(API_URL,{method:'POST',
-    headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
-    body:JSON.stringify({model:model,messages:msgs,max_tokens:2800,temperature:0.75})});
-  if(!r.ok){
-    var errBody=await r.json().catch(function(){return{}});
-    var errMsg=(errBody.error&&errBody.error.message)||('HTTP fejl '+r.status);
-    /* If vision model fails, retry without image using text model */
-    if(img&&(r.status===401||r.status===400||r.status===404)){
-      var r2=await fetch(API_URL,{method:'POST',
-        headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
-        body:JSON.stringify({model:TEXT_MODEL,messages:[{role:'user',content:prompt+' (Analyser baseret på de oplysninger du har)'}],max_tokens:2800,temperature:0.75})});
-      if(r2.ok){var d2=await r2.json();return d2.choices[0].message.content}
-    }
-    throw new Error(errMsg);
+
+  function makeBody(model,msgs){
+    return JSON.stringify({model:model,messages:msgs,max_tokens:2800,temperature:0.75});
   }
-  var d=await r.json();return d.choices[0].message.content;
+
+  /* Text-only call */
+  if(!img){
+    var msgs=[{role:'user',content:prompt}];
+    var r=await fetch(API_URL,{method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
+      body:makeBody(TEXT_MODEL,msgs)});
+    if(!r.ok){
+      var eb=await r.json().catch(function(){return{}});
+      throw new Error((eb.error&&eb.error.message)||('HTTP '+r.status));
+    }
+    var d=await r.json();return d.choices[0].message.content;
+  }
+
+  /* Vision call — try each model until one works */
+  var visionMsgs=[{role:'user',content:[
+    {type:'image_url',image_url:{url:'data:image/jpeg;base64,'+img,detail:'high'}},
+    {type:'text',text:prompt}
+  ]}];
+  var lastErr='';
+  for(var vi=0;vi<VISION_MODELS.length;vi++){
+    var vr=await fetch(API_URL,{method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
+      body:makeBody(VISION_MODELS[vi],visionMsgs)});
+    if(vr.ok){var vd=await vr.json();return vd.choices[0].message.content}
+    var veb=await vr.json().catch(function(){return{}});
+    lastErr=(veb.error&&veb.error.message)||('HTTP '+vr.status);
+    /* 401 = wrong key, stop immediately */
+    if(vr.status===401){throw new Error('Ugyldig API-nøgle. Gå til console.groq.com/keys og kopier en ny nøgle.')}
+  }
+  /* All vision models failed — fall back to text only */
+  var tr=await fetch(API_URL,{method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
+    body:makeBody(TEXT_MODEL,[{role:'user',content:prompt+' (Ingen billede tilgængeligt — analyser ud fra kontekst)'}])});
+  if(tr.ok){var td=await tr.json();return td.choices[0].message.content}
+  throw new Error(lastErr||'Alle modeller fejlede');
 }
 function compressImg(file,maxW){
   maxW=maxW||900;
@@ -640,7 +663,7 @@ async function getHairAdvice(){
       msgContent.push({type:'text',text:prompt});
       var hairR=await fetch(API_URL,{method:'POST',
         headers:{'Content-Type':'application/json','Authorization':'Bearer '+key2},
-        body:JSON.stringify({model:VISION_MODEL,messages:[{role:'user',content:msgContent}],max_tokens:2800,temperature:0.75})});
+        body:JSON.stringify({model:VISION_MODELS[0],messages:[{role:'user',content:msgContent}],max_tokens:2800,temperature:0.75})});
       if(hairR.ok){var hairD=await hairR.json();res=hairD.choices[0].message.content}
       else{res=await callAI(prompt,hairImgB64)}
     }else{
