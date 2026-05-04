@@ -585,28 +585,43 @@ async function getHairAdvice(){
     var prodNote=hairProds.length>0?
       '\nBRUGERENS HÅRPRODUKTER: '+hairProds.map(function(p){return p.name+(p.brand?' ('+p.brand+')':'')+(p.description?' — '+p.description:'')}).join(', ')+
       '. For hvert frisureforslag: angiv præcis HVILKE af disse produkter kan bruges og PRÆCIS HVORDAN.':'';
+    /* Build the 3 mandatory slots based on whether user has preferences */
+    var hasPref=hp.preferences&&hp.preferences.trim().length>0;
+    var slot1Rule=hasPref?
+      'SLOT 1 — OBLIGATORISK: Brugeren har skrevet at de kan lide: "'+hp.preferences+'". Giv EN frisure der er EN DIREKTE VERSION af det brugeren beskriver — hold dig TÆT til deres ord. Kald den det rigtige navn (fx Messy Fringe, Edgar Cut, osv). ALDRIG ignorér brugerens ønsker.':
+      'SLOT 1 — BEDST FOR ANSIGTSFORMEN: Den frisure der passer absolut bedst til ansigtsformen.';
+    var slot2Rule=hasPref?
+      'SLOT 2 — VARIANT: En ANDEN variation eller relateret frisure til brugerens stil (fx hvis de nævnte messy fringe, giv en anden messy-frisure eller textured fringe). Skal stadig passe til ansigtsformen.':
+      'SLOT 2 — POPULÆR KLASSIKER: En populær frisure der passer godt til ansigtsformen.';
+    var slot3Rule='SLOT 3 — NEMMEST HVERDAG: Den nemmeste frisure at style dagligt der stadig ser god ud til ansigtsformen.';
     var prompt=
-      'Du er Danmarks bedste frisør og hårcoach. Anbefal 3 PERFEKTE frisurer til denne person. Svar KUN på DANSK.'+
+      'Du er Danmarks bedste frisør. Anbefal præcis 3 frisurer. Svar KUN på DANSK.'+
       '\nAnsigtsform: '+S.faceAnalysis.ansigtsform+', Hårtype: '+(hp.type||'ukendt')+
       ', Tykkelse: '+(hp.thickness||'ukendt')+', Tekstur: '+(hp.texture||'ukendt')+', Længde: '+(hp.lengthCm||'ukendt')+'.'+
-      inspoNote+prefText+prodNote+
-      '\nVIGTIGT: Anbefal en MIX: 1 frisure der er BEDST FOR ANSIGTSFORMEN, 1 der MATCHER BRUGERENS STIL-PRÆFERENCE, og 1 der er den NEMMESTE TIL HVERDAG. Alle 3 skal dog stadig passe godt til ansigtsformen.'+
-      '\nSTYLING TRIN REGLER: Brug ALTID konkrete mål: "en ært hårvoks", "en 10-krones størrelse hårler", "2-3 sprøjt sea salt spray", "en knappenålshoved finish spray". ALDRIG "lidt" eller "en smule". Brug rigtige produktnavne som hårvoks, hårler, sea salt spray, finish spray, tørshampoo — ALDRIG bare "hårcreme".'+
+      (inspoNote?inspoNote:'')+
+      (prodNote?prodNote:'')+
+      '\n\nDU SKAL FØLGE DISSE 3 SLOTS PRÆCIST:'+
+      '\n'+slot1Rule+
+      '\n'+slot2Rule+
+      '\n'+slot3Rule+
+      '\n\nKRITISK REGEL: Hvis brugeren nævner en specifik frisure (fx messy fringe, edgar, buzz cut, fade) SKAL mindst 1 forslag være netop den frisure med det korrekte navn. Du må IKKE erstatte den med noget andet.'+
+      '\nSTYLING REGLER: Brug præcise mål — "en ært hårvoks", "en 10-krone hårler", "2-3 sprøjt sea salt spray". Brug rigtige produktnavne: hårvoks, hårler, sea salt spray, finish spray, tørshampoo.'+
       '\nReturner KUN gyldigt JSON:{"frisurer":[{'+
-        '"navn":"KUN selve frisurenavnet fx Curtain Hair / French Crop / Buzz Cut — ALDRIG tilføj ansigtsform eller stil-beskrivelse til navnet",'+
-        '"type":"EN af: Bedst for dit ansigt / Matcher din stil / Nemmest hverdag",'+
+        '"navn":"KUN frisurenavnet — fx Messy Fringe / Edgar Cut / Buzz Cut. ALDRIG ansigtsform i navnet",'+
+        '"type":"EN af: Matcher din stil / Bedst for dit ansigt / Nemmest hverdag",'+
         '"sværhed":"nem/medium/svær",'+
         '"passerAnsigt":true/false,'+
-        '"begrundelse":"3 sætninger PRÆCIS HVORFOR passer til ansigtsform og hårtype",'+
-        '"imageSearchDA":"dansk søgeterm fx curtain hair mænd",'+
-        '"imageSearchEN":"engelsk søgeterm fx mens curtain hair oval face 2024",'+
-        '"youtubeEN":"youtube søgeord",'+
-        '"frisørScript":["sætning 1 til frisøren","sætning 2 med præcise mål fx 3 cm på toppen","sætning 3 teknik fx scissor over comb","sætning 4 finish"],'+
-        '"stylingTrin":["trin 1: PRODUKTNAVN (fx hårvoks) på størrelsen af EN ÆRT — varm mellem hænderne og fordel fra rod til spids","trin 2: konkret styling handling","trin 3","trin 4","trin 5: finish fx 1-2 sprøjt finish spray for holdbarhed"],'+
-        '"stylingTid":"antal minutter",'+
-        '"eksisterendeProdukter":["præcis hvilke af brugerens egne produkter der KAN bruges og PRÆCIS HVORDAN"],'+
-        '"anbefaledeProdukter":[{"navn":"specifikt produktnavn fx American Crew Fiber","type":"hårvoks/hårler/sea salt spray/tørshampoo/finish spray","brug":"præcis mål og hvornår fx en ært i tørt hår","pris":"DKK ca.","link":"https://www.google.com/search?q=k%C3%B8b+NAVN+h%C3%A5r"}],'+
-        '"vedligeholdelse":"klip hver X uger, daglig rutine"'+
+        '"erBrugerensØnske":true/false,'+
+        '"begrundelse":"hvorfor denne passer til ansigtsform og hårtype",'+
+        '"imageSearchDA":"dansk søgeord",'+
+        '"imageSearchEN":"engelsk søgeord fx messy fringe men 2024",'+
+        '"youtubeEN":"youtube tutorial søgeord",'+
+        '"frisørScript":["hvad du siger til frisøren","præcise mål fx 3 cm på toppen","teknik","finish"],'+
+        '"stylingTrin":["trin 1: produkt + præcis mål","trin 2","trin 3","trin 4","trin 5 finish"],'+
+        '"stylingTid":"antal min",'+
+        '"eksisterendeProdukter":["brugerens egne produkter der kan bruges og HVORDAN"],'+
+        '"anbefaledeProdukter":[{"navn":"produktnavn","type":"hårvoks/hårler/sea salt spray/finish spray","brug":"præcis mål","pris":"DKK","link":"https://www.google.com/search?q=k%C3%B8b+NAVN+h%C3%A5r"}],'+
+        '"vedligeholdelse":"klip hver X uger"'+
       '}]}';
     /* Send face image + up to 3 inspo images so AI can actually see the references */
     var hairImgB64=S.faceImage?S.faceImage.split(',')[1]:null;
