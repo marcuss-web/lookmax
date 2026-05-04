@@ -242,6 +242,7 @@ function defState(){
     onboarded:false,apiKey:'',
     faceAnalysis:null,faceImage:null,
     facePotential:null, /* stores potential score from scan */
+    faceRating:null,    /* stores actual face rating 1-10 */
     firstScan:null,     /* {image, score, date} */
     lastScan:null,      /* {image, score, date} */
     hairProfile:{type:'',thickness:'',texture:'',lengthCm:'',concerns:'',preferences:''},
@@ -489,6 +490,7 @@ async function processScan(){
     catch(e){r.innerHTML='<div class="ai-card">'+res.replace(/\n/g,'<br>')+'</div>';return}
     S.faceAnalysis=an;
     S.facePotential=an.potentiale||an.rating;
+    S.faceRating=an.rating||null;
     /* Store first/last scan */
     var scanEntry={image:S.faceImage,score:an.rating,date:new Date().toISOString()};
     if(!S.firstScan){S.firstScan=scanEntry}
@@ -588,7 +590,7 @@ async function getHairAdvice(){
       '\nAnsigtsform: '+S.faceAnalysis.ansigtsform+', Hårtype: '+(hp.type||'ukendt')+
       ', Tykkelse: '+(hp.thickness||'ukendt')+', Tekstur: '+(hp.texture||'ukendt')+', Længde: '+(hp.lengthCm||'ukendt')+'.'+
       inspoNote+prefText+prodNote+
-      '\nVIGTIGT: Anbefal frisurer der passer ANSIGTSFORMEN BEDST — mindst 1 der er objektivt bedst for ansigtsformen.'+
+      '\nVIGTIGT: Anbefal en MIX: 1 frisure der er BEDST FOR ANSIGTSFORMEN, 1 der MATCHER BRUGERENS STIL-PRÆFERENCE, og 1 der er den NEMMESTE TIL HVERDAG. Alle 3 skal dog stadig passe godt til ansigtsformen.'+
       '\nSTYLING TRIN REGLER: Brug ALTID konkrete mål: "en ært hårvoks", "en 10-krones størrelse hårler", "2-3 sprøjt sea salt spray", "en knappenålshoved finish spray". ALDRIG "lidt" eller "en smule". Brug rigtige produktnavne som hårvoks, hårler, sea salt spray, finish spray, tørshampoo — ALDRIG bare "hårcreme".'+
       '\nReturner KUN gyldigt JSON:{"frisurer":[{'+
         '"navn":"KUN selve frisurenavnet fx Curtain Hair / French Crop / Buzz Cut — ALDRIG tilføj ansigtsform eller stil-beskrivelse til navnet",'+
@@ -922,7 +924,7 @@ function makeRing(size,score,maxScore,label,subLabel,color){
         '<circle fill="none" stroke="'+color+'" stroke-width="3" stroke-linecap="round" stroke-dasharray="'+circ+'" stroke-dashoffset="'+offset+'" cx="'+(size/2)+'" cy="'+(size/2)+'" r="'+r+'"/>'+
       '</svg>'+
       '<div class="ring-inner">'+
-        '<div class="ring-val" style="font-size:'+(size*0.22)+'px">'+score+'</div>'+
+        '<div class="ring-val" style="font-size:'+(size*0.18)+'px">'+Math.round(score/10)+'/10</div>'+
         '<div class="ring-label">'+label+'</div>'+
       '</div>'+
     '</div>'+
@@ -951,22 +953,26 @@ function render(){
     var sl=Array.isArray(S.streak)?S.streak.length:0;
     var curScore=S.score;
     var curTier=getTier(curScore);
-    /* Potential ring: based on faceAnalysis potentiale (1-10) converted to 100 scale, but boosted by habits */
-    var potScore=S.facePotential?Math.min(100,Math.round(S.facePotential*10)):null;
+    /* Dual rings: left = current face rating, right = potential (both 1-10) */
+    var faceRating=S.faceRating||null;   /* 1-10 from last scan */
+    var facePot=S.facePotential||null;   /* 1-10 potential from last scan */
+    var potScore=facePot?Math.min(100,Math.round(facePot*10)):null;
+    var faceScore=faceRating?Math.round(faceRating*10):null;
     var potTier=potScore?getTier(potScore):null;
+    var faceTier=faceScore?getTier(faceScore):null;
     var sEmoji=sl>=30?'👑':sl>=14?'🔥🔥':sl>=7?'🔥':sl>=3?'⚡':'';
 
     /* Score section: dual rings if we have a scan, single ring otherwise */
     var scoreHTML='';
-    if(potScore){
+    if(faceScore&&potScore){
       scoreHTML=
         '<div class="score-wrap">'+
           '<div class="dual-ring-row">'+
-            makeRing(130,curScore,100,'GlOW SCORE',curTier.icon+' '+curTier.label,'url(#sg)')+
+            makeRing(130,faceScore,100,'DIT ANSIGT',faceTier.icon+' '+faceTier.label,'url(#sg)')+
             '<div class="ring-arrow">→</div>'+
             makeRing(130,potScore,100,'POTENTIALE',potTier.icon+' '+potTier.label,'rgba(212,175,55,.6)')+
           '</div>'+
-          '<div style="font-size:.6rem;color:var(--sub);text-align:center;margin-top:2px">Nu <span style="color:var(--gold)">'+Math.round(curScore/10)+'/10</span> → Potentiale <span style="color:var(--gold2)">'+Math.round(potScore/10)+'/10</span></div>'+
+          '<div style="font-size:.65rem;color:var(--sub);text-align:center;margin-top:4px;font-weight:600">'+(Math.round(faceScore/10))+'/10 <span style="color:rgba(255,255,255,.3)">→</span> '+(Math.round(potScore/10))+'/10</div>'+
           (sl>0?
             '<div class="streak-badge">🗓 '+sl+' dag'+(sl===1?'':'e')+' streak'+(sEmoji?' '+sEmoji:'')+'</div>':
             '<div class="streak-badge" style="color:var(--sub);border-color:rgba(255,255,255,.1)">Start din streak i dag ✦</div>')+
