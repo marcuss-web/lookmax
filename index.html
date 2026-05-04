@@ -1055,6 +1055,9 @@ function render(){
       /* Need SVG defs globally for dual rings */
       '<svg style="position:absolute;width:0;height:0"><defs><linearGradient id="sg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#c9a227"/><stop offset="50%" style="stop-color:#f0cc5a"/><stop offset="100%" style="stop-color:#d4af37"/></linearGradient></defs></svg>'+
       scoreHTML+
+      '<div style="margin-bottom:10px">'+
+        '<button onclick="window._testAPI()" style="width:100%;padding:11px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:#9ca3af;font-size:.68rem;cursor:pointer;font-family:inherit">🔧 Test API-nøgle</button>'+
+      '</div>'+
       '<div class="grid2">'+
         '<div class="item full" onclick="window._switchTab(\'scan\')">'+
           '<span class="icon">📷</span><div class="title">3D Ansigtsscanning</div>'+
@@ -1303,6 +1306,36 @@ function renderProds(){
 }
 
 /* ══ WINDOW ══ */
+window._testAPI=async function(){
+  var key=getKey();
+  if(!key){toast('Ingen nøgle gemt');showAPISetup();return}
+  toast('Tester...');
+  try{
+    var r=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
+      body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'user',content:'Sig hej på dansk'}],max_tokens:20})
+    });
+    var body=await r.json();
+    if(r.ok){
+      toast('✓ API virker! Model: llama-3.3-70b-versatile');
+    }else{
+      var msg=(body.error&&body.error.message)||JSON.stringify(body);
+      /* Show full error in an overlay */
+      var o=document.createElement('div');
+      o.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:9000;display:flex;align-items:center;justify-content:center;padding:20px;cursor:pointer';
+      o.innerHTML='<div style="background:#111;border:1px solid #333;border-radius:16px;padding:20px;max-width:400px;width:100%">'+
+        '<div style="color:#ef4444;font-weight:700;margin-bottom:10px">❌ API Fejl (HTTP '+r.status+')</div>'+
+        '<div style="color:#9ca3af;font-size:.75rem;line-height:1.6;word-break:break-all">'+msg+'</div>'+
+        '<div style="color:#555;font-size:.65rem;margin-top:12px">Tryk for at lukke</div>'+
+      '</div>';
+      o.onclick=function(){o.remove()};
+      document.body.appendChild(o);
+    }
+  }catch(e){
+    toast('Netværksfejl: '+e.message);
+  }
+};
 window._startScan=function(){startScan()};
 window._getHairAdvice=function(){getHairAdvice()};
 window._getProductAdvice=function(t){getProductAdvice(t)};
