@@ -279,8 +279,8 @@ function save(){
     calcScore();
   }catch(e){}
 }
-function getKey(){try{if(!S.apiKey)S.apiKey=localStorage.getItem('lmx_apikey_v5')||''}catch(e){}return S.apiKey||''}
-function setKey(k){S.apiKey=k;try{localStorage.setItem('lmx_apikey_v5',k)}catch(e){}}
+function getKey(){try{if(!S.apiKey){var stored=localStorage.getItem('lmx_apikey_v5')||'';S.apiKey=stored.replace(/[\s\u200B\u00A0]+/g,'')}}catch(e){}return(S.apiKey||'').replace(/[\s\u200B\u00A0]+/g,'')}
+function setKey(k){var clean=k.replace(/[\s\u200B\u00A0]+/g,'');S.apiKey=clean;try{localStorage.setItem('lmx_apikey_v5',clean)}catch(e){}}
 
 function calcScore(){
   try{
@@ -943,11 +943,18 @@ function showAPISetup(){
 }
 window._saveAPIKey=function(){
   try{
-    var inp=document.getElementById('apiKeyInput');if(!inp)return;var kv=inp.value.trim();
-    if(!kv||!kv.startsWith('gsk_')){toast('Ugyldig nøgle — skal starte med gsk_');return}
+    var inp=document.getElementById('apiKeyInput');if(!inp)return;
+    /* Strip ALL whitespace including newlines, tabs, zero-width spaces */
+    var kv=inp.value.replace(/[\s\u200B\u00A0]+/g,'');
+    if(!kv){toast('Nøgle er tom');return}
+    if(!kv.startsWith('gsk_')){
+      toast('Skal starte med gsk_ — du har: '+kv.substring(0,8)+'...');
+      return;
+    }
     setKey(kv);S.onboarded=true;save();
     var modal=document.getElementById('apiModal');if(modal)modal.remove();
-    toast('✓ Nøgle gemt! App klar');render();
+    toast('✓ Gemt: '+kv.substring(0,12)+'...');
+    render();
   }catch(e){toast('Fejl: '+e.message)}
 };
 
@@ -1308,34 +1315,49 @@ function renderProds(){
 /* ══ WINDOW ══ */
 window._testAPI=async function(){
   var key=getKey();
-  if(!key){toast('Ingen nøgle gemt');showAPISetup();return}
-  toast('Tester...');
-  try{
-    var r=await fetch('https://api.groq.com/openai/v1/chat/completions',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
-      body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'user',content:'Sig hej på dansk'}],max_tokens:20})
-    });
-    var body=await r.json();
-    if(r.ok){
-      toast('✓ API virker! Model: llama-3.3-70b-versatile');
-    }else{
-      var msg=(body.error&&body.error.message)||JSON.stringify(body);
-      /* Show full error in an overlay */
-      var o=document.createElement('div');
-      o.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:9000;display:flex;align-items:center;justify-content:center;padding:20px;cursor:pointer';
-      o.innerHTML='<div style="background:#111;border:1px solid #333;border-radius:16px;padding:20px;max-width:400px;width:100%">'+
-        '<div style="color:#ef4444;font-weight:700;margin-bottom:10px">❌ API Fejl (HTTP '+r.status+')</div>'+
-        '<div style="color:#9ca3af;font-size:.75rem;line-height:1.6;word-break:break-all">'+msg+'</div>'+
-        '<div style="color:#555;font-size:.65rem;margin-top:12px">Tryk for at lukke</div>'+
-      '</div>';
-      o.onclick=function(){o.remove()};
-      document.body.appendChild(o);
+  /* Show diagnostic overlay */
+  var o=document.createElement('div');
+  o.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.97);z-index:9000;display:flex;align-items:center;justify-content:center;padding:20px';
+  var keyDisplay=key?key.substring(0,6)+'...'+key.substring(key.length-4)+' ('+key.length+' tegn)':'INGEN NØGLE GEMT';
+  o.innerHTML='<div style="background:#111;border:1px solid #333;border-radius:20px;padding:24px;max-width:400px;width:100%">'+
+    '<div style="color:#d4af37;font-family:serif;font-size:1.1rem;margin-bottom:16px">API Diagnose</div>'+
+    '<div style="font-size:.7rem;color:#9ca3af;margin-bottom:8px">Gemt nøgle:</div>'+
+    '<div style="font-size:.8rem;color:#fff;font-family:monospace;background:#000;padding:8px;border-radius:8px;margin-bottom:14px;word-break:break-all">'+keyDisplay+'</div>'+
+    '<button id="diagTestBtn" style="width:100%;padding:12px;background:#d4af37;color:#000;border:none;border-radius:12px;font-weight:700;cursor:pointer;margin-bottom:8px">Test nu</button>'+
+    '<button id="diagNewKey" style="width:100%;padding:12px;background:rgba(255,255,255,.05);color:#fff;border:1px solid rgba(255,255,255,.1);border-radius:12px;cursor:pointer;margin-bottom:8px">Indtast ny nøgle</button>'+
+    '<button id="diagClose" style="width:100%;padding:10px;background:none;color:#555;border:none;cursor:pointer;font-size:.75rem">Luk</button>'+
+    '<div id="diagResult" style="margin-top:12px;font-size:.72rem;color:#9ca3af;line-height:1.6;display:none"></div>'+
+  '</div>';
+  document.body.appendChild(o);
+  document.getElementById('diagClose').onclick=function(){o.remove()};
+  document.getElementById('diagNewKey').onclick=function(){o.remove();showAPISetup()};
+  document.getElementById('diagTestBtn').onclick=async function(){
+    var res=document.getElementById('diagResult');
+    res.style.display='block';
+    res.style.color='#9ca3af';
+    res.textContent='Sender kald...';
+    if(!key){res.style.color='#ef4444';res.textContent='Ingen nøgle gemt — tryk Indtast ny nøgle';return}
+    try{
+      var r=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
+        body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'user',content:'Hi'}],max_tokens:10})
+      });
+      var txt=await r.text();
+      if(r.ok){
+        res.style.color='#22c55e';
+        res.textContent='✓ VIRKER! HTTP 200 — din nøgle er korrekt';
+      }else{
+        res.style.color='#ef4444';
+        res.innerHTML='❌ HTTP '+r.status+'<br>'+txt.substring(0,300);
+      }
+    }catch(e){
+      res.style.color='#ef4444';
+      res.textContent='Netværksfejl: '+e.message;
     }
-  }catch(e){
-    toast('Netværksfejl: '+e.message);
-  }
+  };
 };
+
 window._startScan=function(){startScan()};
 window._getHairAdvice=function(){getHairAdvice()};
 window._getProductAdvice=function(t){getProductAdvice(t)};
