@@ -309,7 +309,7 @@ function toast(m){
 }
 
 /* ── AI ── */
-var VISION_MODEL='meta-llama/llama-4-maverick-17b-128e-instruct';
+var VISION_MODEL='llama-3.2-90b-vision-preview';
 var TEXT_MODEL='llama-3.3-70b-versatile';
 
 async function callAI(prompt,img){
@@ -483,7 +483,7 @@ async function processScan(){
       '"tips":["mindst 12 ekstremt specifikke og handlingsrettede tips — inkl. PRÆCISE søvntimer, PRÆCISE vandglas per dag, specifikke kæbeøvelser med sæt og gentagelser, specifikke vitaminer og doser, specifikke hudplejeprodukter, mewing teknik detaljeret, kost med gram, SPF-niveau, frisure retning, holdningsøvelser med reps — ALDRIG vage råd som bare \'drik mere vand\'"],'+
       '"summary":"2-3 præcise sætninger","optimalSøvn":"tal-string fx 8","optimalVand":"tal-string fx 10",'+
       '"hudtype":"normal/tør/fedtet/kombineret/sensitiv","ansigtsform":"oval/rund/firkantet/hjerteformet/diamant/aflangt",'+
-      '"prognose":"specifik beskrivelse af realistisk potentiale om 3-6 måneder"}';
+      '"prognose":"specifik beskrivelse af realistisk potentiale om 3-6 måneder","haarVaekstTip":"VIGTIGT: Hvis brugerens haarlaengde ikke passer til populaere frisurer — giv et konkret haargroning tip med maallangde og tidsestimat fx: Gro dit haar til 8-12 cm (ca. 2-3 maaneder) for at faa Messy Fringe eller Edgar Cut. Ellers tom streng."}';
     var res=await callAI(prompt,b64);
     var an;
     try{var m=res.match(/\{[\s\S]*\}/);if(m)an=JSON.parse(m[0]);else throw new Error('')}
@@ -533,6 +533,7 @@ function renderScanResult(an){
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">'+
       sBox('OPTIMAL SØVN',(an.optimalSøvn||'-')+'t','😴')+sBox('OPTIMAL VAND',(an.optimalVand||'-')+' glas','💧')+
     '</div>'+
+    +(an.haarVaekstTip?'<div style="background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.2);border-radius:14px;padding:14px;margin-bottom:10px">'+'<div style="font-size:.62rem;color:#60a5fa;font-weight:700;letter-spacing:.5px;margin-bottom:5px">✂️ HÅRGRONING — NÆSTE SKRIDT</div>'+'<div style="font-size:.72rem;color:var(--sub);line-height:1.6">'+an.haarVaekstTip+'</div></div>':'')+
     '<div style="background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.15);border-radius:14px;padding:14px">'+
       '<div style="font-size:.62rem;color:var(--gold);font-weight:700;margin-bottom:5px">🚀 PROGNOSE OM 3-6 MÅN.</div>'+
       '<div style="font-size:.72rem;color:var(--sub);line-height:1.6">'+(an.prognose||'-')+'</div>'+
@@ -621,7 +622,7 @@ async function getHairAdvice(){
         '"stylingTid":"antal min",'+
         '"eksisterendeProdukter":["brugerens egne produkter der kan bruges og HVORDAN"],'+
         '"anbefaledeProdukter":[{"navn":"produktnavn","type":"hårvoks/hårler/sea salt spray/finish spray","brug":"præcis mål","pris":"DKK","link":"https://www.google.com/search?q=k%C3%B8b+NAVN+h%C3%A5r"}],'+
-        '"vedligeholdelse":"klip hver X uger"'+
+        '"vedligeholdelse":"klip hver X uger","haarVaekstTip":"Tjek om brugerens nuværende harlangde passer til frisuren. Hvis IKKE: skriv praecis maallaengde og tidsestimat fx: Gro til 8-12 cm (ca. 2-3 maaneder) for dette look. Ellers: skriv tom streng."'+
       '}]}';
     /* Send face image + up to 3 inspo images so AI can actually see the references */
     var hairImgB64=S.faceImage?S.faceImage.split(',')[1]:null;
@@ -723,7 +724,7 @@ async function getHairAdvice(){
                       '</div>';
                     }).join('')+
                   '</div>':'')+
-                (f.vedligeholdelse?'<div style="font-size:.65rem;color:var(--sub);padding:10px 12px;background:rgba(255,255,255,.02);border-radius:10px;line-height:1.55">🔄 <strong style="color:#fff">Vedligeholdelse:</strong> '+f.vedligeholdelse+'</div>':'')+
+                (f.vedligeholdelse?'<div style="font-size:.65rem;color:var(--sub);padding:10px 12px;background:rgba(255,255,255,.02);border-radius:10px;line-height:1.55;margin-bottom:6px">🔄 <strong style="color:#fff">Vedligeholdelse:</strong> '+f.vedligeholdelse+'</div>':'')+(f.haarVaekstTip?'<div style="background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.2);border-radius:12px;padding:11px 13px"><div style="font-size:.6rem;color:#60a5fa;font-weight:700;margin-bottom:4px">✂️ HÅRGRONING</div><div style="font-size:.7rem;color:var(--sub);line-height:1.55">'+f.haarVaekstTip+'</div></div>':'')+
               '</div>'+
             '</div>'+
           '</div>';
