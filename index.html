@@ -748,11 +748,16 @@ async function getHairAdvice(){
                     }).join('')+
                   '</div>':'')+
                 (f.vedligeholdelse?'<div style="font-size:.65rem;color:var(--sub);padding:10px 12px;background:rgba(255,255,255,.02);border-radius:10px;line-height:1.55;margin-bottom:6px">🔄 <strong style="color:#fff">Vedligeholdelse:</strong> '+f.vedligeholdelse+'</div>':'')+(f.haarVaekstTip?'<div style="background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.2);border-radius:12px;padding:11px 13px"><div style="font-size:.6rem;color:#60a5fa;font-weight:700;margin-bottom:4px">✂️ HÅRGRONING</div><div style="font-size:.7rem;color:var(--sub);line-height:1.55">'+f.haarVaekstTip+'</div></div>':'')+
+              '<div style="margin-top:12px">'+
+                '<button onclick="window._showBarberCard('+i+')" style="width:100%;padding:12px;border-radius:12px;border:none;background:linear-gradient(135deg,#c9a227,#d4af37);color:#000;font-weight:800;font-size:.78rem;cursor:pointer;font-family:inherit;letter-spacing:.3px">✂️ Vis frisørkort</button>'+
+              '</div>'+
               '</div>'+
             '</div>'+
           '</div>';
       });
     }
+    /* Store frisure data globally so barber card can access it */
+    window._lastHairData=data;
     html+='</div>';
     r.innerHTML=html;
     toast('Frisure-råd klar! ✓');
@@ -1356,6 +1361,133 @@ window._testAPI=async function(){
       res.textContent='Netværksfejl: '+e.message;
     }
   };
+};
+
+window._showBarberCard=function(idx){
+  if(!window._lastHairData||!window._lastHairData.frisurer)return;
+  var f=window._lastHairData.frisurer[idx];if(!f)return;
+  var hp=S.hairProfile||{};
+  var an=S.faceAnalysis||{};
+
+  var scriptLines=(f.frisørScript||[]).map(function(s,i){
+    return '<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:8px">'+
+      '<div style="width:20px;height:20px;border-radius:50%;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">'+(i+1)+'</div>'+
+      '<div style="font-size:13px;line-height:1.5;font-style:italic">'+s+'</div>'+
+    '</div>';
+  }).join('');
+
+  var measuresLines=(f.stylingTrin||[]).filter(function(s){return s}).map(function(s,i){
+    return '<div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:6px">'+
+      '<div style="color:#c9a227;font-weight:700;font-size:11px;flex-shrink:0">•</div>'+
+      '<div style="font-size:12px;color:#333;line-height:1.4">'+s+'</div>'+
+    '</div>';
+  }).join('');
+
+  var prodLines=(f.anbefaledeProdukter||[]).map(function(p){
+    var pn=typeof p==='string'?p:(p.navn||'');
+    var pt=typeof p==='object'?(p.type||''):'';
+    var pb=typeof p==='object'?(p.brug||''):'';
+    return '<div style="margin-bottom:5px;font-size:12px;color:#333">🧴 <strong>'+pn+'</strong>'+(pt?' ('+pt+')':'')+( pb?' — '+pb:'')+'</div>';
+  }).join('');
+
+  var cardHTML=
+    '<div id="barberCardInner" style="background:#fff;color:#000;border-radius:20px;padding:28px;max-width:380px;width:100%;font-family:-apple-system,BlinkMacSystemFont,sans-serif;box-shadow:0 20px 60px rgba(0,0,0,.5)">'+
+      /* Header */
+      '<div style="text-align:center;border-bottom:2px solid #000;padding-bottom:16px;margin-bottom:16px">'+
+        '<div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#888;margin-bottom:4px">Frisørkort</div>'+
+        '<div style="font-size:24px;font-weight:900;letter-spacing:-0.5px">'+f.navn+'</div>'+
+        (f.type?'<div style="font-size:11px;color:#888;margin-top:3px;font-weight:500">'+f.type+'</div>':'')+
+      '</div>'+
+      /* Face info */
+      '<div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">'+
+        '<div style="background:#f5f5f5;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:600">Ansigtsform: '+(an.ansigtsform||'–')+'</div>'+
+        '<div style="background:#f5f5f5;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:600">Hårtype: '+(hp.type||'–')+'</div>'+
+        '<div style="background:#f5f5f5;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:600">Længde nu: '+(hp.lengthCm||'–')+'</div>'+
+      '</div>'+
+      /* Barber instructions */
+      '<div style="background:#fffbe6;border:2px solid #d4af37;border-radius:12px;padding:14px;margin-bottom:14px">'+
+        '<div style="font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#c9a227;margin-bottom:10px">✂️ Sig dette til frisøren</div>'+
+        scriptLines+
+      '</div>'+
+      /* Styling notes */
+      (measuresLines?
+        '<div style="margin-bottom:14px">'+
+          '<div style="font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#555;margin-bottom:8px">💆 Styling derhjemme</div>'+
+          measuresLines+
+        '</div>':'')+ 
+      /* Products */
+      (prodLines?
+        '<div style="margin-bottom:14px">'+
+          '<div style="font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#555;margin-bottom:8px">Produkter til dette look</div>'+
+          prodLines+
+        '</div>':'')+ 
+      /* Maintenance */
+      (f.vedligeholdelse?
+        '<div style="background:#f5f5f5;border-radius:10px;padding:10px 12px;font-size:12px;color:#555">'+
+          '🔄 <strong>Vedligeholdelse:</strong> '+f.vedligeholdelse+
+        '</div>':'')+
+      /* Footer */
+      '<div style="text-align:center;margin-top:16px;padding-top:12px;border-top:1px solid #eee;font-size:10px;color:#aaa;letter-spacing:1px">'+
+        'LooksMax AI • looksmax.app'+
+      '</div>'+
+    '</div>';
+
+  var overlay=document.createElement('div');
+  overlay.id='barberCardOverlay';
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:5000;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:20px;overflow-y:auto;backdrop-filter:blur(10px)';
+  overlay.innerHTML=
+    '<div style="width:100%;max-width:420px">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">'+
+        '<div style="font-family:serif;color:#d4af37;font-size:1.1rem;font-weight:700">✂️ Frisørkort</div>'+
+        '<button onclick="window._closeBarberCard()" style="background:rgba(255,255,255,.1);border:none;color:#fff;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:1rem">✕</button>'+
+      '</div>'+
+      cardHTML+
+      '<div style="margin-top:16px;display:flex;gap:8px">'+
+        '<button onclick="window._copyBarberCard()" style="flex:1;padding:13px;background:linear-gradient(135deg,#c9a227,#d4af37);color:#000;border:none;border-radius:12px;font-weight:800;cursor:pointer;font-family:inherit;font-size:.78rem">📋 Kopiér tekst</button>'+
+        '<button onclick="window._shareBarberCard()" style="flex:1;padding:13px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#fff;border-radius:12px;font-weight:700;cursor:pointer;font-family:inherit;font-size:.78rem">↑ Del</button>'+
+      '</div>'+
+      '<p style="text-align:center;color:#555;font-size:.62rem;margin-top:10px">Vis kortet til din frisør eller kopiér teksten</p>'+
+    '</div>';
+  document.body.appendChild(overlay);
+
+  /* Store plain text for copy */
+  overlay._plainText=
+    'FRISØRKORT — '+f.navn+'\n'+
+    '═══════════════════════\n'+
+    'Ansigtsform: '+(an.ansigtsform||'–')+'\n'+
+    'Hårtype: '+(hp.type||'–')+', Længde nu: '+(hp.lengthCm||'–')+'\n\n'+
+    'HVAD DU SIGER TIL FRISØREN:\n'+
+    (f.frisørScript||[]).map(function(s,i){return (i+1)+'. '+s}).join('\n')+'\n\n'+
+    (f.stylingTrin&&f.stylingTrin.length?'STYLING HJEMME:\n'+(f.stylingTrin.map(function(s){return '• '+s}).join('\n'))+'\n\n':'')+
+    (f.vedligeholdelse?'VEDLIGEHOLDELSE: '+f.vedligeholdelse+'\n\n':'')+
+    'Lavet med LooksMax AI';
+};
+
+window._closeBarberCard=function(){var o=document.getElementById('barberCardOverlay');if(o)o.remove()};
+window._copyBarberCard=function(){
+  var overlay=document.getElementById('barberCardOverlay');
+  if(!overlay||!overlay._plainText)return;
+  navigator.clipboard.writeText(overlay._plainText).then(function(){
+    toast('✓ Tekst kopieret!');
+  }).catch(function(){
+    /* Fallback */
+    var ta=document.createElement('textarea');
+    ta.value=overlay._plainText;
+    ta.style.position='fixed';ta.style.opacity='0';
+    document.body.appendChild(ta);ta.select();
+    document.execCommand('copy');ta.remove();
+    toast('✓ Kopieret!');
+  });
+};
+
+window._shareBarberCard=function(){
+  var overlay=document.getElementById('barberCardOverlay');
+  if(!overlay||!overlay._plainText)return;
+  if(navigator.share){
+    navigator.share({title:'Mit frisørkort',text:overlay._plainText}).catch(function(){});
+  }else{
+    window._copyBarberCard();
+  }
 };
 
 window._startScan=function(){startScan()};
