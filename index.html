@@ -609,43 +609,56 @@ async function getHairAdvice(){
     var prodNote=hairProds.length>0?
       '\nBRUGERENS HÅRPRODUKTER: '+hairProds.map(function(p){return p.name+(p.brand?' ('+p.brand+')':'')+(p.description?' — '+p.description:'')}).join(', ')+
       '. For hvert frisureforslag: angiv præcis HVILKE af disse produkter kan bruges og PRÆCIS HVORDAN.':'';
-    /* Build the 3 mandatory slots based on whether user has preferences */
-    var hasPref=hp.preferences&&hp.preferences.trim().length>0;
-    var slot1Rule=hasPref?
-      'SLOT 1 — OBLIGATORISK: Brugeren har skrevet at de kan lide: "'+hp.preferences+'". Giv EN frisure der er EN DIREKTE VERSION af det brugeren beskriver — hold dig TÆT til deres ord. Kald den det rigtige navn (fx Messy Fringe, Edgar Cut, osv). ALDRIG ignorér brugerens ønsker.':
-      'SLOT 1 — BEDST FOR ANSIGTSFORMEN: Den frisure der passer absolut bedst til ansigtsformen.';
-    var slot2Rule=hasPref?
-      'SLOT 2 — VARIANT: En ANDEN variation eller relateret frisure til brugerens stil (fx hvis de nævnte messy fringe, giv en anden messy-frisure eller textured fringe). Skal stadig passe til ansigtsformen.':
-      'SLOT 2 — POPULÆR KLASSIKER: En populær frisure der passer godt til ansigtsformen.';
-    var slot3Rule='SLOT 3 — NEMMEST HVERDAG: Den nemmeste frisure at style dagligt der stadig ser god ud til ansigtsformen.';
+    /* Parse user preferences — split by comma so "messy fringe, edgar" = 2 styles */
+    var prefRaw=(hp.preferences||'').trim();
+    var prefList=prefRaw?prefRaw.split(/[,،]+/).map(function(s){return s.trim()}).filter(Boolean):[];
+    var numPref=prefList.length;
+    /* Total forslag = max(3, numPref + 1 bedst-for-ansigt) but cap at 5 */
+    var totalSlots=Math.min(5,Math.max(3,numPref+1));
+
+    /* Build slot rules */
+    var slotRules='';
+    if(numPref>0){
+      prefList.forEach(function(pref,pi){
+        slotRules+='\nSLOT '+(pi+1)+' — DIN STIL (OBLIGATORISK): Giv præcis frisuren kaldet "'+pref+'" med det korrekte danske/engelske navn. Hold dig 100% tæt til dette. Mærk erBrugerensØnske=true.';
+      });
+      slotRules+='\nSLOT '+(numPref+1)+' — BEDST FOR ANSIGT: Den frisure der objektivt passer BEDST til ansigtsformen '+S.faceAnalysis.ansigtsform+'. Mærk passerAnsigt=true.';
+      if(totalSlots>numPref+1){
+        slotRules+='\nSLOT '+(numPref+2)+' — NEMMEST HVERDAG: Nemmest at style dagligt og passer ansigtsformen.';
+      }
+    }else{
+      slotRules='\nSLOT 1 — BEDST FOR ANSIGT: Objektivt bedste frisure for ansigtsformen. passerAnsigt=true.';
+      slotRules+='\nSLOT 2 — POPULÆR KLASSIKER: Populær frisure der passer ansigtsformen.';
+      slotRules+='\nSLOT 3 — NEMMEST HVERDAG: Nemmest at style dagligt.';
+    }
+
     var prompt=
-      'Du er Danmarks bedste frisør. Anbefal præcis 3 frisurer. Svar KUN på DANSK.'+
+      'Du er Danmarks bedste frisør. Anbefal præcis '+totalSlots+' frisurer. Svar KUN på DANSK.'+
       '\nAnsigtsform: '+S.faceAnalysis.ansigtsform+', Hårtype: '+(hp.type||'ukendt')+
-      ', Tykkelse: '+(hp.thickness||'ukendt')+', Tekstur: '+(hp.texture||'ukendt')+', Længde: '+(hp.lengthCm||'ukendt')+'.'+
+      ', Tykkelse: '+(hp.thickness||'ukendt')+', Tekstur: '+(hp.texture||'ukendt')+', Længde nu: '+(hp.lengthCm||'ukendt')+'.'+
       (inspoNote?inspoNote:'')+
       (prodNote?prodNote:'')+
-      '\n\nDU SKAL FØLGE DISSE 3 SLOTS PRÆCIST:'+
-      '\n'+slot1Rule+
-      '\n'+slot2Rule+
-      '\n'+slot3Rule+
-      '\n\nKRITISK REGEL: Hvis brugeren nævner en specifik frisure (fx messy fringe, edgar, buzz cut, fade) SKAL mindst 1 forslag være netop den frisure med det korrekte navn. Du må IKKE erstatte den med noget andet.'+
-      '\nSTYLING REGLER: Brug præcise mål — "en ært hårvoks", "en 10-krone hårler", "2-3 sprøjt sea salt spray". Brug rigtige produktnavne: hårvoks, hårler, sea salt spray, finish spray, tørshampoo.'+
+      '\n\nFØLG DISSE SLOTS PRÆCIST:'+slotRules+
+      '\n\nKRITISK: Skriv den PERFEKTE hårslængde for hver frisure i feltet perfektLaengde fx "8-12 cm". Skriv altid haarVaekstTip hvis brugerens nuværende længde ('+( hp.lengthCm||'ukendt')+') er for kort.'+
+      '\nSTYLING REGLER: Brug ALTID konkrete mål — "en ært hårvoks", "en 10-krones størrelse hårler", "2-3 sprøjt sea salt spray". Rigtige produktnavne: hårvoks, hårler, sea salt spray, finish spray, tørshampoo. ALDRIG "hårcreme" eller "lidt".'+
       '\nReturner KUN gyldigt JSON:{"frisurer":[{'+
-        '"navn":"KUN frisurenavnet — fx Messy Fringe / Edgar Cut / Buzz Cut. ALDRIG ansigtsform i navnet",'+
-        '"type":"EN af: Matcher din stil / Bedst for dit ansigt / Nemmest hverdag",'+
+        '"navn":"KUN selve frisurenavnet fx Messy Fringe / Edgar Cut / Buzz Cut — ALDRIG ansigtsform i navnet",'+
+        '"type":"Matcher din stil / Bedst for dit ansigt / Nemmest hverdag",'+
         '"sværhed":"nem/medium/svær",'+
         '"passerAnsigt":true/false,'+
         '"erBrugerensØnske":true/false,'+
-        '"begrundelse":"hvorfor denne passer til ansigtsform og hårtype",'+
+        '"perfektLaengde":"den ideelle hårslængde til denne frisure fx 7-10 cm på toppen og 2-3 cm i siderne",'+
+        '"begrundelse":"hvorfor passer til ansigtsform og hårtype",'+
         '"imageSearchDA":"dansk søgeord",'+
         '"imageSearchEN":"engelsk søgeord fx messy fringe men 2024",'+
         '"youtubeEN":"youtube tutorial søgeord",'+
-        '"frisørScript":["hvad du siger til frisøren","præcise mål fx 3 cm på toppen","teknik","finish"],'+
+        '"frisørScript":["sætning til frisøren","præcise mål","teknik","finish"],'+
         '"stylingTrin":["trin 1: produkt + præcis mål","trin 2","trin 3","trin 4","trin 5 finish"],'+
         '"stylingTid":"antal min",'+
-        '"eksisterendeProdukter":["brugerens egne produkter der kan bruges og HVORDAN"],'+
-        '"anbefaledeProdukter":[{"navn":"produktnavn","type":"hårvoks/hårler/sea salt spray/finish spray","brug":"præcis mål","pris":"DKK","link":"https://www.google.com/search?q=k%C3%B8b+NAVN+h%C3%A5r"}],'+
-        '"vedligeholdelse":"klip hver X uger","haarVaekstTip":"Tjek om brugerens nuværende harlangde passer til frisuren. Hvis IKKE: skriv praecis maallaengde og tidsestimat fx: Gro til 8-12 cm (ca. 2-3 maaneder) for dette look. Ellers: skriv tom streng."'+
+        '"eksisterendeProdukter":["brugerens egne produkter der KAN bruges og PRÆCIS HVORDAN"],'+
+        '"anbefaledeProdukter":[{"navn":"produktnavn","type":"hårvoks/hårler/sea salt spray/finish spray","brug":"præcis mål og hvornår","pris":"DKK ca.","link":"https://www.google.com/search?q=k%C3%B8b+NAVN+h%C3%A5r"}],'+
+        '"vedligeholdelse":"klip hver X uger, daglig pleje",'+
+        '"haarVaekstTip":"Hvis brugerens hår ('+( hp.lengthCm||'ukendt')+') er for kort: skriv præcis mållængde og uger/måneder det tager. Ellers tom streng."'+
       '}]}';
     /* Send face image + up to 3 inspo images so AI can actually see the references */
     var hairImgB64=S.faceImage?S.faceImage.split(',')[1]:null;
@@ -702,6 +715,7 @@ async function getHairAdvice(){
             '<div class="hair-detail" id="hairDetail_'+i+'">'+
               '<div style="padding:14px;border:1px solid rgba(255,255,255,.06);border-top:none;border-radius:0 0 16px 16px;background:rgba(10,10,10,.9)">'+
                 '<div style="font-size:.72rem;color:var(--sub);line-height:1.65;margin-bottom:12px;padding:11px;background:rgba(255,255,255,.02);border-radius:12px;border-left:2px solid rgba(212,175,55,.4)">'+f.begrundelse+'</div>'+
+                (f.perfektLaengde?'<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;padding:9px 12px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.22);border-radius:11px"><span style="font-size:1rem">📏</span><div><div style="font-size:.6rem;color:#22c55e;font-weight:700;letter-spacing:.5px">PERFEKT HÅRSLÆNGDE</div><div style="font-size:.72rem;color:#fff;margin-top:2px">'+f.perfektLaengde+'</div></div></div>':'')+
                 '<div style="margin-bottom:12px">'+
                   '<div style="font-size:.6rem;color:var(--gold);font-weight:700;letter-spacing:.5px;margin-bottom:8px">🔍 SE HVORDAN DET SER UD</div>'+
                   '<div style="display:flex;gap:6px;flex-wrap:wrap">'+
